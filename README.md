@@ -1,6 +1,6 @@
 # ppx
 
-`ppx` is a cross-platform [**p**robabilistic **p**rogramming](http://www.probabilistic-programming.org) e**x**ecution protocol and API based on [flatbuffers](https://google.github.io/flatbuffers/).
+`ppx` is a cross-platform [**P**robabilistic **P**rogramming](http://www.probabilistic-programming.org) e**X**ecution protocol and API based on [flatbuffers](https://google.github.io/flatbuffers/).
 
 Probabilistic programming is about the execution probabilistic models under the control of inference engines, and `ppx` allows the model and the inference engine
 * to be implemented in different programming languages and
