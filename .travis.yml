@@ -1,0 +1,11 @@
+sudo: required
+language: cpp
+notifications:
+  email: false
+  slack:
+    secure: gbC/4OXc8gvzHeqYcaHKhtq5AJUgD9YZsdp8ArxvTH0MizdjU1WTDDn7VvRPVJEwJECeldRadK9MzXrYMSOhy5pLL3Oj2ITpwmeYGK0rQEADGNacRloQpLNlrAyI+rlRXciLGvnUDdd4RNLh8Sf89606Vrw/vsGtO9HfQYYN/mDqlXEaucD2nAe3/FUsqfZGwpnNlgjteXVqTWaMWzxif4BlaBnVTFKrL0+dMN4esuvH96b6cgLp/ejgR+VmR09JYia7WQPlGm5Ck0SNGbO80cyoiYuOUgNAKVi65Zg9+kHIVXHDG2K4wxUyk3kTbPK2NR62I/jOcykraTEAh5PqdTx4I5UuYJtd8orjh3vPo8hzqGXXXdd31k1cjHpHN0Y4BDXUOXdqaRyZHrFH+zpe7ty8y4Ywq3Q0/5I6dZvJAphyz200xxtc9d6S2PPvLQkoUjpJFg4OM6c1B0trGAr2RjfoAVxPJQk/t+jzrC0ln7sLeegkR9kcLEhz/2QyxrWEomzlCoQorunki/414WczqrpGw9UQ/k9zxuCd0vCZicRatd1vzS7MQ10kGZoZCmsp+hxp9Qolz2PIN+cGKhrXCEZMcEtDtZgmDN7D9XTUV6WWqTzK3evWidempWiyetJ6z5cAg1u3YbJKgU9V3FQsY4Im3HQ5xYSR3tbxpo4L798=
+install:
+- git clone --branch v1.9.0 https://github.com/google/flatbuffers.git && cd flatbuffers
+  && cmake -G "Unix Makefiles" && sudo make install && cd ..
+script:
+- sh compile.sh
