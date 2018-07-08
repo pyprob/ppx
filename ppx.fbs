@@ -1,5 +1,9 @@
 // ppx
 // 0.1.0
+//
+// Probabilistic programming execution protocol
+// https://github.com/probprog/ppx
+//
 namespace ppx;
 
 union MessageBody {
