@@ -1194,7 +1194,7 @@ inline const ppx::Message *GetSizePrefixedMessage(const void *buf) {
 }
 
 inline const char *MessageIdentifier() {
-  return "PPLP";
+  return "PPXF";
 }
 
 inline bool MessageBufferHasIdentifier(const void *buf) {

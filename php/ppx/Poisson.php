@@ -22,7 +22,7 @@ class Poisson extends Table
 
     public static function PoissonIdentifier()
     {
-        return "PPLP";
+        return "PPXF";
     }
 
     public static function PoissonBufferHasIdentifier(ByteBuffer $buf)

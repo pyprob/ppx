@@ -14,7 +14,7 @@ public struct Message : IFlatbufferObject
   public ByteBuffer ByteBuffer { get { return __p.bb; } }
   public static Message GetRootAsMessage(ByteBuffer _bb) { return GetRootAsMessage(_bb, new Message()); }
   public static Message GetRootAsMessage(ByteBuffer _bb, Message obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
-  public static bool MessageBufferHasIdentifier(ByteBuffer _bb) { return Table.__has_identifier(_bb, "PPLP"); }
+  public static bool MessageBufferHasIdentifier(ByteBuffer _bb) { return Table.__has_identifier(_bb, "PPXF"); }
   public void __init(int _i, ByteBuffer _bb) { __p.bb_pos = _i; __p.bb = _bb; }
   public Message __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
@@ -37,8 +37,8 @@ public struct Message : IFlatbufferObject
     int o = builder.EndObject();
     return new Offset<Message>(o);
   }
-  public static void FinishMessageBuffer(FlatBufferBuilder builder, Offset<Message> offset) { builder.Finish(offset.Value, "PPLP"); }
-  public static void FinishSizePrefixedMessageBuffer(FlatBufferBuilder builder, Offset<Message> offset) { builder.FinishSizePrefixed(offset.Value, "PPLP"); }
+  public static void FinishMessageBuffer(FlatBufferBuilder builder, Offset<Message> offset) { builder.Finish(offset.Value, "PPXF"); }
+  public static void FinishSizePrefixedMessageBuffer(FlatBufferBuilder builder, Offset<Message> offset) { builder.FinishSizePrefixed(offset.Value, "PPXF"); }
 };
 
 

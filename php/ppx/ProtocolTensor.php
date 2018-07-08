@@ -22,7 +22,7 @@ class ProtocolTensor extends Table
 
     public static function ProtocolTensorIdentifier()
     {
-        return "PPLP";
+        return "PPXF";
     }
 
     public static function ProtocolTensorBufferHasIdentifier(ByteBuffer $buf)

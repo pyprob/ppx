@@ -87,4 +87,4 @@ table Poisson {
 }
 
 root_type Message;
-file_identifier "PPLP";
+file_identifier "PPXF";

@@ -73,7 +73,7 @@ ppx.Message.getRootAsMessage = function(bb, obj) {
  * @returns {boolean}
  */
 ppx.Message.bufferHasIdentifier = function(bb) {
-  return bb.__has_identifier('PPLP');
+  return bb.__has_identifier('PPXF');
 };
 
 /**
@@ -130,7 +130,7 @@ ppx.Message.endMessage = function(builder) {
  * @param {flatbuffers.Offset} offset
  */
 ppx.Message.finishMessageBuffer = function(builder, offset) {
-  builder.finish(offset, 'PPLP');
+  builder.finish(offset, 'PPXF');
 };
 
 /**

@@ -22,7 +22,7 @@ class Observe extends Table
 
     public static function ObserveIdentifier()
     {
-        return "PPLP";
+        return "PPXF";
     }
 
     public static function ObserveBufferHasIdentifier(ByteBuffer $buf)

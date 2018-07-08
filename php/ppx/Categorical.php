@@ -22,7 +22,7 @@ class Categorical extends Table
 
     public static function CategoricalIdentifier()
     {
-        return "PPLP";
+        return "PPXF";
     }
 
     public static function CategoricalBufferHasIdentifier(ByteBuffer $buf)

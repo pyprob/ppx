@@ -22,7 +22,7 @@ class Run extends Table
 
     public static function RunIdentifier()
     {
-        return "PPLP";
+        return "PPXF";
     }
 
     public static function RunBufferHasIdentifier(ByteBuffer $buf)

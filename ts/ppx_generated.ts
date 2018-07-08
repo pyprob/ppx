@@ -69,7 +69,7 @@ static getRootAsMessage(bb:flatbuffers.ByteBuffer, obj?:Message):Message {
  * @returns {boolean}
  */
 static bufferHasIdentifier(bb:flatbuffers.ByteBuffer):boolean {
-  return bb.__has_identifier('PPLP');
+  return bb.__has_identifier('PPXF');
 };
 
 /**
@@ -126,7 +126,7 @@ static endMessage(builder:flatbuffers.Builder):flatbuffers.Offset {
  * @param {flatbuffers.Offset} offset
  */
 static finishMessageBuffer(builder:flatbuffers.Builder, offset:flatbuffers.Offset) {
-  builder.finish(offset, 'PPLP');
+  builder.finish(offset, 'PPXF');
 };
 
 }

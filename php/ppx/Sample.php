@@ -22,7 +22,7 @@ class Sample extends Table
 
     public static function SampleIdentifier()
     {
-        return "PPLP";
+        return "PPXF";
     }
 
     public static function SampleBufferHasIdentifier(ByteBuffer $buf)

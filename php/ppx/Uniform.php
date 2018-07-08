@@ -22,7 +22,7 @@ class Uniform extends Table
 
     public static function UniformIdentifier()
     {
-        return "PPLP";
+        return "PPXF";
     }
 
     public static function UniformBufferHasIdentifier(ByteBuffer $buf)

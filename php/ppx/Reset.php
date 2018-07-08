@@ -22,7 +22,7 @@ class Reset extends Table
 
     public static function ResetIdentifier()
     {
-        return "PPLP";
+        return "PPXF";
     }
 
     public static function ResetBufferHasIdentifier(ByteBuffer $buf)

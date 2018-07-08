@@ -22,7 +22,7 @@ class HandshakeResult extends Table
 
     public static function HandshakeResultIdentifier()
     {
-        return "PPLP";
+        return "PPXF";
     }
 
     public static function HandshakeResultBufferHasIdentifier(ByteBuffer $buf)

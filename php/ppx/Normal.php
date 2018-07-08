@@ -22,7 +22,7 @@ class Normal extends Table
 
     public static function NormalIdentifier()
     {
-        return "PPLP";
+        return "PPXF";
     }
 
     public static function NormalBufferHasIdentifier(ByteBuffer $buf)

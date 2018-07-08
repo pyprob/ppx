@@ -22,7 +22,7 @@ class Message extends Table
 
     public static function MessageIdentifier()
     {
-        return "PPLP";
+        return "PPXF";
     }
 
     public static function MessageBufferHasIdentifier(ByteBuffer $buf)
@@ -109,6 +109,6 @@ class Message extends Table
 
     public static function finishMessageBuffer(FlatBufferBuilder $builder, $offset)
     {
-        $builder->finish($offset, "PPLP");
+        $builder->finish($offset, "PPXF");
     }
 }
