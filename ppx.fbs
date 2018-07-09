@@ -22,7 +22,7 @@ table Message {
   body: MessageBody;
 }
 
-table ProtocolTensor {
+table Tensor {
   data: [double];
   shape: [int];
 }
@@ -44,11 +44,11 @@ table HandshakeResult {
 }
 
 table Run {
-  observation: ProtocolTensor;
+  observation: Tensor;
 }
 
 table RunResult {
-  result: ProtocolTensor;
+  result: Tensor;
 }
 
 table Sample {
@@ -59,13 +59,13 @@ table Sample {
 }
 
 table SampleResult {
-  result: ProtocolTensor;
+  result: Tensor;
 }
 
 table Observe {
   address: string;
   distribution: Distribution;
-  value: ProtocolTensor;
+  value: Tensor;
 }
 
 table ObserveResult {}
@@ -73,21 +73,21 @@ table ObserveResult {}
 table Reset {}
 
 table Normal {
-  mean: ProtocolTensor;
-  stddev: ProtocolTensor;
+  mean: Tensor;
+  stddev: Tensor;
 }
 
 table Uniform {
-  low: ProtocolTensor;
-  high: ProtocolTensor;
+  low: Tensor;
+  high: Tensor;
 }
 
 table Categorical {
-  probs: ProtocolTensor;
+  probs: Tensor;
 }
 
 table Poisson {
-  rate: ProtocolTensor;
+  rate: Tensor;
 }
 
 root_type Message;

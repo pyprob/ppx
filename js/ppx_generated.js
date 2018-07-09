@@ -136,7 +136,7 @@ ppx.Message.finishMessageBuffer = function(builder, offset) {
 /**
  * @constructor
  */
-ppx.ProtocolTensor = function() {
+ppx.Tensor = function() {
   /**
    * @type {flatbuffers.ByteBuffer}
    */
@@ -151,9 +151,9 @@ ppx.ProtocolTensor = function() {
 /**
  * @param {number} i
  * @param {flatbuffers.ByteBuffer} bb
- * @returns {ppx.ProtocolTensor}
+ * @returns {ppx.Tensor}
  */
-ppx.ProtocolTensor.prototype.__init = function(i, bb) {
+ppx.Tensor.prototype.__init = function(i, bb) {
   this.bb_pos = i;
   this.bb = bb;
   return this;
@@ -161,18 +161,18 @@ ppx.ProtocolTensor.prototype.__init = function(i, bb) {
 
 /**
  * @param {flatbuffers.ByteBuffer} bb
- * @param {ppx.ProtocolTensor=} obj
- * @returns {ppx.ProtocolTensor}
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor}
  */
-ppx.ProtocolTensor.getRootAsProtocolTensor = function(bb, obj) {
-  return (obj || new ppx.ProtocolTensor).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+ppx.Tensor.getRootAsTensor = function(bb, obj) {
+  return (obj || new ppx.Tensor).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
  * @param {number} index
  * @returns {number}
  */
-ppx.ProtocolTensor.prototype.data = function(index) {
+ppx.Tensor.prototype.data = function(index) {
   var offset = this.bb.__offset(this.bb_pos, 4);
   return offset ? this.bb.readFloat64(this.bb.__vector(this.bb_pos + offset) + index * 8) : 0;
 };
@@ -180,7 +180,7 @@ ppx.ProtocolTensor.prototype.data = function(index) {
 /**
  * @returns {number}
  */
-ppx.ProtocolTensor.prototype.dataLength = function() {
+ppx.Tensor.prototype.dataLength = function() {
   var offset = this.bb.__offset(this.bb_pos, 4);
   return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
 };
@@ -188,7 +188,7 @@ ppx.ProtocolTensor.prototype.dataLength = function() {
 /**
  * @returns {Float64Array}
  */
-ppx.ProtocolTensor.prototype.dataArray = function() {
+ppx.Tensor.prototype.dataArray = function() {
   var offset = this.bb.__offset(this.bb_pos, 4);
   return offset ? new Float64Array(this.bb.bytes().buffer, this.bb.bytes().byteOffset + this.bb.__vector(this.bb_pos + offset), this.bb.__vector_len(this.bb_pos + offset)) : null;
 };
@@ -197,7 +197,7 @@ ppx.ProtocolTensor.prototype.dataArray = function() {
  * @param {number} index
  * @returns {number}
  */
-ppx.ProtocolTensor.prototype.shape = function(index) {
+ppx.Tensor.prototype.shape = function(index) {
   var offset = this.bb.__offset(this.bb_pos, 6);
   return offset ? this.bb.readInt32(this.bb.__vector(this.bb_pos + offset) + index * 4) : 0;
 };
@@ -205,7 +205,7 @@ ppx.ProtocolTensor.prototype.shape = function(index) {
 /**
  * @returns {number}
  */
-ppx.ProtocolTensor.prototype.shapeLength = function() {
+ppx.Tensor.prototype.shapeLength = function() {
   var offset = this.bb.__offset(this.bb_pos, 6);
   return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
 };
@@ -213,7 +213,7 @@ ppx.ProtocolTensor.prototype.shapeLength = function() {
 /**
  * @returns {Int32Array}
  */
-ppx.ProtocolTensor.prototype.shapeArray = function() {
+ppx.Tensor.prototype.shapeArray = function() {
   var offset = this.bb.__offset(this.bb_pos, 6);
   return offset ? new Int32Array(this.bb.bytes().buffer, this.bb.bytes().byteOffset + this.bb.__vector(this.bb_pos + offset), this.bb.__vector_len(this.bb_pos + offset)) : null;
 };
@@ -221,7 +221,7 @@ ppx.ProtocolTensor.prototype.shapeArray = function() {
 /**
  * @param {flatbuffers.Builder} builder
  */
-ppx.ProtocolTensor.startProtocolTensor = function(builder) {
+ppx.Tensor.startTensor = function(builder) {
   builder.startObject(2);
 };
 
@@ -229,7 +229,7 @@ ppx.ProtocolTensor.startProtocolTensor = function(builder) {
  * @param {flatbuffers.Builder} builder
  * @param {flatbuffers.Offset} dataOffset
  */
-ppx.ProtocolTensor.addData = function(builder, dataOffset) {
+ppx.Tensor.addData = function(builder, dataOffset) {
   builder.addFieldOffset(0, dataOffset, 0);
 };
 
@@ -238,7 +238,7 @@ ppx.ProtocolTensor.addData = function(builder, dataOffset) {
  * @param {Array.<number>} data
  * @returns {flatbuffers.Offset}
  */
-ppx.ProtocolTensor.createDataVector = function(builder, data) {
+ppx.Tensor.createDataVector = function(builder, data) {
   builder.startVector(8, data.length, 8);
   for (var i = data.length - 1; i >= 0; i--) {
     builder.addFloat64(data[i]);
@@ -250,7 +250,7 @@ ppx.ProtocolTensor.createDataVector = function(builder, data) {
  * @param {flatbuffers.Builder} builder
  * @param {number} numElems
  */
-ppx.ProtocolTensor.startDataVector = function(builder, numElems) {
+ppx.Tensor.startDataVector = function(builder, numElems) {
   builder.startVector(8, numElems, 8);
 };
 
@@ -258,7 +258,7 @@ ppx.ProtocolTensor.startDataVector = function(builder, numElems) {
  * @param {flatbuffers.Builder} builder
  * @param {flatbuffers.Offset} shapeOffset
  */
-ppx.ProtocolTensor.addShape = function(builder, shapeOffset) {
+ppx.Tensor.addShape = function(builder, shapeOffset) {
   builder.addFieldOffset(1, shapeOffset, 0);
 };
 
@@ -267,7 +267,7 @@ ppx.ProtocolTensor.addShape = function(builder, shapeOffset) {
  * @param {Array.<number>} data
  * @returns {flatbuffers.Offset}
  */
-ppx.ProtocolTensor.createShapeVector = function(builder, data) {
+ppx.Tensor.createShapeVector = function(builder, data) {
   builder.startVector(4, data.length, 4);
   for (var i = data.length - 1; i >= 0; i--) {
     builder.addInt32(data[i]);
@@ -279,7 +279,7 @@ ppx.ProtocolTensor.createShapeVector = function(builder, data) {
  * @param {flatbuffers.Builder} builder
  * @param {number} numElems
  */
-ppx.ProtocolTensor.startShapeVector = function(builder, numElems) {
+ppx.Tensor.startShapeVector = function(builder, numElems) {
   builder.startVector(4, numElems, 4);
 };
 
@@ -287,7 +287,7 @@ ppx.ProtocolTensor.startShapeVector = function(builder, numElems) {
  * @param {flatbuffers.Builder} builder
  * @returns {flatbuffers.Offset}
  */
-ppx.ProtocolTensor.endProtocolTensor = function(builder) {
+ppx.Tensor.endTensor = function(builder) {
   var offset = builder.endObject();
   return offset;
 };
@@ -481,12 +481,12 @@ ppx.Run.getRootAsRun = function(bb, obj) {
 };
 
 /**
- * @param {ppx.ProtocolTensor=} obj
- * @returns {ppx.ProtocolTensor|null}
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
  */
 ppx.Run.prototype.observation = function(obj) {
   var offset = this.bb.__offset(this.bb_pos, 4);
-  return offset ? (obj || new ppx.ProtocolTensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
 };
 
 /**
@@ -549,12 +549,12 @@ ppx.RunResult.getRootAsRunResult = function(bb, obj) {
 };
 
 /**
- * @param {ppx.ProtocolTensor=} obj
- * @returns {ppx.ProtocolTensor|null}
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
  */
 ppx.RunResult.prototype.result = function(obj) {
   var offset = this.bb.__offset(this.bb_pos, 4);
-  return offset ? (obj || new ppx.ProtocolTensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
 };
 
 /**
@@ -750,12 +750,12 @@ ppx.SampleResult.getRootAsSampleResult = function(bb, obj) {
 };
 
 /**
- * @param {ppx.ProtocolTensor=} obj
- * @returns {ppx.ProtocolTensor|null}
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
  */
 ppx.SampleResult.prototype.result = function(obj) {
   var offset = this.bb.__offset(this.bb_pos, 4);
-  return offset ? (obj || new ppx.ProtocolTensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
 };
 
 /**
@@ -844,12 +844,12 @@ ppx.Observe.prototype.distribution = function(obj) {
 };
 
 /**
- * @param {ppx.ProtocolTensor=} obj
- * @returns {ppx.ProtocolTensor|null}
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
  */
 ppx.Observe.prototype.value = function(obj) {
   var offset = this.bb.__offset(this.bb_pos, 10);
-  return offset ? (obj || new ppx.ProtocolTensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
 };
 
 /**
@@ -1038,21 +1038,21 @@ ppx.Normal.getRootAsNormal = function(bb, obj) {
 };
 
 /**
- * @param {ppx.ProtocolTensor=} obj
- * @returns {ppx.ProtocolTensor|null}
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
  */
 ppx.Normal.prototype.mean = function(obj) {
   var offset = this.bb.__offset(this.bb_pos, 4);
-  return offset ? (obj || new ppx.ProtocolTensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
 };
 
 /**
- * @param {ppx.ProtocolTensor=} obj
- * @returns {ppx.ProtocolTensor|null}
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
  */
 ppx.Normal.prototype.stddev = function(obj) {
   var offset = this.bb.__offset(this.bb_pos, 6);
-  return offset ? (obj || new ppx.ProtocolTensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
 };
 
 /**
@@ -1123,21 +1123,21 @@ ppx.Uniform.getRootAsUniform = function(bb, obj) {
 };
 
 /**
- * @param {ppx.ProtocolTensor=} obj
- * @returns {ppx.ProtocolTensor|null}
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
  */
 ppx.Uniform.prototype.low = function(obj) {
   var offset = this.bb.__offset(this.bb_pos, 4);
-  return offset ? (obj || new ppx.ProtocolTensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
 };
 
 /**
- * @param {ppx.ProtocolTensor=} obj
- * @returns {ppx.ProtocolTensor|null}
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
  */
 ppx.Uniform.prototype.high = function(obj) {
   var offset = this.bb.__offset(this.bb_pos, 6);
-  return offset ? (obj || new ppx.ProtocolTensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
 };
 
 /**
@@ -1208,12 +1208,12 @@ ppx.Categorical.getRootAsCategorical = function(bb, obj) {
 };
 
 /**
- * @param {ppx.ProtocolTensor=} obj
- * @returns {ppx.ProtocolTensor|null}
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
  */
 ppx.Categorical.prototype.probs = function(obj) {
   var offset = this.bb.__offset(this.bb_pos, 4);
-  return offset ? (obj || new ppx.ProtocolTensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
 };
 
 /**
@@ -1276,12 +1276,12 @@ ppx.Poisson.getRootAsPoisson = function(bb, obj) {
 };
 
 /**
- * @param {ppx.ProtocolTensor=} obj
- * @returns {ppx.ProtocolTensor|null}
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
  */
 ppx.Poisson.prototype.rate = function(obj) {
   var offset = this.bb.__offset(this.bb_pos, 4);
-  return offset ? (obj || new ppx.ProtocolTensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
 };
 
 /**

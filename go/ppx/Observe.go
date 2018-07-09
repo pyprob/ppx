@@ -55,12 +55,12 @@ func (rcv *Observe) Distribution(obj *flatbuffers.Table) bool {
 	return false
 }
 
-func (rcv *Observe) Value(obj *ProtocolTensor) *ProtocolTensor {
+func (rcv *Observe) Value(obj *Tensor) *Tensor {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(10))
 	if o != 0 {
 		x := rcv._tab.Indirect(o + rcv._tab.Pos)
 		if obj == nil {
-			obj = new(ProtocolTensor)
+			obj = new(Tensor)
 		}
 		obj.Init(rcv._tab.Bytes, x)
 		return obj

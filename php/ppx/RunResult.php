@@ -44,7 +44,7 @@ class RunResult extends Table
 
     public function getResult()
     {
-        $obj = new ProtocolTensor();
+        $obj = new Tensor();
         $o = $this->__offset(4);
         return $o != 0 ? $obj->init($this->__indirect($o + $this->bb_pos), $this->bb) : 0;
     }

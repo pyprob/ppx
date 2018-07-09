@@ -26,12 +26,12 @@ func (rcv *Normal) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *Normal) Mean(obj *ProtocolTensor) *ProtocolTensor {
+func (rcv *Normal) Mean(obj *Tensor) *Tensor {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
 		x := rcv._tab.Indirect(o + rcv._tab.Pos)
 		if obj == nil {
-			obj = new(ProtocolTensor)
+			obj = new(Tensor)
 		}
 		obj.Init(rcv._tab.Bytes, x)
 		return obj
@@ -39,12 +39,12 @@ func (rcv *Normal) Mean(obj *ProtocolTensor) *ProtocolTensor {
 	return nil
 }
 
-func (rcv *Normal) Stddev(obj *ProtocolTensor) *ProtocolTensor {
+func (rcv *Normal) Stddev(obj *Tensor) *Tensor {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		x := rcv._tab.Indirect(o + rcv._tab.Pos)
 		if obj == nil {
-			obj = new(ProtocolTensor)
+			obj = new(Tensor)
 		}
 		obj.Init(rcv._tab.Bytes, x)
 		return obj

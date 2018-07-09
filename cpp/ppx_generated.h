@@ -10,7 +10,7 @@ namespace ppx {
 
 struct Message;
 
-struct ProtocolTensor;
+struct Tensor;
 
 struct Handshake;
 
@@ -310,7 +310,7 @@ inline flatbuffers::Offset<Message> CreateMessage(
   return builder_.Finish();
 }
 
-struct ProtocolTensor FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+struct Tensor FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
     VT_DATA = 4,
     VT_SHAPE = 6
@@ -331,42 +331,42 @@ struct ProtocolTensor FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
 };
 
-struct ProtocolTensorBuilder {
+struct TensorBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_data(flatbuffers::Offset<flatbuffers::Vector<double>> data) {
-    fbb_.AddOffset(ProtocolTensor::VT_DATA, data);
+    fbb_.AddOffset(Tensor::VT_DATA, data);
   }
   void add_shape(flatbuffers::Offset<flatbuffers::Vector<int32_t>> shape) {
-    fbb_.AddOffset(ProtocolTensor::VT_SHAPE, shape);
+    fbb_.AddOffset(Tensor::VT_SHAPE, shape);
   }
-  explicit ProtocolTensorBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit TensorBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ProtocolTensorBuilder &operator=(const ProtocolTensorBuilder &);
-  flatbuffers::Offset<ProtocolTensor> Finish() {
+  TensorBuilder &operator=(const TensorBuilder &);
+  flatbuffers::Offset<Tensor> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<ProtocolTensor>(end);
+    auto o = flatbuffers::Offset<Tensor>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<ProtocolTensor> CreateProtocolTensor(
+inline flatbuffers::Offset<Tensor> CreateTensor(
     flatbuffers::FlatBufferBuilder &_fbb,
     flatbuffers::Offset<flatbuffers::Vector<double>> data = 0,
     flatbuffers::Offset<flatbuffers::Vector<int32_t>> shape = 0) {
-  ProtocolTensorBuilder builder_(_fbb);
+  TensorBuilder builder_(_fbb);
   builder_.add_shape(shape);
   builder_.add_data(data);
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<ProtocolTensor> CreateProtocolTensorDirect(
+inline flatbuffers::Offset<Tensor> CreateTensorDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const std::vector<double> *data = nullptr,
     const std::vector<int32_t> *shape = nullptr) {
-  return ppx::CreateProtocolTensor(
+  return ppx::CreateTensor(
       _fbb,
       data ? _fbb.CreateVector<double>(*data) : 0,
       shape ? _fbb.CreateVector<int32_t>(*shape) : 0);
@@ -487,8 +487,8 @@ struct Run FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
     VT_OBSERVATION = 4
   };
-  const ProtocolTensor *observation() const {
-    return GetPointer<const ProtocolTensor *>(VT_OBSERVATION);
+  const Tensor *observation() const {
+    return GetPointer<const Tensor *>(VT_OBSERVATION);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -501,7 +501,7 @@ struct Run FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct RunBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_observation(flatbuffers::Offset<ProtocolTensor> observation) {
+  void add_observation(flatbuffers::Offset<Tensor> observation) {
     fbb_.AddOffset(Run::VT_OBSERVATION, observation);
   }
   explicit RunBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -518,7 +518,7 @@ struct RunBuilder {
 
 inline flatbuffers::Offset<Run> CreateRun(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<ProtocolTensor> observation = 0) {
+    flatbuffers::Offset<Tensor> observation = 0) {
   RunBuilder builder_(_fbb);
   builder_.add_observation(observation);
   return builder_.Finish();
@@ -528,8 +528,8 @@ struct RunResult FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
     VT_RESULT = 4
   };
-  const ProtocolTensor *result() const {
-    return GetPointer<const ProtocolTensor *>(VT_RESULT);
+  const Tensor *result() const {
+    return GetPointer<const Tensor *>(VT_RESULT);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -542,7 +542,7 @@ struct RunResult FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct RunResultBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_result(flatbuffers::Offset<ProtocolTensor> result) {
+  void add_result(flatbuffers::Offset<Tensor> result) {
     fbb_.AddOffset(RunResult::VT_RESULT, result);
   }
   explicit RunResultBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -559,7 +559,7 @@ struct RunResultBuilder {
 
 inline flatbuffers::Offset<RunResult> CreateRunResult(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<ProtocolTensor> result = 0) {
+    flatbuffers::Offset<Tensor> result = 0) {
   RunResultBuilder builder_(_fbb);
   builder_.add_result(result);
   return builder_.Finish();
@@ -696,8 +696,8 @@ struct SampleResult FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
     VT_RESULT = 4
   };
-  const ProtocolTensor *result() const {
-    return GetPointer<const ProtocolTensor *>(VT_RESULT);
+  const Tensor *result() const {
+    return GetPointer<const Tensor *>(VT_RESULT);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -710,7 +710,7 @@ struct SampleResult FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct SampleResultBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_result(flatbuffers::Offset<ProtocolTensor> result) {
+  void add_result(flatbuffers::Offset<Tensor> result) {
     fbb_.AddOffset(SampleResult::VT_RESULT, result);
   }
   explicit SampleResultBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -727,7 +727,7 @@ struct SampleResultBuilder {
 
 inline flatbuffers::Offset<SampleResult> CreateSampleResult(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<ProtocolTensor> result = 0) {
+    flatbuffers::Offset<Tensor> result = 0) {
   SampleResultBuilder builder_(_fbb);
   builder_.add_result(result);
   return builder_.Finish();
@@ -762,8 +762,8 @@ struct Observe FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const Poisson *distribution_as_Poisson() const {
     return distribution_type() == Distribution_Poisson ? static_cast<const Poisson *>(distribution()) : nullptr;
   }
-  const ProtocolTensor *value() const {
-    return GetPointer<const ProtocolTensor *>(VT_VALUE);
+  const Tensor *value() const {
+    return GetPointer<const Tensor *>(VT_VALUE);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -806,7 +806,7 @@ struct ObserveBuilder {
   void add_distribution(flatbuffers::Offset<void> distribution) {
     fbb_.AddOffset(Observe::VT_DISTRIBUTION, distribution);
   }
-  void add_value(flatbuffers::Offset<ProtocolTensor> value) {
+  void add_value(flatbuffers::Offset<Tensor> value) {
     fbb_.AddOffset(Observe::VT_VALUE, value);
   }
   explicit ObserveBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -826,7 +826,7 @@ inline flatbuffers::Offset<Observe> CreateObserve(
     flatbuffers::Offset<flatbuffers::String> address = 0,
     Distribution distribution_type = Distribution_NONE,
     flatbuffers::Offset<void> distribution = 0,
-    flatbuffers::Offset<ProtocolTensor> value = 0) {
+    flatbuffers::Offset<Tensor> value = 0) {
   ObserveBuilder builder_(_fbb);
   builder_.add_value(value);
   builder_.add_distribution(distribution);
@@ -840,7 +840,7 @@ inline flatbuffers::Offset<Observe> CreateObserveDirect(
     const char *address = nullptr,
     Distribution distribution_type = Distribution_NONE,
     flatbuffers::Offset<void> distribution = 0,
-    flatbuffers::Offset<ProtocolTensor> value = 0) {
+    flatbuffers::Offset<Tensor> value = 0) {
   return ppx::CreateObserve(
       _fbb,
       address ? _fbb.CreateString(address) : 0,
@@ -910,11 +910,11 @@ struct Normal FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     VT_MEAN = 4,
     VT_STDDEV = 6
   };
-  const ProtocolTensor *mean() const {
-    return GetPointer<const ProtocolTensor *>(VT_MEAN);
+  const Tensor *mean() const {
+    return GetPointer<const Tensor *>(VT_MEAN);
   }
-  const ProtocolTensor *stddev() const {
-    return GetPointer<const ProtocolTensor *>(VT_STDDEV);
+  const Tensor *stddev() const {
+    return GetPointer<const Tensor *>(VT_STDDEV);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -929,10 +929,10 @@ struct Normal FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct NormalBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_mean(flatbuffers::Offset<ProtocolTensor> mean) {
+  void add_mean(flatbuffers::Offset<Tensor> mean) {
     fbb_.AddOffset(Normal::VT_MEAN, mean);
   }
-  void add_stddev(flatbuffers::Offset<ProtocolTensor> stddev) {
+  void add_stddev(flatbuffers::Offset<Tensor> stddev) {
     fbb_.AddOffset(Normal::VT_STDDEV, stddev);
   }
   explicit NormalBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -949,8 +949,8 @@ struct NormalBuilder {
 
 inline flatbuffers::Offset<Normal> CreateNormal(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<ProtocolTensor> mean = 0,
-    flatbuffers::Offset<ProtocolTensor> stddev = 0) {
+    flatbuffers::Offset<Tensor> mean = 0,
+    flatbuffers::Offset<Tensor> stddev = 0) {
   NormalBuilder builder_(_fbb);
   builder_.add_stddev(stddev);
   builder_.add_mean(mean);
@@ -962,11 +962,11 @@ struct Uniform FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     VT_LOW = 4,
     VT_HIGH = 6
   };
-  const ProtocolTensor *low() const {
-    return GetPointer<const ProtocolTensor *>(VT_LOW);
+  const Tensor *low() const {
+    return GetPointer<const Tensor *>(VT_LOW);
   }
-  const ProtocolTensor *high() const {
-    return GetPointer<const ProtocolTensor *>(VT_HIGH);
+  const Tensor *high() const {
+    return GetPointer<const Tensor *>(VT_HIGH);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -981,10 +981,10 @@ struct Uniform FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct UniformBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_low(flatbuffers::Offset<ProtocolTensor> low) {
+  void add_low(flatbuffers::Offset<Tensor> low) {
     fbb_.AddOffset(Uniform::VT_LOW, low);
   }
-  void add_high(flatbuffers::Offset<ProtocolTensor> high) {
+  void add_high(flatbuffers::Offset<Tensor> high) {
     fbb_.AddOffset(Uniform::VT_HIGH, high);
   }
   explicit UniformBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -1001,8 +1001,8 @@ struct UniformBuilder {
 
 inline flatbuffers::Offset<Uniform> CreateUniform(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<ProtocolTensor> low = 0,
-    flatbuffers::Offset<ProtocolTensor> high = 0) {
+    flatbuffers::Offset<Tensor> low = 0,
+    flatbuffers::Offset<Tensor> high = 0) {
   UniformBuilder builder_(_fbb);
   builder_.add_high(high);
   builder_.add_low(low);
@@ -1013,8 +1013,8 @@ struct Categorical FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
     VT_PROBS = 4
   };
-  const ProtocolTensor *probs() const {
-    return GetPointer<const ProtocolTensor *>(VT_PROBS);
+  const Tensor *probs() const {
+    return GetPointer<const Tensor *>(VT_PROBS);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -1027,7 +1027,7 @@ struct Categorical FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct CategoricalBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_probs(flatbuffers::Offset<ProtocolTensor> probs) {
+  void add_probs(flatbuffers::Offset<Tensor> probs) {
     fbb_.AddOffset(Categorical::VT_PROBS, probs);
   }
   explicit CategoricalBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -1044,7 +1044,7 @@ struct CategoricalBuilder {
 
 inline flatbuffers::Offset<Categorical> CreateCategorical(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<ProtocolTensor> probs = 0) {
+    flatbuffers::Offset<Tensor> probs = 0) {
   CategoricalBuilder builder_(_fbb);
   builder_.add_probs(probs);
   return builder_.Finish();
@@ -1054,8 +1054,8 @@ struct Poisson FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
     VT_RATE = 4
   };
-  const ProtocolTensor *rate() const {
-    return GetPointer<const ProtocolTensor *>(VT_RATE);
+  const Tensor *rate() const {
+    return GetPointer<const Tensor *>(VT_RATE);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -1068,7 +1068,7 @@ struct Poisson FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct PoissonBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_rate(flatbuffers::Offset<ProtocolTensor> rate) {
+  void add_rate(flatbuffers::Offset<Tensor> rate) {
     fbb_.AddOffset(Poisson::VT_RATE, rate);
   }
   explicit PoissonBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -1085,7 +1085,7 @@ struct PoissonBuilder {
 
 inline flatbuffers::Offset<Poisson> CreatePoisson(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<ProtocolTensor> rate = 0) {
+    flatbuffers::Offset<Tensor> rate = 0) {
   PoissonBuilder builder_(_fbb);
   builder_.add_rate(rate);
   return builder_.Finish();

@@ -17,12 +17,12 @@ public struct Uniform : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p.bb_pos = _i; __p.bb = _bb; }
   public Uniform __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ProtocolTensor? Low { get { int o = __p.__offset(4); return o != 0 ? (ProtocolTensor?)(new ProtocolTensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
-  public ProtocolTensor? High { get { int o = __p.__offset(6); return o != 0 ? (ProtocolTensor?)(new ProtocolTensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
+  public Tensor? Low { get { int o = __p.__offset(4); return o != 0 ? (Tensor?)(new Tensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
+  public Tensor? High { get { int o = __p.__offset(6); return o != 0 ? (Tensor?)(new Tensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
 
   public static Offset<Uniform> CreateUniform(FlatBufferBuilder builder,
-      Offset<ProtocolTensor> lowOffset = default(Offset<ProtocolTensor>),
-      Offset<ProtocolTensor> highOffset = default(Offset<ProtocolTensor>)) {
+      Offset<Tensor> lowOffset = default(Offset<Tensor>),
+      Offset<Tensor> highOffset = default(Offset<Tensor>)) {
     builder.StartObject(2);
     Uniform.AddHigh(builder, highOffset);
     Uniform.AddLow(builder, lowOffset);
@@ -30,8 +30,8 @@ public struct Uniform : IFlatbufferObject
   }
 
   public static void StartUniform(FlatBufferBuilder builder) { builder.StartObject(2); }
-  public static void AddLow(FlatBufferBuilder builder, Offset<ProtocolTensor> lowOffset) { builder.AddOffset(0, lowOffset.Value, 0); }
-  public static void AddHigh(FlatBufferBuilder builder, Offset<ProtocolTensor> highOffset) { builder.AddOffset(1, highOffset.Value, 0); }
+  public static void AddLow(FlatBufferBuilder builder, Offset<Tensor> lowOffset) { builder.AddOffset(0, lowOffset.Value, 0); }
+  public static void AddHigh(FlatBufferBuilder builder, Offset<Tensor> highOffset) { builder.AddOffset(1, highOffset.Value, 0); }
   public static Offset<Uniform> EndUniform(FlatBufferBuilder builder) {
     int o = builder.EndObject();
     return new Offset<Uniform>(o);

@@ -17,12 +17,12 @@ public struct Normal : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p.bb_pos = _i; __p.bb = _bb; }
   public Normal __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ProtocolTensor? Mean { get { int o = __p.__offset(4); return o != 0 ? (ProtocolTensor?)(new ProtocolTensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
-  public ProtocolTensor? Stddev { get { int o = __p.__offset(6); return o != 0 ? (ProtocolTensor?)(new ProtocolTensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
+  public Tensor? Mean { get { int o = __p.__offset(4); return o != 0 ? (Tensor?)(new Tensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
+  public Tensor? Stddev { get { int o = __p.__offset(6); return o != 0 ? (Tensor?)(new Tensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
 
   public static Offset<Normal> CreateNormal(FlatBufferBuilder builder,
-      Offset<ProtocolTensor> meanOffset = default(Offset<ProtocolTensor>),
-      Offset<ProtocolTensor> stddevOffset = default(Offset<ProtocolTensor>)) {
+      Offset<Tensor> meanOffset = default(Offset<Tensor>),
+      Offset<Tensor> stddevOffset = default(Offset<Tensor>)) {
     builder.StartObject(2);
     Normal.AddStddev(builder, stddevOffset);
     Normal.AddMean(builder, meanOffset);
@@ -30,8 +30,8 @@ public struct Normal : IFlatbufferObject
   }
 
   public static void StartNormal(FlatBufferBuilder builder) { builder.StartObject(2); }
-  public static void AddMean(FlatBufferBuilder builder, Offset<ProtocolTensor> meanOffset) { builder.AddOffset(0, meanOffset.Value, 0); }
-  public static void AddStddev(FlatBufferBuilder builder, Offset<ProtocolTensor> stddevOffset) { builder.AddOffset(1, stddevOffset.Value, 0); }
+  public static void AddMean(FlatBufferBuilder builder, Offset<Tensor> meanOffset) { builder.AddOffset(0, meanOffset.Value, 0); }
+  public static void AddStddev(FlatBufferBuilder builder, Offset<Tensor> stddevOffset) { builder.AddOffset(1, stddevOffset.Value, 0); }
   public static Offset<Normal> EndNormal(FlatBufferBuilder builder) {
     int o = builder.EndObject();
     return new Offset<Normal>(o);

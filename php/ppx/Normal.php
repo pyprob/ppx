@@ -44,14 +44,14 @@ class Normal extends Table
 
     public function getMean()
     {
-        $obj = new ProtocolTensor();
+        $obj = new Tensor();
         $o = $this->__offset(4);
         return $o != 0 ? $obj->init($this->__indirect($o + $this->bb_pos), $this->bb) : 0;
     }
 
     public function getStddev()
     {
-        $obj = new ProtocolTensor();
+        $obj = new Tensor();
         $o = $this->__offset(6);
         return $o != 0 ? $obj->init($this->__indirect($o + $this->bb_pos), $this->bb) : 0;
     }

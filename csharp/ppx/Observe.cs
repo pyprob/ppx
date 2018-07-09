@@ -21,13 +21,13 @@ public struct Observe : IFlatbufferObject
   public ArraySegment<byte>? GetAddressBytes() { return __p.__vector_as_arraysegment(4); }
   public Distribution DistributionType { get { int o = __p.__offset(6); return o != 0 ? (Distribution)__p.bb.Get(o + __p.bb_pos) : Distribution.NONE; } }
   public TTable? Distribution<TTable>() where TTable : struct, IFlatbufferObject { int o = __p.__offset(8); return o != 0 ? (TTable?)__p.__union<TTable>(o) : null; }
-  public ProtocolTensor? Value { get { int o = __p.__offset(10); return o != 0 ? (ProtocolTensor?)(new ProtocolTensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
+  public Tensor? Value { get { int o = __p.__offset(10); return o != 0 ? (Tensor?)(new Tensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
 
   public static Offset<Observe> CreateObserve(FlatBufferBuilder builder,
       StringOffset addressOffset = default(StringOffset),
       Distribution distribution_type = Distribution.NONE,
       int distributionOffset = 0,
-      Offset<ProtocolTensor> valueOffset = default(Offset<ProtocolTensor>)) {
+      Offset<Tensor> valueOffset = default(Offset<Tensor>)) {
     builder.StartObject(4);
     Observe.AddValue(builder, valueOffset);
     Observe.AddDistribution(builder, distributionOffset);
@@ -40,7 +40,7 @@ public struct Observe : IFlatbufferObject
   public static void AddAddress(FlatBufferBuilder builder, StringOffset addressOffset) { builder.AddOffset(0, addressOffset.Value, 0); }
   public static void AddDistributionType(FlatBufferBuilder builder, Distribution distributionType) { builder.AddByte(1, (byte)distributionType, 0); }
   public static void AddDistribution(FlatBufferBuilder builder, int distributionOffset) { builder.AddOffset(2, distributionOffset, 0); }
-  public static void AddValue(FlatBufferBuilder builder, Offset<ProtocolTensor> valueOffset) { builder.AddOffset(3, valueOffset.Value, 0); }
+  public static void AddValue(FlatBufferBuilder builder, Offset<Tensor> valueOffset) { builder.AddOffset(3, valueOffset.Value, 0); }
   public static Offset<Observe> EndObserve(FlatBufferBuilder builder) {
     int o = builder.EndObject();
     return new Offset<Observe>(o);

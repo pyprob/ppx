@@ -14,8 +14,8 @@ public final class Categorical extends Table {
   public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; }
   public Categorical __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ProtocolTensor probs() { return probs(new ProtocolTensor()); }
-  public ProtocolTensor probs(ProtocolTensor obj) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
+  public Tensor probs() { return probs(new Tensor()); }
+  public Tensor probs(Tensor obj) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
 
   public static int createCategorical(FlatBufferBuilder builder,
       int probsOffset) {

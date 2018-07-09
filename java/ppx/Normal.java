@@ -14,10 +14,10 @@ public final class Normal extends Table {
   public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; }
   public Normal __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ProtocolTensor mean() { return mean(new ProtocolTensor()); }
-  public ProtocolTensor mean(ProtocolTensor obj) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
-  public ProtocolTensor stddev() { return stddev(new ProtocolTensor()); }
-  public ProtocolTensor stddev(ProtocolTensor obj) { int o = __offset(6); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
+  public Tensor mean() { return mean(new Tensor()); }
+  public Tensor mean(Tensor obj) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
+  public Tensor stddev() { return stddev(new Tensor()); }
+  public Tensor stddev(Tensor obj) { int o = __offset(6); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
 
   public static int createNormal(FlatBufferBuilder builder,
       int meanOffset,

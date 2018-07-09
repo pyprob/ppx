@@ -17,17 +17,17 @@ public struct SampleResult : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p.bb_pos = _i; __p.bb = _bb; }
   public SampleResult __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ProtocolTensor? Result { get { int o = __p.__offset(4); return o != 0 ? (ProtocolTensor?)(new ProtocolTensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
+  public Tensor? Result { get { int o = __p.__offset(4); return o != 0 ? (Tensor?)(new Tensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
 
   public static Offset<SampleResult> CreateSampleResult(FlatBufferBuilder builder,
-      Offset<ProtocolTensor> resultOffset = default(Offset<ProtocolTensor>)) {
+      Offset<Tensor> resultOffset = default(Offset<Tensor>)) {
     builder.StartObject(1);
     SampleResult.AddResult(builder, resultOffset);
     return SampleResult.EndSampleResult(builder);
   }
 
   public static void StartSampleResult(FlatBufferBuilder builder) { builder.StartObject(1); }
-  public static void AddResult(FlatBufferBuilder builder, Offset<ProtocolTensor> resultOffset) { builder.AddOffset(0, resultOffset.Value, 0); }
+  public static void AddResult(FlatBufferBuilder builder, Offset<Tensor> resultOffset) { builder.AddOffset(0, resultOffset.Value, 0); }
   public static Offset<SampleResult> EndSampleResult(FlatBufferBuilder builder) {
     int o = builder.EndObject();
     return new Offset<SampleResult>(o);

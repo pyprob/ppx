@@ -19,8 +19,8 @@ public final class Observe extends Table {
   public ByteBuffer addressInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 4, 1); }
   public byte distributionType() { int o = __offset(6); return o != 0 ? bb.get(o + bb_pos) : 0; }
   public Table distribution(Table obj) { int o = __offset(8); return o != 0 ? __union(obj, o) : null; }
-  public ProtocolTensor value() { return value(new ProtocolTensor()); }
-  public ProtocolTensor value(ProtocolTensor obj) { int o = __offset(10); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
+  public Tensor value() { return value(new Tensor()); }
+  public Tensor value(Tensor obj) { int o = __offset(10); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
 
   public static int createObserve(FlatBufferBuilder builder,
       int addressOffset,

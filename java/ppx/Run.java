@@ -14,8 +14,8 @@ public final class Run extends Table {
   public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; }
   public Run __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ProtocolTensor observation() { return observation(new ProtocolTensor()); }
-  public ProtocolTensor observation(ProtocolTensor obj) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
+  public Tensor observation() { return observation(new Tensor()); }
+  public Tensor observation(Tensor obj) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
 
   public static int createRun(FlatBufferBuilder builder,
       int observationOffset) {

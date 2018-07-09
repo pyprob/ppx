@@ -68,7 +68,7 @@ class Observe extends Table
 
     public function getValue()
     {
-        $obj = new ProtocolTensor();
+        $obj = new Tensor();
         $o = $this->__offset(10);
         return $o != 0 ? $obj->init($this->__indirect($o + $this->bb_pos), $this->bb) : 0;
     }

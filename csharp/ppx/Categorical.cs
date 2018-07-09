@@ -17,17 +17,17 @@ public struct Categorical : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p.bb_pos = _i; __p.bb = _bb; }
   public Categorical __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ProtocolTensor? Probs { get { int o = __p.__offset(4); return o != 0 ? (ProtocolTensor?)(new ProtocolTensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
+  public Tensor? Probs { get { int o = __p.__offset(4); return o != 0 ? (Tensor?)(new Tensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
 
   public static Offset<Categorical> CreateCategorical(FlatBufferBuilder builder,
-      Offset<ProtocolTensor> probsOffset = default(Offset<ProtocolTensor>)) {
+      Offset<Tensor> probsOffset = default(Offset<Tensor>)) {
     builder.StartObject(1);
     Categorical.AddProbs(builder, probsOffset);
     return Categorical.EndCategorical(builder);
   }
 
   public static void StartCategorical(FlatBufferBuilder builder) { builder.StartObject(1); }
-  public static void AddProbs(FlatBufferBuilder builder, Offset<ProtocolTensor> probsOffset) { builder.AddOffset(0, probsOffset.Value, 0); }
+  public static void AddProbs(FlatBufferBuilder builder, Offset<Tensor> probsOffset) { builder.AddOffset(0, probsOffset.Value, 0); }
   public static Offset<Categorical> EndCategorical(FlatBufferBuilder builder) {
     int o = builder.EndObject();
     return new Offset<Categorical>(o);

@@ -17,17 +17,17 @@ public struct Poisson : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p.bb_pos = _i; __p.bb = _bb; }
   public Poisson __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ProtocolTensor? Rate { get { int o = __p.__offset(4); return o != 0 ? (ProtocolTensor?)(new ProtocolTensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
+  public Tensor? Rate { get { int o = __p.__offset(4); return o != 0 ? (Tensor?)(new Tensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
 
   public static Offset<Poisson> CreatePoisson(FlatBufferBuilder builder,
-      Offset<ProtocolTensor> rateOffset = default(Offset<ProtocolTensor>)) {
+      Offset<Tensor> rateOffset = default(Offset<Tensor>)) {
     builder.StartObject(1);
     Poisson.AddRate(builder, rateOffset);
     return Poisson.EndPoisson(builder);
   }
 
   public static void StartPoisson(FlatBufferBuilder builder) { builder.StartObject(1); }
-  public static void AddRate(FlatBufferBuilder builder, Offset<ProtocolTensor> rateOffset) { builder.AddOffset(0, rateOffset.Value, 0); }
+  public static void AddRate(FlatBufferBuilder builder, Offset<Tensor> rateOffset) { builder.AddOffset(0, rateOffset.Value, 0); }
   public static Offset<Poisson> EndPoisson(FlatBufferBuilder builder) {
     int o = builder.EndObject();
     return new Offset<Poisson>(o);

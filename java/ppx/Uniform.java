@@ -14,10 +14,10 @@ public final class Uniform extends Table {
   public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; }
   public Uniform __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ProtocolTensor low() { return low(new ProtocolTensor()); }
-  public ProtocolTensor low(ProtocolTensor obj) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
-  public ProtocolTensor high() { return high(new ProtocolTensor()); }
-  public ProtocolTensor high(ProtocolTensor obj) { int o = __offset(6); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
+  public Tensor low() { return low(new Tensor()); }
+  public Tensor low(Tensor obj) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
+  public Tensor high() { return high(new Tensor()); }
+  public Tensor high(Tensor obj) { int o = __offset(6); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
 
   public static int createUniform(FlatBufferBuilder builder,
       int lowOffset,

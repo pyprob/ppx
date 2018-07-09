@@ -26,12 +26,12 @@ func (rcv *RunResult) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *RunResult) Result(obj *ProtocolTensor) *ProtocolTensor {
+func (rcv *RunResult) Result(obj *Tensor) *Tensor {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
 		x := rcv._tab.Indirect(o + rcv._tab.Pos)
 		if obj == nil {
-			obj = new(ProtocolTensor)
+			obj = new(Tensor)
 		}
 		obj.Init(rcv._tab.Bytes, x)
 		return obj

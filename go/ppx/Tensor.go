@@ -6,27 +6,27 @@ import (
 	flatbuffers "github.com/google/flatbuffers/go"
 )
 
-type ProtocolTensor struct {
+type Tensor struct {
 	_tab flatbuffers.Table
 }
 
-func GetRootAsProtocolTensor(buf []byte, offset flatbuffers.UOffsetT) *ProtocolTensor {
+func GetRootAsTensor(buf []byte, offset flatbuffers.UOffsetT) *Tensor {
 	n := flatbuffers.GetUOffsetT(buf[offset:])
-	x := &ProtocolTensor{}
+	x := &Tensor{}
 	x.Init(buf, n+offset)
 	return x
 }
 
-func (rcv *ProtocolTensor) Init(buf []byte, i flatbuffers.UOffsetT) {
+func (rcv *Tensor) Init(buf []byte, i flatbuffers.UOffsetT) {
 	rcv._tab.Bytes = buf
 	rcv._tab.Pos = i
 }
 
-func (rcv *ProtocolTensor) Table() flatbuffers.Table {
+func (rcv *Tensor) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *ProtocolTensor) Data(j int) float64 {
+func (rcv *Tensor) Data(j int) float64 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
 		a := rcv._tab.Vector(o)
@@ -35,7 +35,7 @@ func (rcv *ProtocolTensor) Data(j int) float64 {
 	return 0
 }
 
-func (rcv *ProtocolTensor) DataLength() int {
+func (rcv *Tensor) DataLength() int {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
 		return rcv._tab.VectorLen(o)
@@ -43,7 +43,7 @@ func (rcv *ProtocolTensor) DataLength() int {
 	return 0
 }
 
-func (rcv *ProtocolTensor) Shape(j int) int32 {
+func (rcv *Tensor) Shape(j int) int32 {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		a := rcv._tab.Vector(o)
@@ -52,7 +52,7 @@ func (rcv *ProtocolTensor) Shape(j int) int32 {
 	return 0
 }
 
-func (rcv *ProtocolTensor) ShapeLength() int {
+func (rcv *Tensor) ShapeLength() int {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(6))
 	if o != 0 {
 		return rcv._tab.VectorLen(o)
@@ -60,21 +60,21 @@ func (rcv *ProtocolTensor) ShapeLength() int {
 	return 0
 }
 
-func ProtocolTensorStart(builder *flatbuffers.Builder) {
+func TensorStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }
-func ProtocolTensorAddData(builder *flatbuffers.Builder, data flatbuffers.UOffsetT) {
+func TensorAddData(builder *flatbuffers.Builder, data flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(data), 0)
 }
-func ProtocolTensorStartDataVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+func TensorStartDataVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(8, numElems, 8)
 }
-func ProtocolTensorAddShape(builder *flatbuffers.Builder, shape flatbuffers.UOffsetT) {
+func TensorAddShape(builder *flatbuffers.Builder, shape flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(shape), 0)
 }
-func ProtocolTensorStartShapeVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+func TensorStartShapeVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(4, numElems, 4)
 }
-func ProtocolTensorEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
+func TensorEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
 }

@@ -8,32 +8,32 @@ use \Google\FlatBuffers\Table;
 use \Google\FlatBuffers\ByteBuffer;
 use \Google\FlatBuffers\FlatBufferBuilder;
 
-class ProtocolTensor extends Table
+class Tensor extends Table
 {
     /**
      * @param ByteBuffer $bb
-     * @return ProtocolTensor
+     * @return Tensor
      */
-    public static function getRootAsProtocolTensor(ByteBuffer $bb)
+    public static function getRootAsTensor(ByteBuffer $bb)
     {
-        $obj = new ProtocolTensor();
+        $obj = new Tensor();
         return ($obj->init($bb->getInt($bb->getPosition()) + $bb->getPosition(), $bb));
     }
 
-    public static function ProtocolTensorIdentifier()
+    public static function TensorIdentifier()
     {
         return "PPXF";
     }
 
-    public static function ProtocolTensorBufferHasIdentifier(ByteBuffer $buf)
+    public static function TensorBufferHasIdentifier(ByteBuffer $buf)
     {
-        return self::__has_identifier($buf, self::ProtocolTensorIdentifier());
+        return self::__has_identifier($buf, self::TensorIdentifier());
     }
 
     /**
      * @param int $_i offset
      * @param ByteBuffer $_bb
-     * @return ProtocolTensor
+     * @return Tensor
      **/
     public function init($_i, ByteBuffer $_bb)
     {
@@ -84,16 +84,16 @@ class ProtocolTensor extends Table
      * @param FlatBufferBuilder $builder
      * @return void
      */
-    public static function startProtocolTensor(FlatBufferBuilder $builder)
+    public static function startTensor(FlatBufferBuilder $builder)
     {
         $builder->StartObject(2);
     }
 
     /**
      * @param FlatBufferBuilder $builder
-     * @return ProtocolTensor
+     * @return Tensor
      */
-    public static function createProtocolTensor(FlatBufferBuilder $builder, $data, $shape)
+    public static function createTensor(FlatBufferBuilder $builder, $data, $shape)
     {
         $builder->startObject(2);
         self::addData($builder, $data);
@@ -174,7 +174,7 @@ class ProtocolTensor extends Table
      * @param FlatBufferBuilder $builder
      * @return int table offset
      */
-    public static function endProtocolTensor(FlatBufferBuilder $builder)
+    public static function endTensor(FlatBufferBuilder $builder)
     {
         $o = $builder->endObject();
         return $o;

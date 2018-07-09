@@ -14,8 +14,8 @@ public final class Poisson extends Table {
   public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; }
   public Poisson __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ProtocolTensor rate() { return rate(new ProtocolTensor()); }
-  public ProtocolTensor rate(ProtocolTensor obj) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
+  public Tensor rate() { return rate(new Tensor()); }
+  public Tensor rate(Tensor obj) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
 
   public static int createPoisson(FlatBufferBuilder builder,
       int rateOffset) {

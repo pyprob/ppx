@@ -135,7 +135,7 @@ static finishMessageBuffer(builder:flatbuffers.Builder, offset:flatbuffers.Offse
  * @constructor
  */
 export namespace ppx{
-export class ProtocolTensor {
+export class Tensor {
   /**
    * @type {flatbuffers.ByteBuffer}
    */
@@ -148,9 +148,9 @@ export class ProtocolTensor {
 /**
  * @param {number} i
  * @param {flatbuffers.ByteBuffer} bb
- * @returns {ProtocolTensor}
+ * @returns {Tensor}
  */
-__init(i:number, bb:flatbuffers.ByteBuffer):ProtocolTensor {
+__init(i:number, bb:flatbuffers.ByteBuffer):Tensor {
   this.bb_pos = i;
   this.bb = bb;
   return this;
@@ -158,11 +158,11 @@ __init(i:number, bb:flatbuffers.ByteBuffer):ProtocolTensor {
 
 /**
  * @param {flatbuffers.ByteBuffer} bb
- * @param {ProtocolTensor=} obj
- * @returns {ProtocolTensor}
+ * @param {Tensor=} obj
+ * @returns {Tensor}
  */
-static getRootAsProtocolTensor(bb:flatbuffers.ByteBuffer, obj?:ProtocolTensor):ProtocolTensor {
-  return (obj || new ProtocolTensor).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+static getRootAsTensor(bb:flatbuffers.ByteBuffer, obj?:Tensor):Tensor {
+  return (obj || new Tensor).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
@@ -218,7 +218,7 @@ shapeArray():Int32Array|null {
 /**
  * @param {flatbuffers.Builder} builder
  */
-static startProtocolTensor(builder:flatbuffers.Builder) {
+static startTensor(builder:flatbuffers.Builder) {
   builder.startObject(2);
 };
 
@@ -284,7 +284,7 @@ static startShapeVector(builder:flatbuffers.Builder, numElems:number) {
  * @param {flatbuffers.Builder} builder
  * @returns {flatbuffers.Offset}
  */
-static endProtocolTensor(builder:flatbuffers.Builder):flatbuffers.Offset {
+static endTensor(builder:flatbuffers.Builder):flatbuffers.Offset {
   var offset = builder.endObject();
   return offset;
 };
@@ -487,12 +487,12 @@ static getRootAsRun(bb:flatbuffers.ByteBuffer, obj?:Run):Run {
 };
 
 /**
- * @param {ppx.ProtocolTensor=} obj
- * @returns {ppx.ProtocolTensor|null}
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
  */
-observation(obj?:ppx.ProtocolTensor):ppx.ProtocolTensor|null {
+observation(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? (obj || new ppx.ProtocolTensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 };
 
 /**
@@ -556,12 +556,12 @@ static getRootAsRunResult(bb:flatbuffers.ByteBuffer, obj?:RunResult):RunResult {
 };
 
 /**
- * @param {ppx.ProtocolTensor=} obj
- * @returns {ppx.ProtocolTensor|null}
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
  */
-result(obj?:ppx.ProtocolTensor):ppx.ProtocolTensor|null {
+result(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? (obj || new ppx.ProtocolTensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 };
 
 /**
@@ -761,12 +761,12 @@ static getRootAsSampleResult(bb:flatbuffers.ByteBuffer, obj?:SampleResult):Sampl
 };
 
 /**
- * @param {ppx.ProtocolTensor=} obj
- * @returns {ppx.ProtocolTensor|null}
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
  */
-result(obj?:ppx.ProtocolTensor):ppx.ProtocolTensor|null {
+result(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? (obj || new ppx.ProtocolTensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 };
 
 /**
@@ -858,12 +858,12 @@ distribution<T extends flatbuffers.Table>(obj:T):T|null {
 };
 
 /**
- * @param {ppx.ProtocolTensor=} obj
- * @returns {ppx.ProtocolTensor|null}
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
  */
-value(obj?:ppx.ProtocolTensor):ppx.ProtocolTensor|null {
+value(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 10);
-  return offset ? (obj || new ppx.ProtocolTensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 };
 
 /**
@@ -1055,21 +1055,21 @@ static getRootAsNormal(bb:flatbuffers.ByteBuffer, obj?:Normal):Normal {
 };
 
 /**
- * @param {ppx.ProtocolTensor=} obj
- * @returns {ppx.ProtocolTensor|null}
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
  */
-mean(obj?:ppx.ProtocolTensor):ppx.ProtocolTensor|null {
+mean(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? (obj || new ppx.ProtocolTensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 };
 
 /**
- * @param {ppx.ProtocolTensor=} obj
- * @returns {ppx.ProtocolTensor|null}
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
  */
-stddev(obj?:ppx.ProtocolTensor):ppx.ProtocolTensor|null {
+stddev(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 6);
-  return offset ? (obj || new ppx.ProtocolTensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 };
 
 /**
@@ -1141,21 +1141,21 @@ static getRootAsUniform(bb:flatbuffers.ByteBuffer, obj?:Uniform):Uniform {
 };
 
 /**
- * @param {ppx.ProtocolTensor=} obj
- * @returns {ppx.ProtocolTensor|null}
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
  */
-low(obj?:ppx.ProtocolTensor):ppx.ProtocolTensor|null {
+low(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? (obj || new ppx.ProtocolTensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 };
 
 /**
- * @param {ppx.ProtocolTensor=} obj
- * @returns {ppx.ProtocolTensor|null}
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
  */
-high(obj?:ppx.ProtocolTensor):ppx.ProtocolTensor|null {
+high(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 6);
-  return offset ? (obj || new ppx.ProtocolTensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 };
 
 /**
@@ -1227,12 +1227,12 @@ static getRootAsCategorical(bb:flatbuffers.ByteBuffer, obj?:Categorical):Categor
 };
 
 /**
- * @param {ppx.ProtocolTensor=} obj
- * @returns {ppx.ProtocolTensor|null}
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
  */
-probs(obj?:ppx.ProtocolTensor):ppx.ProtocolTensor|null {
+probs(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? (obj || new ppx.ProtocolTensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 };
 
 /**
@@ -1296,12 +1296,12 @@ static getRootAsPoisson(bb:flatbuffers.ByteBuffer, obj?:Poisson):Poisson {
 };
 
 /**
- * @param {ppx.ProtocolTensor=} obj
- * @returns {ppx.ProtocolTensor|null}
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
  */
-rate(obj?:ppx.ProtocolTensor):ppx.ProtocolTensor|null {
+rate(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? (obj || new ppx.ProtocolTensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 };
 
 /**
