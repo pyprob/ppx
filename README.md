@@ -1,5 +1,7 @@
 # PPX [![Build Status](https://travis-ci.org/probprog/ppx.svg?branch=master)](https://travis-ci.org/probprog/ppx)
 
+<p align="left"><img width="40%" src="docs/ppx_logo.png" /></p>
+
 `PPX` is a cross-platform [**P**robabilistic **P**rogramming](http://www.probabilistic-programming.org) e**X**ecution protocol and API based on [flatbuffers](https://google.github.io/flatbuffers/). It is intended as an open interoperability protocol between models and inference engines implemented in different probabilistic programming languages.
 
 Probabilistic programming is about the execution probabilistic models under the control of inference engines, and `PPX` allows the model and the inference engine to be
