@@ -29,4 +29,10 @@ We provide `PPX` compiled to all programming languages officially supported by f
 
 ## Authors
 
-`PPX` has been developed by [Atılım Güneş Baydin](http://www.robots.ox.ac.uk/~gunes/) and [Tuan Anh Le](http://www.tuananhle.co.uk/) within the Programming Languages and AI group led by [Frank Wood](http://www.cs.ubc.ca/~fwood/index.html) at the University of Oxford and University of British Columbia.
+`PPX` has been developed by 
+
+* [Atılım Güneş Baydin](http://www.robots.ox.ac.uk/~gunes/)
+* [Tuan Anh Le](http://www.tuananhle.co.uk/) 
+* [Lukas Heinrich](http://www.lukasheinrich.com/)
+* [Kyle Cranmer](http://theoryandpractice.org/)
+* [Frank Wood](http://www.cs.ubc.ca/~fwood/index.html)
