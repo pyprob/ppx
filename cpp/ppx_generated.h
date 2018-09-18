@@ -568,13 +568,17 @@ inline flatbuffers::Offset<RunResult> CreateRunResult(
 struct Sample FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
     VT_ADDRESS = 4,
-    VT_DISTRIBUTION_TYPE = 6,
-    VT_DISTRIBUTION = 8,
-    VT_CONTROL = 10,
-    VT_REPLACE = 12
+    VT_NAME = 6,
+    VT_DISTRIBUTION_TYPE = 8,
+    VT_DISTRIBUTION = 10,
+    VT_CONTROL = 12,
+    VT_REPLACE = 14
   };
   const flatbuffers::String *address() const {
     return GetPointer<const flatbuffers::String *>(VT_ADDRESS);
+  }
+  const flatbuffers::String *name() const {
+    return GetPointer<const flatbuffers::String *>(VT_NAME);
   }
   Distribution distribution_type() const {
     return static_cast<Distribution>(GetField<uint8_t>(VT_DISTRIBUTION_TYPE, 0));
@@ -605,6 +609,8 @@ struct Sample FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_ADDRESS) &&
            verifier.Verify(address()) &&
+           VerifyOffset(verifier, VT_NAME) &&
+           verifier.Verify(name()) &&
            VerifyField<uint8_t>(verifier, VT_DISTRIBUTION_TYPE) &&
            VerifyOffset(verifier, VT_DISTRIBUTION) &&
            VerifyDistribution(verifier, distribution(), distribution_type()) &&
@@ -636,6 +642,9 @@ struct SampleBuilder {
   void add_address(flatbuffers::Offset<flatbuffers::String> address) {
     fbb_.AddOffset(Sample::VT_ADDRESS, address);
   }
+  void add_name(flatbuffers::Offset<flatbuffers::String> name) {
+    fbb_.AddOffset(Sample::VT_NAME, name);
+  }
   void add_distribution_type(Distribution distribution_type) {
     fbb_.AddElement<uint8_t>(Sample::VT_DISTRIBUTION_TYPE, static_cast<uint8_t>(distribution_type), 0);
   }
@@ -663,12 +672,14 @@ struct SampleBuilder {
 inline flatbuffers::Offset<Sample> CreateSample(
     flatbuffers::FlatBufferBuilder &_fbb,
     flatbuffers::Offset<flatbuffers::String> address = 0,
+    flatbuffers::Offset<flatbuffers::String> name = 0,
     Distribution distribution_type = Distribution_NONE,
     flatbuffers::Offset<void> distribution = 0,
     bool control = true,
     bool replace = false) {
   SampleBuilder builder_(_fbb);
   builder_.add_distribution(distribution);
+  builder_.add_name(name);
   builder_.add_address(address);
   builder_.add_replace(replace);
   builder_.add_control(control);
@@ -679,6 +690,7 @@ inline flatbuffers::Offset<Sample> CreateSample(
 inline flatbuffers::Offset<Sample> CreateSampleDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const char *address = nullptr,
+    const char *name = nullptr,
     Distribution distribution_type = Distribution_NONE,
     flatbuffers::Offset<void> distribution = 0,
     bool control = true,
@@ -686,6 +698,7 @@ inline flatbuffers::Offset<Sample> CreateSampleDirect(
   return ppx::CreateSample(
       _fbb,
       address ? _fbb.CreateString(address) : 0,
+      name ? _fbb.CreateString(name) : 0,
       distribution_type,
       distribution,
       control,
@@ -736,12 +749,16 @@ inline flatbuffers::Offset<SampleResult> CreateSampleResult(
 struct Observe FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum {
     VT_ADDRESS = 4,
-    VT_DISTRIBUTION_TYPE = 6,
-    VT_DISTRIBUTION = 8,
-    VT_VALUE = 10
+    VT_NAME = 6,
+    VT_DISTRIBUTION_TYPE = 8,
+    VT_DISTRIBUTION = 10,
+    VT_VALUE = 12
   };
   const flatbuffers::String *address() const {
     return GetPointer<const flatbuffers::String *>(VT_ADDRESS);
+  }
+  const flatbuffers::String *name() const {
+    return GetPointer<const flatbuffers::String *>(VT_NAME);
   }
   Distribution distribution_type() const {
     return static_cast<Distribution>(GetField<uint8_t>(VT_DISTRIBUTION_TYPE, 0));
@@ -769,6 +786,8 @@ struct Observe FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_ADDRESS) &&
            verifier.Verify(address()) &&
+           VerifyOffset(verifier, VT_NAME) &&
+           verifier.Verify(name()) &&
            VerifyField<uint8_t>(verifier, VT_DISTRIBUTION_TYPE) &&
            VerifyOffset(verifier, VT_DISTRIBUTION) &&
            VerifyDistribution(verifier, distribution(), distribution_type()) &&
@@ -800,6 +819,9 @@ struct ObserveBuilder {
   void add_address(flatbuffers::Offset<flatbuffers::String> address) {
     fbb_.AddOffset(Observe::VT_ADDRESS, address);
   }
+  void add_name(flatbuffers::Offset<flatbuffers::String> name) {
+    fbb_.AddOffset(Observe::VT_NAME, name);
+  }
   void add_distribution_type(Distribution distribution_type) {
     fbb_.AddElement<uint8_t>(Observe::VT_DISTRIBUTION_TYPE, static_cast<uint8_t>(distribution_type), 0);
   }
@@ -824,12 +846,14 @@ struct ObserveBuilder {
 inline flatbuffers::Offset<Observe> CreateObserve(
     flatbuffers::FlatBufferBuilder &_fbb,
     flatbuffers::Offset<flatbuffers::String> address = 0,
+    flatbuffers::Offset<flatbuffers::String> name = 0,
     Distribution distribution_type = Distribution_NONE,
     flatbuffers::Offset<void> distribution = 0,
     flatbuffers::Offset<Tensor> value = 0) {
   ObserveBuilder builder_(_fbb);
   builder_.add_value(value);
   builder_.add_distribution(distribution);
+  builder_.add_name(name);
   builder_.add_address(address);
   builder_.add_distribution_type(distribution_type);
   return builder_.Finish();
@@ -838,12 +862,14 @@ inline flatbuffers::Offset<Observe> CreateObserve(
 inline flatbuffers::Offset<Observe> CreateObserveDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const char *address = nullptr,
+    const char *name = nullptr,
     Distribution distribution_type = Distribution_NONE,
     flatbuffers::Offset<void> distribution = 0,
     flatbuffers::Offset<Tensor> value = 0) {
   return ppx::CreateObserve(
       _fbb,
       address ? _fbb.CreateString(address) : 0,
+      name ? _fbb.CreateString(name) : 0,
       distribution_type,
       distribution,
       value);

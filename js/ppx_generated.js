@@ -626,10 +626,19 @@ ppx.Sample.prototype.address = function(optionalEncoding) {
 };
 
 /**
+ * @param {flatbuffers.Encoding=} optionalEncoding
+ * @returns {string|Uint8Array|null}
+ */
+ppx.Sample.prototype.name = function(optionalEncoding) {
+  var offset = this.bb.__offset(this.bb_pos, 6);
+  return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+};
+
+/**
  * @returns {ppx.Distribution}
  */
 ppx.Sample.prototype.distributionType = function() {
-  var offset = this.bb.__offset(this.bb_pos, 6);
+  var offset = this.bb.__offset(this.bb_pos, 8);
   return offset ? /** @type {ppx.Distribution} */ (this.bb.readUint8(this.bb_pos + offset)) : ppx.Distribution.NONE;
 };
 
@@ -638,7 +647,7 @@ ppx.Sample.prototype.distributionType = function() {
  * @returns {?flatbuffers.Table}
  */
 ppx.Sample.prototype.distribution = function(obj) {
-  var offset = this.bb.__offset(this.bb_pos, 8);
+  var offset = this.bb.__offset(this.bb_pos, 10);
   return offset ? this.bb.__union(obj, this.bb_pos + offset) : null;
 };
 
@@ -646,7 +655,7 @@ ppx.Sample.prototype.distribution = function(obj) {
  * @returns {boolean}
  */
 ppx.Sample.prototype.control = function() {
-  var offset = this.bb.__offset(this.bb_pos, 10);
+  var offset = this.bb.__offset(this.bb_pos, 12);
   return offset ? !!this.bb.readInt8(this.bb_pos + offset) : true;
 };
 
@@ -654,7 +663,7 @@ ppx.Sample.prototype.control = function() {
  * @returns {boolean}
  */
 ppx.Sample.prototype.replace = function() {
-  var offset = this.bb.__offset(this.bb_pos, 12);
+  var offset = this.bb.__offset(this.bb_pos, 14);
   return offset ? !!this.bb.readInt8(this.bb_pos + offset) : false;
 };
 
@@ -662,7 +671,7 @@ ppx.Sample.prototype.replace = function() {
  * @param {flatbuffers.Builder} builder
  */
 ppx.Sample.startSample = function(builder) {
-  builder.startObject(5);
+  builder.startObject(6);
 };
 
 /**
@@ -675,10 +684,18 @@ ppx.Sample.addAddress = function(builder, addressOffset) {
 
 /**
  * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} nameOffset
+ */
+ppx.Sample.addName = function(builder, nameOffset) {
+  builder.addFieldOffset(1, nameOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
  * @param {ppx.Distribution} distributionType
  */
 ppx.Sample.addDistributionType = function(builder, distributionType) {
-  builder.addFieldInt8(1, distributionType, ppx.Distribution.NONE);
+  builder.addFieldInt8(2, distributionType, ppx.Distribution.NONE);
 };
 
 /**
@@ -686,7 +703,7 @@ ppx.Sample.addDistributionType = function(builder, distributionType) {
  * @param {flatbuffers.Offset} distributionOffset
  */
 ppx.Sample.addDistribution = function(builder, distributionOffset) {
-  builder.addFieldOffset(2, distributionOffset, 0);
+  builder.addFieldOffset(3, distributionOffset, 0);
 };
 
 /**
@@ -694,7 +711,7 @@ ppx.Sample.addDistribution = function(builder, distributionOffset) {
  * @param {boolean} control
  */
 ppx.Sample.addControl = function(builder, control) {
-  builder.addFieldInt8(3, +control, +true);
+  builder.addFieldInt8(4, +control, +true);
 };
 
 /**
@@ -702,7 +719,7 @@ ppx.Sample.addControl = function(builder, control) {
  * @param {boolean} replace
  */
 ppx.Sample.addReplace = function(builder, replace) {
-  builder.addFieldInt8(4, +replace, +false);
+  builder.addFieldInt8(5, +replace, +false);
 };
 
 /**
@@ -827,10 +844,19 @@ ppx.Observe.prototype.address = function(optionalEncoding) {
 };
 
 /**
+ * @param {flatbuffers.Encoding=} optionalEncoding
+ * @returns {string|Uint8Array|null}
+ */
+ppx.Observe.prototype.name = function(optionalEncoding) {
+  var offset = this.bb.__offset(this.bb_pos, 6);
+  return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+};
+
+/**
  * @returns {ppx.Distribution}
  */
 ppx.Observe.prototype.distributionType = function() {
-  var offset = this.bb.__offset(this.bb_pos, 6);
+  var offset = this.bb.__offset(this.bb_pos, 8);
   return offset ? /** @type {ppx.Distribution} */ (this.bb.readUint8(this.bb_pos + offset)) : ppx.Distribution.NONE;
 };
 
@@ -839,7 +865,7 @@ ppx.Observe.prototype.distributionType = function() {
  * @returns {?flatbuffers.Table}
  */
 ppx.Observe.prototype.distribution = function(obj) {
-  var offset = this.bb.__offset(this.bb_pos, 8);
+  var offset = this.bb.__offset(this.bb_pos, 10);
   return offset ? this.bb.__union(obj, this.bb_pos + offset) : null;
 };
 
@@ -848,7 +874,7 @@ ppx.Observe.prototype.distribution = function(obj) {
  * @returns {ppx.Tensor|null}
  */
 ppx.Observe.prototype.value = function(obj) {
-  var offset = this.bb.__offset(this.bb_pos, 10);
+  var offset = this.bb.__offset(this.bb_pos, 12);
   return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
 };
 
@@ -856,7 +882,7 @@ ppx.Observe.prototype.value = function(obj) {
  * @param {flatbuffers.Builder} builder
  */
 ppx.Observe.startObserve = function(builder) {
-  builder.startObject(4);
+  builder.startObject(5);
 };
 
 /**
@@ -869,10 +895,18 @@ ppx.Observe.addAddress = function(builder, addressOffset) {
 
 /**
  * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} nameOffset
+ */
+ppx.Observe.addName = function(builder, nameOffset) {
+  builder.addFieldOffset(1, nameOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
  * @param {ppx.Distribution} distributionType
  */
 ppx.Observe.addDistributionType = function(builder, distributionType) {
-  builder.addFieldInt8(1, distributionType, ppx.Distribution.NONE);
+  builder.addFieldInt8(2, distributionType, ppx.Distribution.NONE);
 };
 
 /**
@@ -880,7 +914,7 @@ ppx.Observe.addDistributionType = function(builder, distributionType) {
  * @param {flatbuffers.Offset} distributionOffset
  */
 ppx.Observe.addDistribution = function(builder, distributionOffset) {
-  builder.addFieldOffset(2, distributionOffset, 0);
+  builder.addFieldOffset(3, distributionOffset, 0);
 };
 
 /**
@@ -888,7 +922,7 @@ ppx.Observe.addDistribution = function(builder, distributionOffset) {
  * @param {flatbuffers.Offset} valueOffset
  */
 ppx.Observe.addValue = function(builder, valueOffset) {
-  builder.addFieldOffset(3, valueOffset, 0);
+  builder.addFieldOffset(4, valueOffset, 0);
 };
 
 /**

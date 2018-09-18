@@ -48,12 +48,18 @@ class Observe extends Table
         return $o != 0 ? $this->__string($o + $this->bb_pos) : null;
     }
 
+    public function getName()
+    {
+        $o = $this->__offset(6);
+        return $o != 0 ? $this->__string($o + $this->bb_pos) : null;
+    }
+
     /**
      * @return byte
      */
     public function getDistributionType()
     {
-        $o = $this->__offset(6);
+        $o = $this->__offset(8);
         return $o != 0 ? $this->bb->getByte($o + $this->bb_pos) : \ppx\Distribution::NONE;
     }
 
@@ -62,14 +68,14 @@ class Observe extends Table
      */
     public function getDistribution($obj)
     {
-        $o = $this->__offset(8);
+        $o = $this->__offset(10);
         return $o != 0 ? $this->__union($obj, $o) : null;
     }
 
     public function getValue()
     {
         $obj = new Tensor();
-        $o = $this->__offset(10);
+        $o = $this->__offset(12);
         return $o != 0 ? $obj->init($this->__indirect($o + $this->bb_pos), $this->bb) : 0;
     }
 
@@ -79,17 +85,18 @@ class Observe extends Table
      */
     public static function startObserve(FlatBufferBuilder $builder)
     {
-        $builder->StartObject(4);
+        $builder->StartObject(5);
     }
 
     /**
      * @param FlatBufferBuilder $builder
      * @return Observe
      */
-    public static function createObserve(FlatBufferBuilder $builder, $address, $distribution_type, $distribution, $value)
+    public static function createObserve(FlatBufferBuilder $builder, $address, $name, $distribution_type, $distribution, $value)
     {
-        $builder->startObject(4);
+        $builder->startObject(5);
         self::addAddress($builder, $address);
+        self::addName($builder, $name);
         self::addDistributionType($builder, $distribution_type);
         self::addDistribution($builder, $distribution);
         self::addValue($builder, $value);
@@ -109,17 +116,27 @@ class Observe extends Table
 
     /**
      * @param FlatBufferBuilder $builder
+     * @param StringOffset
+     * @return void
+     */
+    public static function addName(FlatBufferBuilder $builder, $name)
+    {
+        $builder->addOffsetX(1, $name, 0);
+    }
+
+    /**
+     * @param FlatBufferBuilder $builder
      * @param byte
      * @return void
      */
     public static function addDistributionType(FlatBufferBuilder $builder, $distributionType)
     {
-        $builder->addByteX(1, $distributionType, 0);
+        $builder->addByteX(2, $distributionType, 0);
     }
 
     public static function addDistribution(FlatBufferBuilder $builder, $offset)
     {
-        $builder->addOffsetX(2, $offset, 0);
+        $builder->addOffsetX(3, $offset, 0);
     }
 
     /**
@@ -129,7 +146,7 @@ class Observe extends Table
      */
     public static function addValue(FlatBufferBuilder $builder, $value)
     {
-        $builder->addOffsetX(3, $value, 0);
+        $builder->addOffsetX(4, $value, 0);
     }
 
     /**

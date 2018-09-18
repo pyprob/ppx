@@ -48,12 +48,18 @@ class Sample extends Table
         return $o != 0 ? $this->__string($o + $this->bb_pos) : null;
     }
 
+    public function getName()
+    {
+        $o = $this->__offset(6);
+        return $o != 0 ? $this->__string($o + $this->bb_pos) : null;
+    }
+
     /**
      * @return byte
      */
     public function getDistributionType()
     {
-        $o = $this->__offset(6);
+        $o = $this->__offset(8);
         return $o != 0 ? $this->bb->getByte($o + $this->bb_pos) : \ppx\Distribution::NONE;
     }
 
@@ -62,7 +68,7 @@ class Sample extends Table
      */
     public function getDistribution($obj)
     {
-        $o = $this->__offset(8);
+        $o = $this->__offset(10);
         return $o != 0 ? $this->__union($obj, $o) : null;
     }
 
@@ -71,7 +77,7 @@ class Sample extends Table
      */
     public function getControl()
     {
-        $o = $this->__offset(10);
+        $o = $this->__offset(12);
         return $o != 0 ? $this->bb->getBool($o + $this->bb_pos) : true;
     }
 
@@ -80,7 +86,7 @@ class Sample extends Table
      */
     public function getReplace()
     {
-        $o = $this->__offset(12);
+        $o = $this->__offset(14);
         return $o != 0 ? $this->bb->getBool($o + $this->bb_pos) : false;
     }
 
@@ -90,17 +96,18 @@ class Sample extends Table
      */
     public static function startSample(FlatBufferBuilder $builder)
     {
-        $builder->StartObject(5);
+        $builder->StartObject(6);
     }
 
     /**
      * @param FlatBufferBuilder $builder
      * @return Sample
      */
-    public static function createSample(FlatBufferBuilder $builder, $address, $distribution_type, $distribution, $control, $replace)
+    public static function createSample(FlatBufferBuilder $builder, $address, $name, $distribution_type, $distribution, $control, $replace)
     {
-        $builder->startObject(5);
+        $builder->startObject(6);
         self::addAddress($builder, $address);
+        self::addName($builder, $name);
         self::addDistributionType($builder, $distribution_type);
         self::addDistribution($builder, $distribution);
         self::addControl($builder, $control);
@@ -121,17 +128,27 @@ class Sample extends Table
 
     /**
      * @param FlatBufferBuilder $builder
+     * @param StringOffset
+     * @return void
+     */
+    public static function addName(FlatBufferBuilder $builder, $name)
+    {
+        $builder->addOffsetX(1, $name, 0);
+    }
+
+    /**
+     * @param FlatBufferBuilder $builder
      * @param byte
      * @return void
      */
     public static function addDistributionType(FlatBufferBuilder $builder, $distributionType)
     {
-        $builder->addByteX(1, $distributionType, 0);
+        $builder->addByteX(2, $distributionType, 0);
     }
 
     public static function addDistribution(FlatBufferBuilder $builder, $offset)
     {
-        $builder->addOffsetX(2, $offset, 0);
+        $builder->addOffsetX(3, $offset, 0);
     }
 
     /**
@@ -141,7 +158,7 @@ class Sample extends Table
      */
     public static function addControl(FlatBufferBuilder $builder, $control)
     {
-        $builder->addBoolX(3, $control, false);
+        $builder->addBoolX(4, $control, false);
     }
 
     /**
@@ -151,7 +168,7 @@ class Sample extends Table
      */
     public static function addReplace(FlatBufferBuilder $builder, $replace)
     {
-        $builder->addBoolX(4, $replace, false);
+        $builder->addBoolX(5, $replace, false);
     }
 
     /**

@@ -1,5 +1,5 @@
 // ppx
-// 0.1.0
+// 0.1.1
 //
 // Probabilistic programming execution protocol
 // https://github.com/probprog/ppx
@@ -53,6 +53,7 @@ table RunResult {
 
 table Sample {
   address: string;
+  name: string;
   distribution: Distribution;
   control: bool = true;
   replace: bool = false;
@@ -64,6 +65,7 @@ table SampleResult {
 
 table Observe {
   address: string;
+  name: string;
   distribution: Distribution;
   value: Tensor;
 }

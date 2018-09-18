@@ -17,29 +17,35 @@ public final class Observe extends Table {
   public String address() { int o = __offset(4); return o != 0 ? __string(o + bb_pos) : null; }
   public ByteBuffer addressAsByteBuffer() { return __vector_as_bytebuffer(4, 1); }
   public ByteBuffer addressInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 4, 1); }
-  public byte distributionType() { int o = __offset(6); return o != 0 ? bb.get(o + bb_pos) : 0; }
-  public Table distribution(Table obj) { int o = __offset(8); return o != 0 ? __union(obj, o) : null; }
+  public String name() { int o = __offset(6); return o != 0 ? __string(o + bb_pos) : null; }
+  public ByteBuffer nameAsByteBuffer() { return __vector_as_bytebuffer(6, 1); }
+  public ByteBuffer nameInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 6, 1); }
+  public byte distributionType() { int o = __offset(8); return o != 0 ? bb.get(o + bb_pos) : 0; }
+  public Table distribution(Table obj) { int o = __offset(10); return o != 0 ? __union(obj, o) : null; }
   public Tensor value() { return value(new Tensor()); }
-  public Tensor value(Tensor obj) { int o = __offset(10); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
+  public Tensor value(Tensor obj) { int o = __offset(12); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
 
   public static int createObserve(FlatBufferBuilder builder,
       int addressOffset,
+      int nameOffset,
       byte distribution_type,
       int distributionOffset,
       int valueOffset) {
-    builder.startObject(4);
+    builder.startObject(5);
     Observe.addValue(builder, valueOffset);
     Observe.addDistribution(builder, distributionOffset);
+    Observe.addName(builder, nameOffset);
     Observe.addAddress(builder, addressOffset);
     Observe.addDistributionType(builder, distribution_type);
     return Observe.endObserve(builder);
   }
 
-  public static void startObserve(FlatBufferBuilder builder) { builder.startObject(4); }
+  public static void startObserve(FlatBufferBuilder builder) { builder.startObject(5); }
   public static void addAddress(FlatBufferBuilder builder, int addressOffset) { builder.addOffset(0, addressOffset, 0); }
-  public static void addDistributionType(FlatBufferBuilder builder, byte distributionType) { builder.addByte(1, distributionType, 0); }
-  public static void addDistribution(FlatBufferBuilder builder, int distributionOffset) { builder.addOffset(2, distributionOffset, 0); }
-  public static void addValue(FlatBufferBuilder builder, int valueOffset) { builder.addOffset(3, valueOffset, 0); }
+  public static void addName(FlatBufferBuilder builder, int nameOffset) { builder.addOffset(1, nameOffset, 0); }
+  public static void addDistributionType(FlatBufferBuilder builder, byte distributionType) { builder.addByte(2, distributionType, 0); }
+  public static void addDistribution(FlatBufferBuilder builder, int distributionOffset) { builder.addOffset(3, distributionOffset, 0); }
+  public static void addValue(FlatBufferBuilder builder, int valueOffset) { builder.addOffset(4, valueOffset, 0); }
   public static int endObserve(FlatBufferBuilder builder) {
     int o = builder.endObject();
     return o;

@@ -636,10 +636,21 @@ address(optionalEncoding?:any):string|Uint8Array|null {
 };
 
 /**
+ * @param {flatbuffers.Encoding=} optionalEncoding
+ * @returns {string|Uint8Array|null}
+ */
+name():string|null
+name(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
+name(optionalEncoding?:any):string|Uint8Array|null {
+  var offset = this.bb!.__offset(this.bb_pos, 6);
+  return offset ? this.bb!.__string(this.bb_pos + offset, optionalEncoding) : null;
+};
+
+/**
  * @returns {ppx.Distribution}
  */
 distributionType():ppx.Distribution {
-  var offset = this.bb!.__offset(this.bb_pos, 6);
+  var offset = this.bb!.__offset(this.bb_pos, 8);
   return offset ? /** @type {ppx.Distribution} */ (this.bb!.readUint8(this.bb_pos + offset)) : ppx.Distribution.NONE;
 };
 
@@ -648,7 +659,7 @@ distributionType():ppx.Distribution {
  * @returns {?flatbuffers.Table}
  */
 distribution<T extends flatbuffers.Table>(obj:T):T|null {
-  var offset = this.bb!.__offset(this.bb_pos, 8);
+  var offset = this.bb!.__offset(this.bb_pos, 10);
   return offset ? this.bb!.__union(obj, this.bb_pos + offset) : null;
 };
 
@@ -656,7 +667,7 @@ distribution<T extends flatbuffers.Table>(obj:T):T|null {
  * @returns {boolean}
  */
 control():boolean {
-  var offset = this.bb!.__offset(this.bb_pos, 10);
+  var offset = this.bb!.__offset(this.bb_pos, 12);
   return offset ? !!this.bb!.readInt8(this.bb_pos + offset) : true;
 };
 
@@ -664,7 +675,7 @@ control():boolean {
  * @returns {boolean}
  */
 replace():boolean {
-  var offset = this.bb!.__offset(this.bb_pos, 12);
+  var offset = this.bb!.__offset(this.bb_pos, 14);
   return offset ? !!this.bb!.readInt8(this.bb_pos + offset) : false;
 };
 
@@ -672,7 +683,7 @@ replace():boolean {
  * @param {flatbuffers.Builder} builder
  */
 static startSample(builder:flatbuffers.Builder) {
-  builder.startObject(5);
+  builder.startObject(6);
 };
 
 /**
@@ -685,10 +696,18 @@ static addAddress(builder:flatbuffers.Builder, addressOffset:flatbuffers.Offset)
 
 /**
  * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} nameOffset
+ */
+static addName(builder:flatbuffers.Builder, nameOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(1, nameOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
  * @param {ppx.Distribution} distributionType
  */
 static addDistributionType(builder:flatbuffers.Builder, distributionType:ppx.Distribution) {
-  builder.addFieldInt8(1, distributionType, ppx.Distribution.NONE);
+  builder.addFieldInt8(2, distributionType, ppx.Distribution.NONE);
 };
 
 /**
@@ -696,7 +715,7 @@ static addDistributionType(builder:flatbuffers.Builder, distributionType:ppx.Dis
  * @param {flatbuffers.Offset} distributionOffset
  */
 static addDistribution(builder:flatbuffers.Builder, distributionOffset:flatbuffers.Offset) {
-  builder.addFieldOffset(2, distributionOffset, 0);
+  builder.addFieldOffset(3, distributionOffset, 0);
 };
 
 /**
@@ -704,7 +723,7 @@ static addDistribution(builder:flatbuffers.Builder, distributionOffset:flatbuffe
  * @param {boolean} control
  */
 static addControl(builder:flatbuffers.Builder, control:boolean) {
-  builder.addFieldInt8(3, +control, +true);
+  builder.addFieldInt8(4, +control, +true);
 };
 
 /**
@@ -712,7 +731,7 @@ static addControl(builder:flatbuffers.Builder, control:boolean) {
  * @param {boolean} replace
  */
 static addReplace(builder:flatbuffers.Builder, replace:boolean) {
-  builder.addFieldInt8(4, +replace, +false);
+  builder.addFieldInt8(5, +replace, +false);
 };
 
 /**
@@ -841,10 +860,21 @@ address(optionalEncoding?:any):string|Uint8Array|null {
 };
 
 /**
+ * @param {flatbuffers.Encoding=} optionalEncoding
+ * @returns {string|Uint8Array|null}
+ */
+name():string|null
+name(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
+name(optionalEncoding?:any):string|Uint8Array|null {
+  var offset = this.bb!.__offset(this.bb_pos, 6);
+  return offset ? this.bb!.__string(this.bb_pos + offset, optionalEncoding) : null;
+};
+
+/**
  * @returns {ppx.Distribution}
  */
 distributionType():ppx.Distribution {
-  var offset = this.bb!.__offset(this.bb_pos, 6);
+  var offset = this.bb!.__offset(this.bb_pos, 8);
   return offset ? /** @type {ppx.Distribution} */ (this.bb!.readUint8(this.bb_pos + offset)) : ppx.Distribution.NONE;
 };
 
@@ -853,7 +883,7 @@ distributionType():ppx.Distribution {
  * @returns {?flatbuffers.Table}
  */
 distribution<T extends flatbuffers.Table>(obj:T):T|null {
-  var offset = this.bb!.__offset(this.bb_pos, 8);
+  var offset = this.bb!.__offset(this.bb_pos, 10);
   return offset ? this.bb!.__union(obj, this.bb_pos + offset) : null;
 };
 
@@ -862,7 +892,7 @@ distribution<T extends flatbuffers.Table>(obj:T):T|null {
  * @returns {ppx.Tensor|null}
  */
 value(obj?:ppx.Tensor):ppx.Tensor|null {
-  var offset = this.bb!.__offset(this.bb_pos, 10);
+  var offset = this.bb!.__offset(this.bb_pos, 12);
   return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 };
 
@@ -870,7 +900,7 @@ value(obj?:ppx.Tensor):ppx.Tensor|null {
  * @param {flatbuffers.Builder} builder
  */
 static startObserve(builder:flatbuffers.Builder) {
-  builder.startObject(4);
+  builder.startObject(5);
 };
 
 /**
@@ -883,10 +913,18 @@ static addAddress(builder:flatbuffers.Builder, addressOffset:flatbuffers.Offset)
 
 /**
  * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} nameOffset
+ */
+static addName(builder:flatbuffers.Builder, nameOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(1, nameOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
  * @param {ppx.Distribution} distributionType
  */
 static addDistributionType(builder:flatbuffers.Builder, distributionType:ppx.Distribution) {
-  builder.addFieldInt8(1, distributionType, ppx.Distribution.NONE);
+  builder.addFieldInt8(2, distributionType, ppx.Distribution.NONE);
 };
 
 /**
@@ -894,7 +932,7 @@ static addDistributionType(builder:flatbuffers.Builder, distributionType:ppx.Dis
  * @param {flatbuffers.Offset} distributionOffset
  */
 static addDistribution(builder:flatbuffers.Builder, distributionOffset:flatbuffers.Offset) {
-  builder.addFieldOffset(2, distributionOffset, 0);
+  builder.addFieldOffset(3, distributionOffset, 0);
 };
 
 /**
@@ -902,7 +940,7 @@ static addDistribution(builder:flatbuffers.Builder, distributionOffset:flatbuffe
  * @param {flatbuffers.Offset} valueOffset
  */
 static addValue(builder:flatbuffers.Builder, valueOffset:flatbuffers.Offset) {
-  builder.addFieldOffset(3, valueOffset, 0);
+  builder.addFieldOffset(4, valueOffset, 0);
 };
 
 /**
