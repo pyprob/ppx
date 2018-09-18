@@ -1,5 +1,5 @@
 // ppx
-// 0.1.1
+// 0.1.2
 //
 // Probabilistic programming execution protocol
 // https://github.com/probprog/ppx
@@ -43,9 +43,7 @@ table HandshakeResult {
   model_name: string;
 }
 
-table Run {
-  observation: Tensor;
-}
+table Run {}
 
 table RunResult {
   result: Tensor;

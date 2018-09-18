@@ -14,18 +14,8 @@ public final class Run extends Table {
   public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; }
   public Run __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public Tensor observation() { return observation(new Tensor()); }
-  public Tensor observation(Tensor obj) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
 
-  public static int createRun(FlatBufferBuilder builder,
-      int observationOffset) {
-    builder.startObject(1);
-    Run.addObservation(builder, observationOffset);
-    return Run.endRun(builder);
-  }
-
-  public static void startRun(FlatBufferBuilder builder) { builder.startObject(1); }
-  public static void addObservation(FlatBufferBuilder builder, int observationOffset) { builder.addOffset(0, observationOffset, 0); }
+  public static void startRun(FlatBufferBuilder builder) { builder.startObject(0); }
   public static int endRun(FlatBufferBuilder builder) {
     int o = builder.endObject();
     return o;

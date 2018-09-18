@@ -26,24 +26,8 @@ func (rcv *Run) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *Run) Observation(obj *Tensor) *Tensor {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
-	if o != 0 {
-		x := rcv._tab.Indirect(o + rcv._tab.Pos)
-		if obj == nil {
-			obj = new(Tensor)
-		}
-		obj.Init(rcv._tab.Bytes, x)
-		return obj
-	}
-	return nil
-}
-
 func RunStart(builder *flatbuffers.Builder) {
-	builder.StartObject(1)
-}
-func RunAddObservation(builder *flatbuffers.Builder, observation flatbuffers.UOffsetT) {
-	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(observation), 0)
+	builder.StartObject(0)
 }
 func RunEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()
