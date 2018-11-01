@@ -16,11 +16,15 @@ We provide `PPX` compiled to all programming languages officially supported by f
 
 * C++
 * C#
+* Dart
 * Go
 * Java
 * JavaScript
+* Lobster
+* Lua
 * PHP
 * Python
+* Rust
 * TypeScript
 
 ## License
@@ -29,10 +33,10 @@ We provide `PPX` compiled to all programming languages officially supported by f
 
 ## Authors
 
-`PPX` has been developed by 
+`PPX` has been developed by
 
 * [Atılım Güneş Baydin](http://www.robots.ox.ac.uk/~gunes/)
-* [Tuan Anh Le](http://www.tuananhle.co.uk/) 
+* [Tuan Anh Le](http://www.tuananhle.co.uk/)
 * [Lukas Heinrich](http://www.lukasheinrich.com/)
 * [Wahid Bhimji](http://www.nersc.gov/about/nersc-staff/data-analytics-services/wahid-bhimji/)
 * [Kyle Cranmer](http://theoryandpractice.org/)

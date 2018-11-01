@@ -356,9 +356,9 @@ struct Tensor FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_DATA) &&
-           verifier.Verify(data()) &&
+           verifier.VerifyVector(data()) &&
            VerifyOffset(verifier, VT_SHAPE) &&
-           verifier.Verify(shape()) &&
+           verifier.VerifyVector(shape()) &&
            verifier.EndTable();
   }
 };
@@ -414,7 +414,7 @@ struct Handshake FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_SYSTEM_NAME) &&
-           verifier.Verify(system_name()) &&
+           verifier.VerifyString(system_name()) &&
            verifier.EndTable();
   }
 };
@@ -467,9 +467,9 @@ struct HandshakeResult FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_SYSTEM_NAME) &&
-           verifier.Verify(system_name()) &&
+           verifier.VerifyString(system_name()) &&
            VerifyOffset(verifier, VT_MODEL_NAME) &&
-           verifier.Verify(model_name()) &&
+           verifier.VerifyString(model_name()) &&
            verifier.EndTable();
   }
 };
@@ -627,9 +627,9 @@ struct Sample FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_ADDRESS) &&
-           verifier.Verify(address()) &&
+           verifier.VerifyString(address()) &&
            VerifyOffset(verifier, VT_NAME) &&
-           verifier.Verify(name()) &&
+           verifier.VerifyString(name()) &&
            VerifyField<uint8_t>(verifier, VT_DISTRIBUTION_TYPE) &&
            VerifyOffset(verifier, VT_DISTRIBUTION) &&
            VerifyDistribution(verifier, distribution(), distribution_type()) &&
@@ -804,9 +804,9 @@ struct Observe FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_ADDRESS) &&
-           verifier.Verify(address()) &&
+           verifier.VerifyString(address()) &&
            VerifyOffset(verifier, VT_NAME) &&
-           verifier.Verify(name()) &&
+           verifier.VerifyString(name()) &&
            VerifyField<uint8_t>(verifier, VT_DISTRIBUTION_TYPE) &&
            VerifyOffset(verifier, VT_DISTRIBUTION) &&
            VerifyDistribution(verifier, distribution(), distribution_type()) &&
@@ -940,9 +940,9 @@ struct Tag FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_ADDRESS) &&
-           verifier.Verify(address()) &&
+           verifier.VerifyString(address()) &&
            VerifyOffset(verifier, VT_NAME) &&
-           verifier.Verify(name()) &&
+           verifier.VerifyString(name()) &&
            VerifyOffset(verifier, VT_VALUE) &&
            verifier.VerifyTable(value()) &&
            verifier.EndTable();

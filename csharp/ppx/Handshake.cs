@@ -18,7 +18,12 @@ public struct Handshake : IFlatbufferObject
   public Handshake __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public string SystemName { get { int o = __p.__offset(4); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetSystemNameBytes() { return __p.__vector_as_span(4); }
+#else
   public ArraySegment<byte>? GetSystemNameBytes() { return __p.__vector_as_arraysegment(4); }
+#endif
+  public byte[] GetSystemNameArray() { return __p.__vector_as_array<byte>(4); }
 
   public static Offset<Handshake> CreateHandshake(FlatBufferBuilder builder,
       StringOffset system_nameOffset = default(StringOffset)) {

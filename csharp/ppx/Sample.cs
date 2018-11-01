@@ -18,9 +18,19 @@ public struct Sample : IFlatbufferObject
   public Sample __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public string Address { get { int o = __p.__offset(4); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetAddressBytes() { return __p.__vector_as_span(4); }
+#else
   public ArraySegment<byte>? GetAddressBytes() { return __p.__vector_as_arraysegment(4); }
+#endif
+  public byte[] GetAddressArray() { return __p.__vector_as_array<byte>(4); }
   public string Name { get { int o = __p.__offset(6); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetNameBytes() { return __p.__vector_as_span(6); }
+#else
   public ArraySegment<byte>? GetNameBytes() { return __p.__vector_as_arraysegment(6); }
+#endif
+  public byte[] GetNameArray() { return __p.__vector_as_array<byte>(6); }
   public Distribution DistributionType { get { int o = __p.__offset(8); return o != 0 ? (Distribution)__p.bb.Get(o + __p.bb_pos) : Distribution.NONE; } }
   public TTable? Distribution<TTable>() where TTable : struct, IFlatbufferObject { int o = __p.__offset(10); return o != 0 ? (TTable?)__p.__union<TTable>(o) : null; }
   public bool Control { get { int o = __p.__offset(12); return o != 0 ? 0!=__p.bb.Get(o + __p.bb_pos) : (bool)true; } }

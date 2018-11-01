@@ -19,10 +19,20 @@ public struct Tensor : IFlatbufferObject
 
   public double Data(int j) { int o = __p.__offset(4); return o != 0 ? __p.bb.GetDouble(__p.__vector(o) + j * 8) : (double)0; }
   public int DataLength { get { int o = __p.__offset(4); return o != 0 ? __p.__vector_len(o) : 0; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetDataBytes() { return __p.__vector_as_span(4); }
+#else
   public ArraySegment<byte>? GetDataBytes() { return __p.__vector_as_arraysegment(4); }
+#endif
+  public double[] GetDataArray() { return __p.__vector_as_array<double>(4); }
   public int Shape(int j) { int o = __p.__offset(6); return o != 0 ? __p.bb.GetInt(__p.__vector(o) + j * 4) : (int)0; }
   public int ShapeLength { get { int o = __p.__offset(6); return o != 0 ? __p.__vector_len(o) : 0; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetShapeBytes() { return __p.__vector_as_span(6); }
+#else
   public ArraySegment<byte>? GetShapeBytes() { return __p.__vector_as_arraysegment(6); }
+#endif
+  public int[] GetShapeArray() { return __p.__vector_as_array<int>(6); }
 
   public static Offset<Tensor> CreateTensor(FlatBufferBuilder builder,
       VectorOffset dataOffset = default(VectorOffset),
@@ -36,9 +46,11 @@ public struct Tensor : IFlatbufferObject
   public static void StartTensor(FlatBufferBuilder builder) { builder.StartObject(2); }
   public static void AddData(FlatBufferBuilder builder, VectorOffset dataOffset) { builder.AddOffset(0, dataOffset.Value, 0); }
   public static VectorOffset CreateDataVector(FlatBufferBuilder builder, double[] data) { builder.StartVector(8, data.Length, 8); for (int i = data.Length - 1; i >= 0; i--) builder.AddDouble(data[i]); return builder.EndVector(); }
+  public static VectorOffset CreateDataVectorBlock(FlatBufferBuilder builder, double[] data) { builder.StartVector(8, data.Length, 8); builder.Add(data); return builder.EndVector(); }
   public static void StartDataVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(8, numElems, 8); }
   public static void AddShape(FlatBufferBuilder builder, VectorOffset shapeOffset) { builder.AddOffset(1, shapeOffset.Value, 0); }
   public static VectorOffset CreateShapeVector(FlatBufferBuilder builder, int[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddInt(data[i]); return builder.EndVector(); }
+  public static VectorOffset CreateShapeVectorBlock(FlatBufferBuilder builder, int[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
   public static void StartShapeVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
   public static Offset<Tensor> EndTensor(FlatBufferBuilder builder) {
     int o = builder.EndObject();

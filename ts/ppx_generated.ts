@@ -37,19 +37,13 @@ export enum Distribution{
  */
 export namespace ppx{
 export class Message {
-  /**
-   * @type {flatbuffers.ByteBuffer}
-   */
   bb: flatbuffers.ByteBuffer|null = null;
 
-  /**
-   * @type {number}
-   */
   bb_pos:number = 0;
 /**
- * @param {number} i
- * @param {flatbuffers.ByteBuffer} bb
- * @returns {Message}
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns Message
  */
 __init(i:number, bb:flatbuffers.ByteBuffer):Message {
   this.bb_pos = i;
@@ -58,33 +52,33 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Message {
 };
 
 /**
- * @param {flatbuffers.ByteBuffer} bb
- * @param {Message=} obj
- * @returns {Message}
+ * @param flatbuffers.ByteBuffer bb
+ * @param Message= obj
+ * @returns Message
  */
 static getRootAsMessage(bb:flatbuffers.ByteBuffer, obj?:Message):Message {
   return (obj || new Message).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
- * @param {flatbuffers.ByteBuffer} bb
- * @returns {boolean}
+ * @param flatbuffers.ByteBuffer bb
+ * @returns boolean
  */
 static bufferHasIdentifier(bb:flatbuffers.ByteBuffer):boolean {
   return bb.__has_identifier('PPXF');
 };
 
 /**
- * @returns {ppx.MessageBody}
+ * @returns ppx.MessageBody
  */
 bodyType():ppx.MessageBody {
   var offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? /** @type {ppx.MessageBody} */ (this.bb!.readUint8(this.bb_pos + offset)) : ppx.MessageBody.NONE;
+  return offset ? /**  */ (this.bb!.readUint8(this.bb_pos + offset)) : ppx.MessageBody.NONE;
 };
 
 /**
- * @param {flatbuffers.Table} obj
- * @returns {?flatbuffers.Table}
+ * @param flatbuffers.Table obj
+ * @returns ?flatbuffers.Table
  */
 body<T extends flatbuffers.Table>(obj:T):T|null {
   var offset = this.bb!.__offset(this.bb_pos, 6);
@@ -92,31 +86,31 @@ body<T extends flatbuffers.Table>(obj:T):T|null {
 };
 
 /**
- * @param {flatbuffers.Builder} builder
+ * @param flatbuffers.Builder builder
  */
 static startMessage(builder:flatbuffers.Builder) {
   builder.startObject(2);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {ppx.MessageBody} bodyType
+ * @param flatbuffers.Builder builder
+ * @param ppx.MessageBody bodyType
  */
 static addBodyType(builder:flatbuffers.Builder, bodyType:ppx.MessageBody) {
   builder.addFieldInt8(0, bodyType, ppx.MessageBody.NONE);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} bodyOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset bodyOffset
  */
 static addBody(builder:flatbuffers.Builder, bodyOffset:flatbuffers.Offset) {
   builder.addFieldOffset(1, bodyOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @returns {flatbuffers.Offset}
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
  */
 static endMessage(builder:flatbuffers.Builder):flatbuffers.Offset {
   var offset = builder.endObject();
@@ -124,8 +118,8 @@ static endMessage(builder:flatbuffers.Builder):flatbuffers.Offset {
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} offset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset offset
  */
 static finishMessageBuffer(builder:flatbuffers.Builder, offset:flatbuffers.Offset) {
   builder.finish(offset, 'PPXF');
@@ -138,19 +132,13 @@ static finishMessageBuffer(builder:flatbuffers.Builder, offset:flatbuffers.Offse
  */
 export namespace ppx{
 export class Tensor {
-  /**
-   * @type {flatbuffers.ByteBuffer}
-   */
   bb: flatbuffers.ByteBuffer|null = null;
 
-  /**
-   * @type {number}
-   */
   bb_pos:number = 0;
 /**
- * @param {number} i
- * @param {flatbuffers.ByteBuffer} bb
- * @returns {Tensor}
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns Tensor
  */
 __init(i:number, bb:flatbuffers.ByteBuffer):Tensor {
   this.bb_pos = i;
@@ -159,17 +147,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Tensor {
 };
 
 /**
- * @param {flatbuffers.ByteBuffer} bb
- * @param {Tensor=} obj
- * @returns {Tensor}
+ * @param flatbuffers.ByteBuffer bb
+ * @param Tensor= obj
+ * @returns Tensor
  */
 static getRootAsTensor(bb:flatbuffers.ByteBuffer, obj?:Tensor):Tensor {
   return (obj || new Tensor).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
- * @param {number} index
- * @returns {number}
+ * @param number index
+ * @returns number
  */
 data(index: number):number|null {
   var offset = this.bb!.__offset(this.bb_pos, 4);
@@ -177,7 +165,7 @@ data(index: number):number|null {
 };
 
 /**
- * @returns {number}
+ * @returns number
  */
 dataLength():number {
   var offset = this.bb!.__offset(this.bb_pos, 4);
@@ -185,7 +173,7 @@ dataLength():number {
 };
 
 /**
- * @returns {Float64Array}
+ * @returns Float64Array
  */
 dataArray():Float64Array|null {
   var offset = this.bb!.__offset(this.bb_pos, 4);
@@ -193,8 +181,8 @@ dataArray():Float64Array|null {
 };
 
 /**
- * @param {number} index
- * @returns {number}
+ * @param number index
+ * @returns number
  */
 shape(index: number):number|null {
   var offset = this.bb!.__offset(this.bb_pos, 6);
@@ -202,7 +190,7 @@ shape(index: number):number|null {
 };
 
 /**
- * @returns {number}
+ * @returns number
  */
 shapeLength():number {
   var offset = this.bb!.__offset(this.bb_pos, 6);
@@ -210,7 +198,7 @@ shapeLength():number {
 };
 
 /**
- * @returns {Int32Array}
+ * @returns Int32Array
  */
 shapeArray():Int32Array|null {
   var offset = this.bb!.__offset(this.bb_pos, 6);
@@ -218,24 +206,24 @@ shapeArray():Int32Array|null {
 };
 
 /**
- * @param {flatbuffers.Builder} builder
+ * @param flatbuffers.Builder builder
  */
 static startTensor(builder:flatbuffers.Builder) {
   builder.startObject(2);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} dataOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset dataOffset
  */
 static addData(builder:flatbuffers.Builder, dataOffset:flatbuffers.Offset) {
   builder.addFieldOffset(0, dataOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {Array.<number>} data
- * @returns {flatbuffers.Offset}
+ * @param flatbuffers.Builder builder
+ * @param Array.<number> data
+ * @returns flatbuffers.Offset
  */
 static createDataVector(builder:flatbuffers.Builder, data:number[] | Uint8Array):flatbuffers.Offset {
   builder.startVector(8, data.length, 8);
@@ -246,25 +234,25 @@ static createDataVector(builder:flatbuffers.Builder, data:number[] | Uint8Array)
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {number} numElems
+ * @param flatbuffers.Builder builder
+ * @param number numElems
  */
 static startDataVector(builder:flatbuffers.Builder, numElems:number) {
   builder.startVector(8, numElems, 8);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} shapeOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset shapeOffset
  */
 static addShape(builder:flatbuffers.Builder, shapeOffset:flatbuffers.Offset) {
   builder.addFieldOffset(1, shapeOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {Array.<number>} data
- * @returns {flatbuffers.Offset}
+ * @param flatbuffers.Builder builder
+ * @param Array.<number> data
+ * @returns flatbuffers.Offset
  */
 static createShapeVector(builder:flatbuffers.Builder, data:number[] | Uint8Array):flatbuffers.Offset {
   builder.startVector(4, data.length, 4);
@@ -275,16 +263,16 @@ static createShapeVector(builder:flatbuffers.Builder, data:number[] | Uint8Array
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {number} numElems
+ * @param flatbuffers.Builder builder
+ * @param number numElems
  */
 static startShapeVector(builder:flatbuffers.Builder, numElems:number) {
   builder.startVector(4, numElems, 4);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @returns {flatbuffers.Offset}
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
  */
 static endTensor(builder:flatbuffers.Builder):flatbuffers.Offset {
   var offset = builder.endObject();
@@ -298,19 +286,13 @@ static endTensor(builder:flatbuffers.Builder):flatbuffers.Offset {
  */
 export namespace ppx{
 export class Handshake {
-  /**
-   * @type {flatbuffers.ByteBuffer}
-   */
   bb: flatbuffers.ByteBuffer|null = null;
 
-  /**
-   * @type {number}
-   */
   bb_pos:number = 0;
 /**
- * @param {number} i
- * @param {flatbuffers.ByteBuffer} bb
- * @returns {Handshake}
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns Handshake
  */
 __init(i:number, bb:flatbuffers.ByteBuffer):Handshake {
   this.bb_pos = i;
@@ -319,17 +301,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Handshake {
 };
 
 /**
- * @param {flatbuffers.ByteBuffer} bb
- * @param {Handshake=} obj
- * @returns {Handshake}
+ * @param flatbuffers.ByteBuffer bb
+ * @param Handshake= obj
+ * @returns Handshake
  */
 static getRootAsHandshake(bb:flatbuffers.ByteBuffer, obj?:Handshake):Handshake {
   return (obj || new Handshake).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
- * @param {flatbuffers.Encoding=} optionalEncoding
- * @returns {string|Uint8Array|null}
+ * @param flatbuffers.Encoding= optionalEncoding
+ * @returns string|Uint8Array|null
  */
 systemName():string|null
 systemName(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
@@ -339,23 +321,23 @@ systemName(optionalEncoding?:any):string|Uint8Array|null {
 };
 
 /**
- * @param {flatbuffers.Builder} builder
+ * @param flatbuffers.Builder builder
  */
 static startHandshake(builder:flatbuffers.Builder) {
   builder.startObject(1);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} systemNameOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset systemNameOffset
  */
 static addSystemName(builder:flatbuffers.Builder, systemNameOffset:flatbuffers.Offset) {
   builder.addFieldOffset(0, systemNameOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @returns {flatbuffers.Offset}
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
  */
 static endHandshake(builder:flatbuffers.Builder):flatbuffers.Offset {
   var offset = builder.endObject();
@@ -369,19 +351,13 @@ static endHandshake(builder:flatbuffers.Builder):flatbuffers.Offset {
  */
 export namespace ppx{
 export class HandshakeResult {
-  /**
-   * @type {flatbuffers.ByteBuffer}
-   */
   bb: flatbuffers.ByteBuffer|null = null;
 
-  /**
-   * @type {number}
-   */
   bb_pos:number = 0;
 /**
- * @param {number} i
- * @param {flatbuffers.ByteBuffer} bb
- * @returns {HandshakeResult}
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns HandshakeResult
  */
 __init(i:number, bb:flatbuffers.ByteBuffer):HandshakeResult {
   this.bb_pos = i;
@@ -390,17 +366,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):HandshakeResult {
 };
 
 /**
- * @param {flatbuffers.ByteBuffer} bb
- * @param {HandshakeResult=} obj
- * @returns {HandshakeResult}
+ * @param flatbuffers.ByteBuffer bb
+ * @param HandshakeResult= obj
+ * @returns HandshakeResult
  */
 static getRootAsHandshakeResult(bb:flatbuffers.ByteBuffer, obj?:HandshakeResult):HandshakeResult {
   return (obj || new HandshakeResult).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
- * @param {flatbuffers.Encoding=} optionalEncoding
- * @returns {string|Uint8Array|null}
+ * @param flatbuffers.Encoding= optionalEncoding
+ * @returns string|Uint8Array|null
  */
 systemName():string|null
 systemName(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
@@ -410,8 +386,8 @@ systemName(optionalEncoding?:any):string|Uint8Array|null {
 };
 
 /**
- * @param {flatbuffers.Encoding=} optionalEncoding
- * @returns {string|Uint8Array|null}
+ * @param flatbuffers.Encoding= optionalEncoding
+ * @returns string|Uint8Array|null
  */
 modelName():string|null
 modelName(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
@@ -421,31 +397,31 @@ modelName(optionalEncoding?:any):string|Uint8Array|null {
 };
 
 /**
- * @param {flatbuffers.Builder} builder
+ * @param flatbuffers.Builder builder
  */
 static startHandshakeResult(builder:flatbuffers.Builder) {
   builder.startObject(2);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} systemNameOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset systemNameOffset
  */
 static addSystemName(builder:flatbuffers.Builder, systemNameOffset:flatbuffers.Offset) {
   builder.addFieldOffset(0, systemNameOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} modelNameOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset modelNameOffset
  */
 static addModelName(builder:flatbuffers.Builder, modelNameOffset:flatbuffers.Offset) {
   builder.addFieldOffset(1, modelNameOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @returns {flatbuffers.Offset}
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
  */
 static endHandshakeResult(builder:flatbuffers.Builder):flatbuffers.Offset {
   var offset = builder.endObject();
@@ -459,19 +435,13 @@ static endHandshakeResult(builder:flatbuffers.Builder):flatbuffers.Offset {
  */
 export namespace ppx{
 export class Run {
-  /**
-   * @type {flatbuffers.ByteBuffer}
-   */
   bb: flatbuffers.ByteBuffer|null = null;
 
-  /**
-   * @type {number}
-   */
   bb_pos:number = 0;
 /**
- * @param {number} i
- * @param {flatbuffers.ByteBuffer} bb
- * @returns {Run}
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns Run
  */
 __init(i:number, bb:flatbuffers.ByteBuffer):Run {
   this.bb_pos = i;
@@ -480,24 +450,24 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Run {
 };
 
 /**
- * @param {flatbuffers.ByteBuffer} bb
- * @param {Run=} obj
- * @returns {Run}
+ * @param flatbuffers.ByteBuffer bb
+ * @param Run= obj
+ * @returns Run
  */
 static getRootAsRun(bb:flatbuffers.ByteBuffer, obj?:Run):Run {
   return (obj || new Run).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
+ * @param flatbuffers.Builder builder
  */
 static startRun(builder:flatbuffers.Builder) {
   builder.startObject(0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @returns {flatbuffers.Offset}
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
  */
 static endRun(builder:flatbuffers.Builder):flatbuffers.Offset {
   var offset = builder.endObject();
@@ -511,19 +481,13 @@ static endRun(builder:flatbuffers.Builder):flatbuffers.Offset {
  */
 export namespace ppx{
 export class RunResult {
-  /**
-   * @type {flatbuffers.ByteBuffer}
-   */
   bb: flatbuffers.ByteBuffer|null = null;
 
-  /**
-   * @type {number}
-   */
   bb_pos:number = 0;
 /**
- * @param {number} i
- * @param {flatbuffers.ByteBuffer} bb
- * @returns {RunResult}
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns RunResult
  */
 __init(i:number, bb:flatbuffers.ByteBuffer):RunResult {
   this.bb_pos = i;
@@ -532,17 +496,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):RunResult {
 };
 
 /**
- * @param {flatbuffers.ByteBuffer} bb
- * @param {RunResult=} obj
- * @returns {RunResult}
+ * @param flatbuffers.ByteBuffer bb
+ * @param RunResult= obj
+ * @returns RunResult
  */
 static getRootAsRunResult(bb:flatbuffers.ByteBuffer, obj?:RunResult):RunResult {
   return (obj || new RunResult).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
- * @param {ppx.Tensor=} obj
- * @returns {ppx.Tensor|null}
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
  */
 result(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 4);
@@ -550,23 +514,23 @@ result(obj?:ppx.Tensor):ppx.Tensor|null {
 };
 
 /**
- * @param {flatbuffers.Builder} builder
+ * @param flatbuffers.Builder builder
  */
 static startRunResult(builder:flatbuffers.Builder) {
   builder.startObject(1);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} resultOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset resultOffset
  */
 static addResult(builder:flatbuffers.Builder, resultOffset:flatbuffers.Offset) {
   builder.addFieldOffset(0, resultOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @returns {flatbuffers.Offset}
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
  */
 static endRunResult(builder:flatbuffers.Builder):flatbuffers.Offset {
   var offset = builder.endObject();
@@ -580,19 +544,13 @@ static endRunResult(builder:flatbuffers.Builder):flatbuffers.Offset {
  */
 export namespace ppx{
 export class Sample {
-  /**
-   * @type {flatbuffers.ByteBuffer}
-   */
   bb: flatbuffers.ByteBuffer|null = null;
 
-  /**
-   * @type {number}
-   */
   bb_pos:number = 0;
 /**
- * @param {number} i
- * @param {flatbuffers.ByteBuffer} bb
- * @returns {Sample}
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns Sample
  */
 __init(i:number, bb:flatbuffers.ByteBuffer):Sample {
   this.bb_pos = i;
@@ -601,17 +559,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Sample {
 };
 
 /**
- * @param {flatbuffers.ByteBuffer} bb
- * @param {Sample=} obj
- * @returns {Sample}
+ * @param flatbuffers.ByteBuffer bb
+ * @param Sample= obj
+ * @returns Sample
  */
 static getRootAsSample(bb:flatbuffers.ByteBuffer, obj?:Sample):Sample {
   return (obj || new Sample).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
- * @param {flatbuffers.Encoding=} optionalEncoding
- * @returns {string|Uint8Array|null}
+ * @param flatbuffers.Encoding= optionalEncoding
+ * @returns string|Uint8Array|null
  */
 address():string|null
 address(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
@@ -621,8 +579,8 @@ address(optionalEncoding?:any):string|Uint8Array|null {
 };
 
 /**
- * @param {flatbuffers.Encoding=} optionalEncoding
- * @returns {string|Uint8Array|null}
+ * @param flatbuffers.Encoding= optionalEncoding
+ * @returns string|Uint8Array|null
  */
 name():string|null
 name(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
@@ -632,16 +590,16 @@ name(optionalEncoding?:any):string|Uint8Array|null {
 };
 
 /**
- * @returns {ppx.Distribution}
+ * @returns ppx.Distribution
  */
 distributionType():ppx.Distribution {
   var offset = this.bb!.__offset(this.bb_pos, 8);
-  return offset ? /** @type {ppx.Distribution} */ (this.bb!.readUint8(this.bb_pos + offset)) : ppx.Distribution.NONE;
+  return offset ? /**  */ (this.bb!.readUint8(this.bb_pos + offset)) : ppx.Distribution.NONE;
 };
 
 /**
- * @param {flatbuffers.Table} obj
- * @returns {?flatbuffers.Table}
+ * @param flatbuffers.Table obj
+ * @returns ?flatbuffers.Table
  */
 distribution<T extends flatbuffers.Table>(obj:T):T|null {
   var offset = this.bb!.__offset(this.bb_pos, 10);
@@ -649,7 +607,7 @@ distribution<T extends flatbuffers.Table>(obj:T):T|null {
 };
 
 /**
- * @returns {boolean}
+ * @returns boolean
  */
 control():boolean {
   var offset = this.bb!.__offset(this.bb_pos, 12);
@@ -657,7 +615,7 @@ control():boolean {
 };
 
 /**
- * @returns {boolean}
+ * @returns boolean
  */
 replace():boolean {
   var offset = this.bb!.__offset(this.bb_pos, 14);
@@ -665,63 +623,63 @@ replace():boolean {
 };
 
 /**
- * @param {flatbuffers.Builder} builder
+ * @param flatbuffers.Builder builder
  */
 static startSample(builder:flatbuffers.Builder) {
   builder.startObject(6);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} addressOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset addressOffset
  */
 static addAddress(builder:flatbuffers.Builder, addressOffset:flatbuffers.Offset) {
   builder.addFieldOffset(0, addressOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} nameOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset nameOffset
  */
 static addName(builder:flatbuffers.Builder, nameOffset:flatbuffers.Offset) {
   builder.addFieldOffset(1, nameOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {ppx.Distribution} distributionType
+ * @param flatbuffers.Builder builder
+ * @param ppx.Distribution distributionType
  */
 static addDistributionType(builder:flatbuffers.Builder, distributionType:ppx.Distribution) {
   builder.addFieldInt8(2, distributionType, ppx.Distribution.NONE);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} distributionOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset distributionOffset
  */
 static addDistribution(builder:flatbuffers.Builder, distributionOffset:flatbuffers.Offset) {
   builder.addFieldOffset(3, distributionOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {boolean} control
+ * @param flatbuffers.Builder builder
+ * @param boolean control
  */
 static addControl(builder:flatbuffers.Builder, control:boolean) {
   builder.addFieldInt8(4, +control, +true);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {boolean} replace
+ * @param flatbuffers.Builder builder
+ * @param boolean replace
  */
 static addReplace(builder:flatbuffers.Builder, replace:boolean) {
   builder.addFieldInt8(5, +replace, +false);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @returns {flatbuffers.Offset}
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
  */
 static endSample(builder:flatbuffers.Builder):flatbuffers.Offset {
   var offset = builder.endObject();
@@ -735,19 +693,13 @@ static endSample(builder:flatbuffers.Builder):flatbuffers.Offset {
  */
 export namespace ppx{
 export class SampleResult {
-  /**
-   * @type {flatbuffers.ByteBuffer}
-   */
   bb: flatbuffers.ByteBuffer|null = null;
 
-  /**
-   * @type {number}
-   */
   bb_pos:number = 0;
 /**
- * @param {number} i
- * @param {flatbuffers.ByteBuffer} bb
- * @returns {SampleResult}
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns SampleResult
  */
 __init(i:number, bb:flatbuffers.ByteBuffer):SampleResult {
   this.bb_pos = i;
@@ -756,17 +708,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):SampleResult {
 };
 
 /**
- * @param {flatbuffers.ByteBuffer} bb
- * @param {SampleResult=} obj
- * @returns {SampleResult}
+ * @param flatbuffers.ByteBuffer bb
+ * @param SampleResult= obj
+ * @returns SampleResult
  */
 static getRootAsSampleResult(bb:flatbuffers.ByteBuffer, obj?:SampleResult):SampleResult {
   return (obj || new SampleResult).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
- * @param {ppx.Tensor=} obj
- * @returns {ppx.Tensor|null}
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
  */
 result(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 4);
@@ -774,23 +726,23 @@ result(obj?:ppx.Tensor):ppx.Tensor|null {
 };
 
 /**
- * @param {flatbuffers.Builder} builder
+ * @param flatbuffers.Builder builder
  */
 static startSampleResult(builder:flatbuffers.Builder) {
   builder.startObject(1);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} resultOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset resultOffset
  */
 static addResult(builder:flatbuffers.Builder, resultOffset:flatbuffers.Offset) {
   builder.addFieldOffset(0, resultOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @returns {flatbuffers.Offset}
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
  */
 static endSampleResult(builder:flatbuffers.Builder):flatbuffers.Offset {
   var offset = builder.endObject();
@@ -804,19 +756,13 @@ static endSampleResult(builder:flatbuffers.Builder):flatbuffers.Offset {
  */
 export namespace ppx{
 export class Observe {
-  /**
-   * @type {flatbuffers.ByteBuffer}
-   */
   bb: flatbuffers.ByteBuffer|null = null;
 
-  /**
-   * @type {number}
-   */
   bb_pos:number = 0;
 /**
- * @param {number} i
- * @param {flatbuffers.ByteBuffer} bb
- * @returns {Observe}
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns Observe
  */
 __init(i:number, bb:flatbuffers.ByteBuffer):Observe {
   this.bb_pos = i;
@@ -825,17 +771,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Observe {
 };
 
 /**
- * @param {flatbuffers.ByteBuffer} bb
- * @param {Observe=} obj
- * @returns {Observe}
+ * @param flatbuffers.ByteBuffer bb
+ * @param Observe= obj
+ * @returns Observe
  */
 static getRootAsObserve(bb:flatbuffers.ByteBuffer, obj?:Observe):Observe {
   return (obj || new Observe).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
- * @param {flatbuffers.Encoding=} optionalEncoding
- * @returns {string|Uint8Array|null}
+ * @param flatbuffers.Encoding= optionalEncoding
+ * @returns string|Uint8Array|null
  */
 address():string|null
 address(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
@@ -845,8 +791,8 @@ address(optionalEncoding?:any):string|Uint8Array|null {
 };
 
 /**
- * @param {flatbuffers.Encoding=} optionalEncoding
- * @returns {string|Uint8Array|null}
+ * @param flatbuffers.Encoding= optionalEncoding
+ * @returns string|Uint8Array|null
  */
 name():string|null
 name(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
@@ -856,16 +802,16 @@ name(optionalEncoding?:any):string|Uint8Array|null {
 };
 
 /**
- * @returns {ppx.Distribution}
+ * @returns ppx.Distribution
  */
 distributionType():ppx.Distribution {
   var offset = this.bb!.__offset(this.bb_pos, 8);
-  return offset ? /** @type {ppx.Distribution} */ (this.bb!.readUint8(this.bb_pos + offset)) : ppx.Distribution.NONE;
+  return offset ? /**  */ (this.bb!.readUint8(this.bb_pos + offset)) : ppx.Distribution.NONE;
 };
 
 /**
- * @param {flatbuffers.Table} obj
- * @returns {?flatbuffers.Table}
+ * @param flatbuffers.Table obj
+ * @returns ?flatbuffers.Table
  */
 distribution<T extends flatbuffers.Table>(obj:T):T|null {
   var offset = this.bb!.__offset(this.bb_pos, 10);
@@ -873,8 +819,8 @@ distribution<T extends flatbuffers.Table>(obj:T):T|null {
 };
 
 /**
- * @param {ppx.Tensor=} obj
- * @returns {ppx.Tensor|null}
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
  */
 value(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 12);
@@ -882,55 +828,55 @@ value(obj?:ppx.Tensor):ppx.Tensor|null {
 };
 
 /**
- * @param {flatbuffers.Builder} builder
+ * @param flatbuffers.Builder builder
  */
 static startObserve(builder:flatbuffers.Builder) {
   builder.startObject(5);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} addressOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset addressOffset
  */
 static addAddress(builder:flatbuffers.Builder, addressOffset:flatbuffers.Offset) {
   builder.addFieldOffset(0, addressOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} nameOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset nameOffset
  */
 static addName(builder:flatbuffers.Builder, nameOffset:flatbuffers.Offset) {
   builder.addFieldOffset(1, nameOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {ppx.Distribution} distributionType
+ * @param flatbuffers.Builder builder
+ * @param ppx.Distribution distributionType
  */
 static addDistributionType(builder:flatbuffers.Builder, distributionType:ppx.Distribution) {
   builder.addFieldInt8(2, distributionType, ppx.Distribution.NONE);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} distributionOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset distributionOffset
  */
 static addDistribution(builder:flatbuffers.Builder, distributionOffset:flatbuffers.Offset) {
   builder.addFieldOffset(3, distributionOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} valueOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset valueOffset
  */
 static addValue(builder:flatbuffers.Builder, valueOffset:flatbuffers.Offset) {
   builder.addFieldOffset(4, valueOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @returns {flatbuffers.Offset}
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
  */
 static endObserve(builder:flatbuffers.Builder):flatbuffers.Offset {
   var offset = builder.endObject();
@@ -944,19 +890,13 @@ static endObserve(builder:flatbuffers.Builder):flatbuffers.Offset {
  */
 export namespace ppx{
 export class ObserveResult {
-  /**
-   * @type {flatbuffers.ByteBuffer}
-   */
   bb: flatbuffers.ByteBuffer|null = null;
 
-  /**
-   * @type {number}
-   */
   bb_pos:number = 0;
 /**
- * @param {number} i
- * @param {flatbuffers.ByteBuffer} bb
- * @returns {ObserveResult}
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns ObserveResult
  */
 __init(i:number, bb:flatbuffers.ByteBuffer):ObserveResult {
   this.bb_pos = i;
@@ -965,24 +905,24 @@ __init(i:number, bb:flatbuffers.ByteBuffer):ObserveResult {
 };
 
 /**
- * @param {flatbuffers.ByteBuffer} bb
- * @param {ObserveResult=} obj
- * @returns {ObserveResult}
+ * @param flatbuffers.ByteBuffer bb
+ * @param ObserveResult= obj
+ * @returns ObserveResult
  */
 static getRootAsObserveResult(bb:flatbuffers.ByteBuffer, obj?:ObserveResult):ObserveResult {
   return (obj || new ObserveResult).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
+ * @param flatbuffers.Builder builder
  */
 static startObserveResult(builder:flatbuffers.Builder) {
   builder.startObject(0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @returns {flatbuffers.Offset}
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
  */
 static endObserveResult(builder:flatbuffers.Builder):flatbuffers.Offset {
   var offset = builder.endObject();
@@ -996,19 +936,13 @@ static endObserveResult(builder:flatbuffers.Builder):flatbuffers.Offset {
  */
 export namespace ppx{
 export class Tag {
-  /**
-   * @type {flatbuffers.ByteBuffer}
-   */
   bb: flatbuffers.ByteBuffer|null = null;
 
-  /**
-   * @type {number}
-   */
   bb_pos:number = 0;
 /**
- * @param {number} i
- * @param {flatbuffers.ByteBuffer} bb
- * @returns {Tag}
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns Tag
  */
 __init(i:number, bb:flatbuffers.ByteBuffer):Tag {
   this.bb_pos = i;
@@ -1017,17 +951,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Tag {
 };
 
 /**
- * @param {flatbuffers.ByteBuffer} bb
- * @param {Tag=} obj
- * @returns {Tag}
+ * @param flatbuffers.ByteBuffer bb
+ * @param Tag= obj
+ * @returns Tag
  */
 static getRootAsTag(bb:flatbuffers.ByteBuffer, obj?:Tag):Tag {
   return (obj || new Tag).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
- * @param {flatbuffers.Encoding=} optionalEncoding
- * @returns {string|Uint8Array|null}
+ * @param flatbuffers.Encoding= optionalEncoding
+ * @returns string|Uint8Array|null
  */
 address():string|null
 address(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
@@ -1037,8 +971,8 @@ address(optionalEncoding?:any):string|Uint8Array|null {
 };
 
 /**
- * @param {flatbuffers.Encoding=} optionalEncoding
- * @returns {string|Uint8Array|null}
+ * @param flatbuffers.Encoding= optionalEncoding
+ * @returns string|Uint8Array|null
  */
 name():string|null
 name(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
@@ -1048,8 +982,8 @@ name(optionalEncoding?:any):string|Uint8Array|null {
 };
 
 /**
- * @param {ppx.Tensor=} obj
- * @returns {ppx.Tensor|null}
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
  */
 value(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 8);
@@ -1057,39 +991,39 @@ value(obj?:ppx.Tensor):ppx.Tensor|null {
 };
 
 /**
- * @param {flatbuffers.Builder} builder
+ * @param flatbuffers.Builder builder
  */
 static startTag(builder:flatbuffers.Builder) {
   builder.startObject(3);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} addressOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset addressOffset
  */
 static addAddress(builder:flatbuffers.Builder, addressOffset:flatbuffers.Offset) {
   builder.addFieldOffset(0, addressOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} nameOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset nameOffset
  */
 static addName(builder:flatbuffers.Builder, nameOffset:flatbuffers.Offset) {
   builder.addFieldOffset(1, nameOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} valueOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset valueOffset
  */
 static addValue(builder:flatbuffers.Builder, valueOffset:flatbuffers.Offset) {
   builder.addFieldOffset(2, valueOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @returns {flatbuffers.Offset}
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
  */
 static endTag(builder:flatbuffers.Builder):flatbuffers.Offset {
   var offset = builder.endObject();
@@ -1103,19 +1037,13 @@ static endTag(builder:flatbuffers.Builder):flatbuffers.Offset {
  */
 export namespace ppx{
 export class TagResult {
-  /**
-   * @type {flatbuffers.ByteBuffer}
-   */
   bb: flatbuffers.ByteBuffer|null = null;
 
-  /**
-   * @type {number}
-   */
   bb_pos:number = 0;
 /**
- * @param {number} i
- * @param {flatbuffers.ByteBuffer} bb
- * @returns {TagResult}
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns TagResult
  */
 __init(i:number, bb:flatbuffers.ByteBuffer):TagResult {
   this.bb_pos = i;
@@ -1124,24 +1052,24 @@ __init(i:number, bb:flatbuffers.ByteBuffer):TagResult {
 };
 
 /**
- * @param {flatbuffers.ByteBuffer} bb
- * @param {TagResult=} obj
- * @returns {TagResult}
+ * @param flatbuffers.ByteBuffer bb
+ * @param TagResult= obj
+ * @returns TagResult
  */
 static getRootAsTagResult(bb:flatbuffers.ByteBuffer, obj?:TagResult):TagResult {
   return (obj || new TagResult).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
+ * @param flatbuffers.Builder builder
  */
 static startTagResult(builder:flatbuffers.Builder) {
   builder.startObject(0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @returns {flatbuffers.Offset}
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
  */
 static endTagResult(builder:flatbuffers.Builder):flatbuffers.Offset {
   var offset = builder.endObject();
@@ -1155,19 +1083,13 @@ static endTagResult(builder:flatbuffers.Builder):flatbuffers.Offset {
  */
 export namespace ppx{
 export class Reset {
-  /**
-   * @type {flatbuffers.ByteBuffer}
-   */
   bb: flatbuffers.ByteBuffer|null = null;
 
-  /**
-   * @type {number}
-   */
   bb_pos:number = 0;
 /**
- * @param {number} i
- * @param {flatbuffers.ByteBuffer} bb
- * @returns {Reset}
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns Reset
  */
 __init(i:number, bb:flatbuffers.ByteBuffer):Reset {
   this.bb_pos = i;
@@ -1176,24 +1098,24 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Reset {
 };
 
 /**
- * @param {flatbuffers.ByteBuffer} bb
- * @param {Reset=} obj
- * @returns {Reset}
+ * @param flatbuffers.ByteBuffer bb
+ * @param Reset= obj
+ * @returns Reset
  */
 static getRootAsReset(bb:flatbuffers.ByteBuffer, obj?:Reset):Reset {
   return (obj || new Reset).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
+ * @param flatbuffers.Builder builder
  */
 static startReset(builder:flatbuffers.Builder) {
   builder.startObject(0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @returns {flatbuffers.Offset}
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
  */
 static endReset(builder:flatbuffers.Builder):flatbuffers.Offset {
   var offset = builder.endObject();
@@ -1207,19 +1129,13 @@ static endReset(builder:flatbuffers.Builder):flatbuffers.Offset {
  */
 export namespace ppx{
 export class Normal {
-  /**
-   * @type {flatbuffers.ByteBuffer}
-   */
   bb: flatbuffers.ByteBuffer|null = null;
 
-  /**
-   * @type {number}
-   */
   bb_pos:number = 0;
 /**
- * @param {number} i
- * @param {flatbuffers.ByteBuffer} bb
- * @returns {Normal}
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns Normal
  */
 __init(i:number, bb:flatbuffers.ByteBuffer):Normal {
   this.bb_pos = i;
@@ -1228,17 +1144,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Normal {
 };
 
 /**
- * @param {flatbuffers.ByteBuffer} bb
- * @param {Normal=} obj
- * @returns {Normal}
+ * @param flatbuffers.ByteBuffer bb
+ * @param Normal= obj
+ * @returns Normal
  */
 static getRootAsNormal(bb:flatbuffers.ByteBuffer, obj?:Normal):Normal {
   return (obj || new Normal).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
- * @param {ppx.Tensor=} obj
- * @returns {ppx.Tensor|null}
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
  */
 mean(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 4);
@@ -1246,8 +1162,8 @@ mean(obj?:ppx.Tensor):ppx.Tensor|null {
 };
 
 /**
- * @param {ppx.Tensor=} obj
- * @returns {ppx.Tensor|null}
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
  */
 stddev(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 6);
@@ -1255,31 +1171,31 @@ stddev(obj?:ppx.Tensor):ppx.Tensor|null {
 };
 
 /**
- * @param {flatbuffers.Builder} builder
+ * @param flatbuffers.Builder builder
  */
 static startNormal(builder:flatbuffers.Builder) {
   builder.startObject(2);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} meanOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset meanOffset
  */
 static addMean(builder:flatbuffers.Builder, meanOffset:flatbuffers.Offset) {
   builder.addFieldOffset(0, meanOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} stddevOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset stddevOffset
  */
 static addStddev(builder:flatbuffers.Builder, stddevOffset:flatbuffers.Offset) {
   builder.addFieldOffset(1, stddevOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @returns {flatbuffers.Offset}
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
  */
 static endNormal(builder:flatbuffers.Builder):flatbuffers.Offset {
   var offset = builder.endObject();
@@ -1293,19 +1209,13 @@ static endNormal(builder:flatbuffers.Builder):flatbuffers.Offset {
  */
 export namespace ppx{
 export class Uniform {
-  /**
-   * @type {flatbuffers.ByteBuffer}
-   */
   bb: flatbuffers.ByteBuffer|null = null;
 
-  /**
-   * @type {number}
-   */
   bb_pos:number = 0;
 /**
- * @param {number} i
- * @param {flatbuffers.ByteBuffer} bb
- * @returns {Uniform}
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns Uniform
  */
 __init(i:number, bb:flatbuffers.ByteBuffer):Uniform {
   this.bb_pos = i;
@@ -1314,17 +1224,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Uniform {
 };
 
 /**
- * @param {flatbuffers.ByteBuffer} bb
- * @param {Uniform=} obj
- * @returns {Uniform}
+ * @param flatbuffers.ByteBuffer bb
+ * @param Uniform= obj
+ * @returns Uniform
  */
 static getRootAsUniform(bb:flatbuffers.ByteBuffer, obj?:Uniform):Uniform {
   return (obj || new Uniform).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
- * @param {ppx.Tensor=} obj
- * @returns {ppx.Tensor|null}
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
  */
 low(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 4);
@@ -1332,8 +1242,8 @@ low(obj?:ppx.Tensor):ppx.Tensor|null {
 };
 
 /**
- * @param {ppx.Tensor=} obj
- * @returns {ppx.Tensor|null}
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
  */
 high(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 6);
@@ -1341,31 +1251,31 @@ high(obj?:ppx.Tensor):ppx.Tensor|null {
 };
 
 /**
- * @param {flatbuffers.Builder} builder
+ * @param flatbuffers.Builder builder
  */
 static startUniform(builder:flatbuffers.Builder) {
   builder.startObject(2);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} lowOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset lowOffset
  */
 static addLow(builder:flatbuffers.Builder, lowOffset:flatbuffers.Offset) {
   builder.addFieldOffset(0, lowOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} highOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset highOffset
  */
 static addHigh(builder:flatbuffers.Builder, highOffset:flatbuffers.Offset) {
   builder.addFieldOffset(1, highOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @returns {flatbuffers.Offset}
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
  */
 static endUniform(builder:flatbuffers.Builder):flatbuffers.Offset {
   var offset = builder.endObject();
@@ -1379,19 +1289,13 @@ static endUniform(builder:flatbuffers.Builder):flatbuffers.Offset {
  */
 export namespace ppx{
 export class Categorical {
-  /**
-   * @type {flatbuffers.ByteBuffer}
-   */
   bb: flatbuffers.ByteBuffer|null = null;
 
-  /**
-   * @type {number}
-   */
   bb_pos:number = 0;
 /**
- * @param {number} i
- * @param {flatbuffers.ByteBuffer} bb
- * @returns {Categorical}
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns Categorical
  */
 __init(i:number, bb:flatbuffers.ByteBuffer):Categorical {
   this.bb_pos = i;
@@ -1400,17 +1304,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Categorical {
 };
 
 /**
- * @param {flatbuffers.ByteBuffer} bb
- * @param {Categorical=} obj
- * @returns {Categorical}
+ * @param flatbuffers.ByteBuffer bb
+ * @param Categorical= obj
+ * @returns Categorical
  */
 static getRootAsCategorical(bb:flatbuffers.ByteBuffer, obj?:Categorical):Categorical {
   return (obj || new Categorical).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
- * @param {ppx.Tensor=} obj
- * @returns {ppx.Tensor|null}
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
  */
 probs(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 4);
@@ -1418,23 +1322,23 @@ probs(obj?:ppx.Tensor):ppx.Tensor|null {
 };
 
 /**
- * @param {flatbuffers.Builder} builder
+ * @param flatbuffers.Builder builder
  */
 static startCategorical(builder:flatbuffers.Builder) {
   builder.startObject(1);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} probsOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset probsOffset
  */
 static addProbs(builder:flatbuffers.Builder, probsOffset:flatbuffers.Offset) {
   builder.addFieldOffset(0, probsOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @returns {flatbuffers.Offset}
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
  */
 static endCategorical(builder:flatbuffers.Builder):flatbuffers.Offset {
   var offset = builder.endObject();
@@ -1448,19 +1352,13 @@ static endCategorical(builder:flatbuffers.Builder):flatbuffers.Offset {
  */
 export namespace ppx{
 export class Poisson {
-  /**
-   * @type {flatbuffers.ByteBuffer}
-   */
   bb: flatbuffers.ByteBuffer|null = null;
 
-  /**
-   * @type {number}
-   */
   bb_pos:number = 0;
 /**
- * @param {number} i
- * @param {flatbuffers.ByteBuffer} bb
- * @returns {Poisson}
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns Poisson
  */
 __init(i:number, bb:flatbuffers.ByteBuffer):Poisson {
   this.bb_pos = i;
@@ -1469,17 +1367,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Poisson {
 };
 
 /**
- * @param {flatbuffers.ByteBuffer} bb
- * @param {Poisson=} obj
- * @returns {Poisson}
+ * @param flatbuffers.ByteBuffer bb
+ * @param Poisson= obj
+ * @returns Poisson
  */
 static getRootAsPoisson(bb:flatbuffers.ByteBuffer, obj?:Poisson):Poisson {
   return (obj || new Poisson).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
- * @param {ppx.Tensor=} obj
- * @returns {ppx.Tensor|null}
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
  */
 rate(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 4);
@@ -1487,23 +1385,23 @@ rate(obj?:ppx.Tensor):ppx.Tensor|null {
 };
 
 /**
- * @param {flatbuffers.Builder} builder
+ * @param flatbuffers.Builder builder
  */
 static startPoisson(builder:flatbuffers.Builder) {
   builder.startObject(1);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} rateOffset
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset rateOffset
  */
 static addRate(builder:flatbuffers.Builder, rateOffset:flatbuffers.Offset) {
   builder.addFieldOffset(0, rateOffset, 0);
 };
 
 /**
- * @param {flatbuffers.Builder} builder
- * @returns {flatbuffers.Offset}
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
  */
 static endPoisson(builder:flatbuffers.Builder):flatbuffers.Offset {
   var offset = builder.endObject();
