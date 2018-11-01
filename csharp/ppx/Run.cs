@@ -17,17 +17,8 @@ public struct Run : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p.bb_pos = _i; __p.bb = _bb; }
   public Run __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public Tensor? Observation { get { int o = __p.__offset(4); return o != 0 ? (Tensor?)(new Tensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
 
-  public static Offset<Run> CreateRun(FlatBufferBuilder builder,
-      Offset<Tensor> observationOffset = default(Offset<Tensor>)) {
-    builder.StartObject(1);
-    Run.AddObservation(builder, observationOffset);
-    return Run.EndRun(builder);
-  }
-
-  public static void StartRun(FlatBufferBuilder builder) { builder.StartObject(1); }
-  public static void AddObservation(FlatBufferBuilder builder, Offset<Tensor> observationOffset) { builder.AddOffset(0, observationOffset.Value, 0); }
+  public static void StartRun(FlatBufferBuilder builder) { builder.StartObject(0); }
   public static Offset<Run> EndRun(FlatBufferBuilder builder) {
     int o = builder.EndObject();
     return new Offset<Run>(o);

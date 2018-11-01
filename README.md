@@ -34,5 +34,6 @@ We provide `PPX` compiled to all programming languages officially supported by f
 * [Atılım Güneş Baydin](http://www.robots.ox.ac.uk/~gunes/)
 * [Tuan Anh Le](http://www.tuananhle.co.uk/) 
 * [Lukas Heinrich](http://www.lukasheinrich.com/)
+* [Wahid Bhimji](http://www.nersc.gov/about/nersc-staff/data-analytics-services/wahid-bhimji/)
 * [Kyle Cranmer](http://theoryandpractice.org/)
 * [Frank Wood](http://www.cs.ubc.ca/~fwood/index.html)

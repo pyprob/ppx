@@ -516,16 +516,8 @@ inline flatbuffers::Offset<HandshakeResult> CreateHandshakeResultDirect(
 }
 
 struct Run FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  enum {
-    VT_OBSERVATION = 4
-  };
-  const Tensor *observation() const {
-    return GetPointer<const Tensor *>(VT_OBSERVATION);
-  }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffset(verifier, VT_OBSERVATION) &&
-           verifier.VerifyTable(observation()) &&
            verifier.EndTable();
   }
 };
@@ -533,9 +525,6 @@ struct Run FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 struct RunBuilder {
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_observation(flatbuffers::Offset<Tensor> observation) {
-    fbb_.AddOffset(Run::VT_OBSERVATION, observation);
-  }
   explicit RunBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
@@ -549,10 +538,8 @@ struct RunBuilder {
 };
 
 inline flatbuffers::Offset<Run> CreateRun(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<Tensor> observation = 0) {
+    flatbuffers::FlatBufferBuilder &_fbb) {
   RunBuilder builder_(_fbb);
-  builder_.add_observation(observation);
   return builder_.Finish();
 }
 

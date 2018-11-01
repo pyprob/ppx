@@ -42,42 +42,24 @@ class Run extends Table
         return $this;
     }
 
-    public function getObservation()
-    {
-        $obj = new Tensor();
-        $o = $this->__offset(4);
-        return $o != 0 ? $obj->init($this->__indirect($o + $this->bb_pos), $this->bb) : 0;
-    }
-
     /**
      * @param FlatBufferBuilder $builder
      * @return void
      */
     public static function startRun(FlatBufferBuilder $builder)
     {
-        $builder->StartObject(1);
+        $builder->StartObject(0);
     }
 
     /**
      * @param FlatBufferBuilder $builder
      * @return Run
      */
-    public static function createRun(FlatBufferBuilder $builder, $observation)
+    public static function createRun(FlatBufferBuilder $builder, )
     {
-        $builder->startObject(1);
-        self::addObservation($builder, $observation);
+        $builder->startObject(0);
         $o = $builder->endObject();
         return $o;
-    }
-
-    /**
-     * @param FlatBufferBuilder $builder
-     * @param int
-     * @return void
-     */
-    public static function addObservation(FlatBufferBuilder $builder, $observation)
-    {
-        $builder->addOffsetX(0, $observation, 0);
     }
 
     /**

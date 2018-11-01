@@ -45,9 +45,7 @@ table HandshakeResult {
   model_name: string;
 }
 
-table Run {
-  observation: Tensor;
-}
+table Run {}
 
 table RunResult {
   result: Tensor;

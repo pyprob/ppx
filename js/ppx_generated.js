@@ -483,27 +483,10 @@ ppx.Run.getRootAsRun = function(bb, obj) {
 };
 
 /**
- * @param {ppx.Tensor=} obj
- * @returns {ppx.Tensor|null}
- */
-ppx.Run.prototype.observation = function(obj) {
-  var offset = this.bb.__offset(this.bb_pos, 4);
-  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
-};
-
-/**
  * @param {flatbuffers.Builder} builder
  */
 ppx.Run.startRun = function(builder) {
-  builder.startObject(1);
-};
-
-/**
- * @param {flatbuffers.Builder} builder
- * @param {flatbuffers.Offset} observationOffset
- */
-ppx.Run.addObservation = function(builder, observationOffset) {
-  builder.addFieldOffset(0, observationOffset, 0);
+  builder.startObject(0);
 };
 
 /**
