@@ -3,9 +3,10 @@ language: cpp
 notifications:
   email: false
   slack:
-    secure: gbC/4OXc8gvzHeqYcaHKhtq5AJUgD9YZsdp8ArxvTH0MizdjU1WTDDn7VvRPVJEwJECeldRadK9MzXrYMSOhy5pLL3Oj2ITpwmeYGK0rQEADGNacRloQpLNlrAyI+rlRXciLGvnUDdd4RNLh8Sf89606Vrw/vsGtO9HfQYYN/mDqlXEaucD2nAe3/FUsqfZGwpnNlgjteXVqTWaMWzxif4BlaBnVTFKrL0+dMN4esuvH96b6cgLp/ejgR+VmR09JYia7WQPlGm5Ck0SNGbO80cyoiYuOUgNAKVi65Zg9+kHIVXHDG2K4wxUyk3kTbPK2NR62I/jOcykraTEAh5PqdTx4I5UuYJtd8orjh3vPo8hzqGXXXdd31k1cjHpHN0Y4BDXUOXdqaRyZHrFH+zpe7ty8y4Ywq3Q0/5I6dZvJAphyz200xxtc9d6S2PPvLQkoUjpJFg4OM6c1B0trGAr2RjfoAVxPJQk/t+jzrC0ln7sLeegkR9kcLEhz/2QyxrWEomzlCoQorunki/414WczqrpGw9UQ/k9zxuCd0vCZicRatd1vzS7MQ10kGZoZCmsp+hxp9Qolz2PIN+cGKhrXCEZMcEtDtZgmDN7D9XTUV6WWqTzK3evWidempWiyetJ6z5cAg1u3YbJKgU9V3FQsY4Im3HQ5xYSR3tbxpo4L798=
+    secure: Vd9YKWhC8eRvQ4l0MC1HkjFYqOrN4ZL00zLFMcu//j/kttyEHl0bekjVyWZaTWISJtSq+5UzDyhXjrDOIkKr5coCO4qL3HDc7t2ksSNwfzcHG0ErMW4ho2VtbN8OTfwhwSV5EUdgfqokgg9ONMPeHYsqVZgEYr2TQuDius5zJ/aoiAStuc2hUrTu2z9he4hXcYGCmlbNN0kfBPE2PV/RdZfFLYlfgjKVm0ztInLdGAvWjJY69YTt72Ubt5arrgfFLa/j8/gtvYwwVJ9PaMdExeI62ulplsmqt9kZ8vW6SScHg6vVwj79WExS4s4suXvrF7bUDtqjzeiBU+zDPDgFSFk0f0o9qAc4DiA2er+jEDHM8Q3G/JTdp2ODQMSYWfOX/LAK2TnyqIhGAeNHtwgyTidAGdwAtmgrIHUVan/c366nbJ9Y/GzYepouTUA1VzRnjiI+Qla8u/rJfN230YffHxXmeNnsgc5/Rt4F3gK9rKQFkaDZp86WaiIn6WWG8jatCHgl4ya4o5mlcn4Ftw7ZVv7xkAm58MXpx47BWDb3OcI0ML1ige7ixTBNG6q5Ah1FYHOguMW7JefJTrW60ZSHFupAI959prmaXkFfHu31KRzya/eGgG+Uag0u9Bjc1DUohoJdOFdrqyiK9exMWWnFU5US5Edv9uG8q0WVDZfhKGc=
 install:
 - git clone --branch v1.9.0 https://github.com/google/flatbuffers.git && cd flatbuffers
-  && cmake -G "Unix Makefiles" && sudo make install && sudo cp flatc /usr/local/bin/ && cd ..
+  && cmake -G "Unix Makefiles" && sudo make install && sudo cp flatc /usr/local/bin/
+  && cd ..
 script:
 - sh compile.sh
