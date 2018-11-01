@@ -28,6 +28,10 @@ struct Observe;
 
 struct ObserveResult;
 
+struct Tag;
+
+struct TagResult;
+
 struct Reset;
 
 struct Normal;
@@ -48,12 +52,14 @@ enum MessageBody {
   MessageBody_SampleResult = 6,
   MessageBody_Observe = 7,
   MessageBody_ObserveResult = 8,
-  MessageBody_Reset = 9,
+  MessageBody_Tag = 9,
+  MessageBody_TagResult = 10,
+  MessageBody_Reset = 11,
   MessageBody_MIN = MessageBody_NONE,
   MessageBody_MAX = MessageBody_Reset
 };
 
-inline const MessageBody (&EnumValuesMessageBody())[10] {
+inline const MessageBody (&EnumValuesMessageBody())[12] {
   static const MessageBody values[] = {
     MessageBody_NONE,
     MessageBody_Handshake,
@@ -64,6 +70,8 @@ inline const MessageBody (&EnumValuesMessageBody())[10] {
     MessageBody_SampleResult,
     MessageBody_Observe,
     MessageBody_ObserveResult,
+    MessageBody_Tag,
+    MessageBody_TagResult,
     MessageBody_Reset
   };
   return values;
@@ -80,6 +88,8 @@ inline const char * const *EnumNamesMessageBody() {
     "SampleResult",
     "Observe",
     "ObserveResult",
+    "Tag",
+    "TagResult",
     "Reset",
     nullptr
   };
@@ -125,6 +135,14 @@ template<> struct MessageBodyTraits<Observe> {
 
 template<> struct MessageBodyTraits<ObserveResult> {
   static const MessageBody enum_value = MessageBody_ObserveResult;
+};
+
+template<> struct MessageBodyTraits<Tag> {
+  static const MessageBody enum_value = MessageBody_Tag;
+};
+
+template<> struct MessageBodyTraits<TagResult> {
+  static const MessageBody enum_value = MessageBody_TagResult;
 };
 
 template<> struct MessageBodyTraits<Reset> {
@@ -231,6 +249,12 @@ struct Message FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const ObserveResult *body_as_ObserveResult() const {
     return body_type() == MessageBody_ObserveResult ? static_cast<const ObserveResult *>(body()) : nullptr;
   }
+  const Tag *body_as_Tag() const {
+    return body_type() == MessageBody_Tag ? static_cast<const Tag *>(body()) : nullptr;
+  }
+  const TagResult *body_as_TagResult() const {
+    return body_type() == MessageBody_TagResult ? static_cast<const TagResult *>(body()) : nullptr;
+  }
   const Reset *body_as_Reset() const {
     return body_type() == MessageBody_Reset ? static_cast<const Reset *>(body()) : nullptr;
   }
@@ -273,6 +297,14 @@ template<> inline const Observe *Message::body_as<Observe>() const {
 
 template<> inline const ObserveResult *Message::body_as<ObserveResult>() const {
   return body_as_ObserveResult();
+}
+
+template<> inline const Tag *Message::body_as<Tag>() const {
+  return body_as_Tag();
+}
+
+template<> inline const TagResult *Message::body_as<TagResult>() const {
+  return body_as_TagResult();
 }
 
 template<> inline const Reset *Message::body_as<Reset>() const {
@@ -903,6 +935,109 @@ inline flatbuffers::Offset<ObserveResult> CreateObserveResult(
   return builder_.Finish();
 }
 
+struct Tag FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  enum {
+    VT_ADDRESS = 4,
+    VT_NAME = 6,
+    VT_VALUE = 8
+  };
+  const flatbuffers::String *address() const {
+    return GetPointer<const flatbuffers::String *>(VT_ADDRESS);
+  }
+  const flatbuffers::String *name() const {
+    return GetPointer<const flatbuffers::String *>(VT_NAME);
+  }
+  const Tensor *value() const {
+    return GetPointer<const Tensor *>(VT_VALUE);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_ADDRESS) &&
+           verifier.Verify(address()) &&
+           VerifyOffset(verifier, VT_NAME) &&
+           verifier.Verify(name()) &&
+           VerifyOffset(verifier, VT_VALUE) &&
+           verifier.VerifyTable(value()) &&
+           verifier.EndTable();
+  }
+};
+
+struct TagBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_address(flatbuffers::Offset<flatbuffers::String> address) {
+    fbb_.AddOffset(Tag::VT_ADDRESS, address);
+  }
+  void add_name(flatbuffers::Offset<flatbuffers::String> name) {
+    fbb_.AddOffset(Tag::VT_NAME, name);
+  }
+  void add_value(flatbuffers::Offset<Tensor> value) {
+    fbb_.AddOffset(Tag::VT_VALUE, value);
+  }
+  explicit TagBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  TagBuilder &operator=(const TagBuilder &);
+  flatbuffers::Offset<Tag> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<Tag>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<Tag> CreateTag(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    flatbuffers::Offset<flatbuffers::String> address = 0,
+    flatbuffers::Offset<flatbuffers::String> name = 0,
+    flatbuffers::Offset<Tensor> value = 0) {
+  TagBuilder builder_(_fbb);
+  builder_.add_value(value);
+  builder_.add_name(name);
+  builder_.add_address(address);
+  return builder_.Finish();
+}
+
+inline flatbuffers::Offset<Tag> CreateTagDirect(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    const char *address = nullptr,
+    const char *name = nullptr,
+    flatbuffers::Offset<Tensor> value = 0) {
+  return ppx::CreateTag(
+      _fbb,
+      address ? _fbb.CreateString(address) : 0,
+      name ? _fbb.CreateString(name) : 0,
+      value);
+}
+
+struct TagResult FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           verifier.EndTable();
+  }
+};
+
+struct TagResultBuilder {
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  explicit TagResultBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  TagResultBuilder &operator=(const TagResultBuilder &);
+  flatbuffers::Offset<TagResult> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<TagResult>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<TagResult> CreateTagResult(
+    flatbuffers::FlatBufferBuilder &_fbb) {
+  TagResultBuilder builder_(_fbb);
+  return builder_.Finish();
+}
+
 struct Reset FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -1152,6 +1287,14 @@ inline bool VerifyMessageBody(flatbuffers::Verifier &verifier, const void *obj, 
     }
     case MessageBody_ObserveResult: {
       auto ptr = reinterpret_cast<const ObserveResult *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case MessageBody_Tag: {
+      auto ptr = reinterpret_cast<const Tag *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case MessageBody_TagResult: {
+      auto ptr = reinterpret_cast<const TagResult *>(obj);
       return verifier.VerifyTable(ptr);
     }
     case MessageBody_Reset: {

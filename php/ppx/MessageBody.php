@@ -14,7 +14,9 @@ class MessageBody
     const SampleResult = 6;
     const Observe = 7;
     const ObserveResult = 8;
-    const Reset = 9;
+    const Tag = 9;
+    const TagResult = 10;
+    const Reset = 11;
 
     private static $names = array(
         "NONE",
@@ -26,6 +28,8 @@ class MessageBody
         "SampleResult",
         "Observe",
         "ObserveResult",
+        "Tag",
+        "TagResult",
         "Reset",
     );
 

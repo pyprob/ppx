@@ -1,5 +1,5 @@
 // ppx
-// 0.1.1
+// 0.1.2
 //
 // Probabilistic programming execution protocol
 // https://github.com/probprog/ppx
@@ -15,6 +15,8 @@ union MessageBody {
   SampleResult,
   Observe,
   ObserveResult,
+  Tag,
+  TagResult,
   Reset
 }
 
@@ -71,6 +73,14 @@ table Observe {
 }
 
 table ObserveResult {}
+
+table Tag {
+  address: string;
+  name: string;
+  value: Tensor;
+}
+
+table TagResult {}
 
 table Reset {}
 

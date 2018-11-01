@@ -19,7 +19,9 @@ ppx.MessageBody = {
   SampleResult: 6,
   Observe: 7,
   ObserveResult: 8,
-  Reset: 9
+  Tag: 9,
+  TagResult: 10,
+  Reset: 11
 };
 
 /**
@@ -981,6 +983,159 @@ ppx.ObserveResult.startObserveResult = function(builder) {
  * @returns {flatbuffers.Offset}
  */
 ppx.ObserveResult.endObserveResult = function(builder) {
+  var offset = builder.endObject();
+  return offset;
+};
+
+/**
+ * @constructor
+ */
+ppx.Tag = function() {
+  /**
+   * @type {flatbuffers.ByteBuffer}
+   */
+  this.bb = null;
+
+  /**
+   * @type {number}
+   */
+  this.bb_pos = 0;
+};
+
+/**
+ * @param {number} i
+ * @param {flatbuffers.ByteBuffer} bb
+ * @returns {ppx.Tag}
+ */
+ppx.Tag.prototype.__init = function(i, bb) {
+  this.bb_pos = i;
+  this.bb = bb;
+  return this;
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Tag=} obj
+ * @returns {ppx.Tag}
+ */
+ppx.Tag.getRootAsTag = function(bb, obj) {
+  return (obj || new ppx.Tag).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.Encoding=} optionalEncoding
+ * @returns {string|Uint8Array|null}
+ */
+ppx.Tag.prototype.address = function(optionalEncoding) {
+  var offset = this.bb.__offset(this.bb_pos, 4);
+  return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+};
+
+/**
+ * @param {flatbuffers.Encoding=} optionalEncoding
+ * @returns {string|Uint8Array|null}
+ */
+ppx.Tag.prototype.name = function(optionalEncoding) {
+  var offset = this.bb.__offset(this.bb_pos, 6);
+  return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+};
+
+/**
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
+ */
+ppx.Tag.prototype.value = function(obj) {
+  var offset = this.bb.__offset(this.bb_pos, 8);
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ */
+ppx.Tag.startTag = function(builder) {
+  builder.startObject(3);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} addressOffset
+ */
+ppx.Tag.addAddress = function(builder, addressOffset) {
+  builder.addFieldOffset(0, addressOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} nameOffset
+ */
+ppx.Tag.addName = function(builder, nameOffset) {
+  builder.addFieldOffset(1, nameOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} valueOffset
+ */
+ppx.Tag.addValue = function(builder, valueOffset) {
+  builder.addFieldOffset(2, valueOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Tag.endTag = function(builder) {
+  var offset = builder.endObject();
+  return offset;
+};
+
+/**
+ * @constructor
+ */
+ppx.TagResult = function() {
+  /**
+   * @type {flatbuffers.ByteBuffer}
+   */
+  this.bb = null;
+
+  /**
+   * @type {number}
+   */
+  this.bb_pos = 0;
+};
+
+/**
+ * @param {number} i
+ * @param {flatbuffers.ByteBuffer} bb
+ * @returns {ppx.TagResult}
+ */
+ppx.TagResult.prototype.__init = function(i, bb) {
+  this.bb_pos = i;
+  this.bb = bb;
+  return this;
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.TagResult=} obj
+ * @returns {ppx.TagResult}
+ */
+ppx.TagResult.getRootAsTagResult = function(bb, obj) {
+  return (obj || new ppx.TagResult).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ */
+ppx.TagResult.startTagResult = function(builder) {
+  builder.startObject(0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @returns {flatbuffers.Offset}
+ */
+ppx.TagResult.endTagResult = function(builder) {
   var offset = builder.endObject();
   return offset;
 };

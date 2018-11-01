@@ -16,7 +16,9 @@ public enum MessageBody : byte
  SampleResult = 6,
  Observe = 7,
  ObserveResult = 8,
- Reset = 9,
+ Tag = 9,
+ TagResult = 10,
+ Reset = 11,
 };
 
 

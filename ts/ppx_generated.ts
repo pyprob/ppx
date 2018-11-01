@@ -15,7 +15,9 @@ export enum MessageBody{
   SampleResult= 6,
   Observe= 7,
   ObserveResult= 8,
-  Reset= 9
+  Tag= 9,
+  TagResult= 10,
+  Reset= 11
 }};
 
 /**
@@ -1000,6 +1002,165 @@ static startObserveResult(builder:flatbuffers.Builder) {
  * @returns {flatbuffers.Offset}
  */
 static endObserveResult(builder:flatbuffers.Builder):flatbuffers.Offset {
+  var offset = builder.endObject();
+  return offset;
+};
+
+}
+}
+/**
+ * @constructor
+ */
+export namespace ppx{
+export class Tag {
+  /**
+   * @type {flatbuffers.ByteBuffer}
+   */
+  bb: flatbuffers.ByteBuffer|null = null;
+
+  /**
+   * @type {number}
+   */
+  bb_pos:number = 0;
+/**
+ * @param {number} i
+ * @param {flatbuffers.ByteBuffer} bb
+ * @returns {Tag}
+ */
+__init(i:number, bb:flatbuffers.ByteBuffer):Tag {
+  this.bb_pos = i;
+  this.bb = bb;
+  return this;
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {Tag=} obj
+ * @returns {Tag}
+ */
+static getRootAsTag(bb:flatbuffers.ByteBuffer, obj?:Tag):Tag {
+  return (obj || new Tag).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.Encoding=} optionalEncoding
+ * @returns {string|Uint8Array|null}
+ */
+address():string|null
+address(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
+address(optionalEncoding?:any):string|Uint8Array|null {
+  var offset = this.bb!.__offset(this.bb_pos, 4);
+  return offset ? this.bb!.__string(this.bb_pos + offset, optionalEncoding) : null;
+};
+
+/**
+ * @param {flatbuffers.Encoding=} optionalEncoding
+ * @returns {string|Uint8Array|null}
+ */
+name():string|null
+name(optionalEncoding:flatbuffers.Encoding):string|Uint8Array|null
+name(optionalEncoding?:any):string|Uint8Array|null {
+  var offset = this.bb!.__offset(this.bb_pos, 6);
+  return offset ? this.bb!.__string(this.bb_pos + offset, optionalEncoding) : null;
+};
+
+/**
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
+ */
+value(obj?:ppx.Tensor):ppx.Tensor|null {
+  var offset = this.bb!.__offset(this.bb_pos, 8);
+  return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ */
+static startTag(builder:flatbuffers.Builder) {
+  builder.startObject(3);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} addressOffset
+ */
+static addAddress(builder:flatbuffers.Builder, addressOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(0, addressOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} nameOffset
+ */
+static addName(builder:flatbuffers.Builder, nameOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(1, nameOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} valueOffset
+ */
+static addValue(builder:flatbuffers.Builder, valueOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(2, valueOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @returns {flatbuffers.Offset}
+ */
+static endTag(builder:flatbuffers.Builder):flatbuffers.Offset {
+  var offset = builder.endObject();
+  return offset;
+};
+
+}
+}
+/**
+ * @constructor
+ */
+export namespace ppx{
+export class TagResult {
+  /**
+   * @type {flatbuffers.ByteBuffer}
+   */
+  bb: flatbuffers.ByteBuffer|null = null;
+
+  /**
+   * @type {number}
+   */
+  bb_pos:number = 0;
+/**
+ * @param {number} i
+ * @param {flatbuffers.ByteBuffer} bb
+ * @returns {TagResult}
+ */
+__init(i:number, bb:flatbuffers.ByteBuffer):TagResult {
+  this.bb_pos = i;
+  this.bb = bb;
+  return this;
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {TagResult=} obj
+ * @returns {TagResult}
+ */
+static getRootAsTagResult(bb:flatbuffers.ByteBuffer, obj?:TagResult):TagResult {
+  return (obj || new TagResult).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ */
+static startTagResult(builder:flatbuffers.Builder) {
+  builder.startObject(0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @returns {flatbuffers.Offset}
+ */
+static endTagResult(builder:flatbuffers.Builder):flatbuffers.Offset {
   var offset = builder.endObject();
   return offset;
 };

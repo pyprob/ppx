@@ -12,7 +12,9 @@ const (
 	MessageBodySampleResult = 6
 	MessageBodyObserve = 7
 	MessageBodyObserveResult = 8
-	MessageBodyReset = 9
+	MessageBodyTag = 9
+	MessageBodyTagResult = 10
+	MessageBodyReset = 11
 )
 
 var EnumNamesMessageBody = map[int]string{
@@ -25,6 +27,8 @@ var EnumNamesMessageBody = map[int]string{
 	MessageBodySampleResult:"SampleResult",
 	MessageBodyObserve:"Observe",
 	MessageBodyObserveResult:"ObserveResult",
+	MessageBodyTag:"Tag",
+	MessageBodyTagResult:"TagResult",
 	MessageBodyReset:"Reset",
 }
 
