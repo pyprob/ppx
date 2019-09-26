@@ -1,4 +1,4 @@
-# PPX [![Build Status](https://travis-ci.org/probprog/ppx.svg?branch=master)](https://travis-ci.org/probprog/ppx)
+# PPX [![Build Status](https://travis-ci.org/pyprob/ppx.svg?branch=master)](https://travis-ci.org/pyprob/ppx)
 
 <p align="left"><img width="40%" src="docs/ppx_logo.png" /></p>
 
