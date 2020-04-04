@@ -9,9 +9,10 @@ import com.google.flatbuffers.*;
 
 @SuppressWarnings("unused")
 public final class HandshakeResult extends Table {
+  public static void ValidateVersion() { Constants.FLATBUFFERS_1_12_0(); }
   public static HandshakeResult getRootAsHandshakeResult(ByteBuffer _bb) { return getRootAsHandshakeResult(_bb, new HandshakeResult()); }
   public static HandshakeResult getRootAsHandshakeResult(ByteBuffer _bb, HandshakeResult obj) { _bb.order(ByteOrder.LITTLE_ENDIAN); return (obj.__assign(_bb.getInt(_bb.position()) + _bb.position(), _bb)); }
-  public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; }
+  public void __init(int _i, ByteBuffer _bb) { __reset(_i, _bb); }
   public HandshakeResult __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public String systemName() { int o = __offset(4); return o != 0 ? __string(o + bb_pos) : null; }
@@ -24,18 +25,25 @@ public final class HandshakeResult extends Table {
   public static int createHandshakeResult(FlatBufferBuilder builder,
       int system_nameOffset,
       int model_nameOffset) {
-    builder.startObject(2);
+    builder.startTable(2);
     HandshakeResult.addModelName(builder, model_nameOffset);
     HandshakeResult.addSystemName(builder, system_nameOffset);
     return HandshakeResult.endHandshakeResult(builder);
   }
 
-  public static void startHandshakeResult(FlatBufferBuilder builder) { builder.startObject(2); }
+  public static void startHandshakeResult(FlatBufferBuilder builder) { builder.startTable(2); }
   public static void addSystemName(FlatBufferBuilder builder, int systemNameOffset) { builder.addOffset(0, systemNameOffset, 0); }
   public static void addModelName(FlatBufferBuilder builder, int modelNameOffset) { builder.addOffset(1, modelNameOffset, 0); }
   public static int endHandshakeResult(FlatBufferBuilder builder) {
-    int o = builder.endObject();
+    int o = builder.endTable();
     return o;
+  }
+
+  public static final class Vector extends BaseVector {
+    public Vector __assign(int _vector, int _element_size, ByteBuffer _bb) { __reset(_vector, _element_size, _bb); return this; }
+
+    public HandshakeResult get(int j) { return get(new HandshakeResult(), j); }
+    public HandshakeResult get(HandshakeResult obj, int j) {  return obj.__assign(__indirect(__element(j), bb), bb); }
   }
 }
 

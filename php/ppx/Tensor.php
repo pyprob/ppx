@@ -121,7 +121,7 @@ class Tensor extends Table
     {
         $builder->startVector(8, count($data), 8);
         for ($i = count($data) - 1; $i >= 0; $i--) {
-            $builder->addDouble($data[$i]);
+            $builder->putDouble($data[$i]);
         }
         return $builder->endVector();
     }
@@ -155,7 +155,7 @@ class Tensor extends Table
     {
         $builder->startVector(4, count($data), 4);
         for ($i = count($data) - 1; $i >= 0; $i--) {
-            $builder->addInt($data[$i]);
+            $builder->putInt($data[$i]);
         }
         return $builder->endVector();
     }

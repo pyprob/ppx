@@ -12,11 +12,11 @@ class Distribution
     const Poisson = 4;
 
     private static $names = array(
-        "NONE",
-        "Normal",
-        "Uniform",
-        "Categorical",
-        "Poisson",
+        Distribution::NONE=>"NONE",
+        Distribution::Normal=>"Normal",
+        Distribution::Uniform=>"Uniform",
+        Distribution::Categorical=>"Categorical",
+        Distribution::Poisson=>"Poisson",
     );
 
     public static function Name($e)

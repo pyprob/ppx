@@ -20,12 +20,31 @@ We provide `PPX` compiled to all programming languages officially supported by f
 * Go
 * Java
 * JavaScript
+* Kotlin
 * Lobster
 * Lua
 * PHP
 * Python
 * Rust
+* Swift
 * TypeScript
+
+## Build
+
+In order to recompile PPX to all supported languages, you can clone this repository and run the flatbuffers compiler in a Docker container as follows.
+
+Prerequisite: Install [Docker](https://hub.docker.com/search/?type=edition&offering=community) for your system.
+
+
+```
+git clone https://github.com/pyprob/ppx.git
+cd ppx
+docker build -t ppx .
+export UID=$(id -u)
+export GID=$(id -g)
+docker run --user $UID:$GID --rm -it -v $PWD:/home ppx sh compile.sh
+```
+
 
 ## License
 

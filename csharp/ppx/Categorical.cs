@@ -6,31 +6,33 @@ namespace ppx
 {
 
 using global::System;
+using global::System.Collections.Generic;
 using global::FlatBuffers;
 
 public struct Categorical : IFlatbufferObject
 {
   private Table __p;
   public ByteBuffer ByteBuffer { get { return __p.bb; } }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_1_12_0(); }
   public static Categorical GetRootAsCategorical(ByteBuffer _bb) { return GetRootAsCategorical(_bb, new Categorical()); }
   public static Categorical GetRootAsCategorical(ByteBuffer _bb, Categorical obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
-  public void __init(int _i, ByteBuffer _bb) { __p.bb_pos = _i; __p.bb = _bb; }
+  public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public Categorical __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public Tensor? Probs { get { int o = __p.__offset(4); return o != 0 ? (Tensor?)(new Tensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
+  public ppx.Tensor? Probs { get { int o = __p.__offset(4); return o != 0 ? (ppx.Tensor?)(new ppx.Tensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
 
-  public static Offset<Categorical> CreateCategorical(FlatBufferBuilder builder,
-      Offset<Tensor> probsOffset = default(Offset<Tensor>)) {
-    builder.StartObject(1);
+  public static Offset<ppx.Categorical> CreateCategorical(FlatBufferBuilder builder,
+      Offset<ppx.Tensor> probsOffset = default(Offset<ppx.Tensor>)) {
+    builder.StartTable(1);
     Categorical.AddProbs(builder, probsOffset);
     return Categorical.EndCategorical(builder);
   }
 
-  public static void StartCategorical(FlatBufferBuilder builder) { builder.StartObject(1); }
-  public static void AddProbs(FlatBufferBuilder builder, Offset<Tensor> probsOffset) { builder.AddOffset(0, probsOffset.Value, 0); }
-  public static Offset<Categorical> EndCategorical(FlatBufferBuilder builder) {
-    int o = builder.EndObject();
-    return new Offset<Categorical>(o);
+  public static void StartCategorical(FlatBufferBuilder builder) { builder.StartTable(1); }
+  public static void AddProbs(FlatBufferBuilder builder, Offset<ppx.Tensor> probsOffset) { builder.AddOffset(0, probsOffset.Value, 0); }
+  public static Offset<ppx.Categorical> EndCategorical(FlatBufferBuilder builder) {
+    int o = builder.EndTable();
+    return new Offset<ppx.Categorical>(o);
   }
 };
 

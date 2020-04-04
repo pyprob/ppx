@@ -2,7 +2,7 @@
 
 import { flatbuffers } from "./flatbuffers"
 /**
- * @enum
+ * @enum {number}
  */
 export namespace ppx{
 export enum MessageBody{
@@ -21,7 +21,7 @@ export enum MessageBody{
 }};
 
 /**
- * @enum
+ * @enum {number}
  */
 export namespace ppx{
 export enum Distribution{
@@ -57,7 +57,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Message {
  * @returns Message
  */
 static getRootAsMessage(bb:flatbuffers.ByteBuffer, obj?:Message):Message {
-  return (obj || new Message).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new Message()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Message= obj
+ * @returns Message
+ */
+static getSizePrefixedRootAsMessage(bb:flatbuffers.ByteBuffer, obj?:Message):Message {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new Message()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
@@ -125,6 +135,20 @@ static finishMessageBuffer(builder:flatbuffers.Builder, offset:flatbuffers.Offse
   builder.finish(offset, 'PPXF');
 };
 
+/**
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset offset
+ */
+static finishSizePrefixedMessageBuffer(builder:flatbuffers.Builder, offset:flatbuffers.Offset) {
+  builder.finish(offset, 'PPXF', true);
+};
+
+static createMessage(builder:flatbuffers.Builder, bodyType:ppx.MessageBody, bodyOffset:flatbuffers.Offset):flatbuffers.Offset {
+  Message.startMessage(builder);
+  Message.addBodyType(builder, bodyType);
+  Message.addBody(builder, bodyOffset);
+  return Message.endMessage(builder);
+}
 }
 }
 /**
@@ -152,7 +176,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Tensor {
  * @returns Tensor
  */
 static getRootAsTensor(bb:flatbuffers.ByteBuffer, obj?:Tensor):Tensor {
-  return (obj || new Tensor).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new Tensor()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Tensor= obj
+ * @returns Tensor
+ */
+static getSizePrefixedRootAsTensor(bb:flatbuffers.ByteBuffer, obj?:Tensor):Tensor {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new Tensor()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
@@ -279,6 +313,12 @@ static endTensor(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 };
 
+static createTensor(builder:flatbuffers.Builder, dataOffset:flatbuffers.Offset, shapeOffset:flatbuffers.Offset):flatbuffers.Offset {
+  Tensor.startTensor(builder);
+  Tensor.addData(builder, dataOffset);
+  Tensor.addShape(builder, shapeOffset);
+  return Tensor.endTensor(builder);
+}
 }
 }
 /**
@@ -306,7 +346,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Handshake {
  * @returns Handshake
  */
 static getRootAsHandshake(bb:flatbuffers.ByteBuffer, obj?:Handshake):Handshake {
-  return (obj || new Handshake).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new Handshake()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Handshake= obj
+ * @returns Handshake
+ */
+static getSizePrefixedRootAsHandshake(bb:flatbuffers.ByteBuffer, obj?:Handshake):Handshake {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new Handshake()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
@@ -344,6 +394,11 @@ static endHandshake(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 };
 
+static createHandshake(builder:flatbuffers.Builder, systemNameOffset:flatbuffers.Offset):flatbuffers.Offset {
+  Handshake.startHandshake(builder);
+  Handshake.addSystemName(builder, systemNameOffset);
+  return Handshake.endHandshake(builder);
+}
 }
 }
 /**
@@ -371,7 +426,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):HandshakeResult {
  * @returns HandshakeResult
  */
 static getRootAsHandshakeResult(bb:flatbuffers.ByteBuffer, obj?:HandshakeResult):HandshakeResult {
-  return (obj || new HandshakeResult).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new HandshakeResult()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param HandshakeResult= obj
+ * @returns HandshakeResult
+ */
+static getSizePrefixedRootAsHandshakeResult(bb:flatbuffers.ByteBuffer, obj?:HandshakeResult):HandshakeResult {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new HandshakeResult()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
@@ -428,6 +493,12 @@ static endHandshakeResult(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 };
 
+static createHandshakeResult(builder:flatbuffers.Builder, systemNameOffset:flatbuffers.Offset, modelNameOffset:flatbuffers.Offset):flatbuffers.Offset {
+  HandshakeResult.startHandshakeResult(builder);
+  HandshakeResult.addSystemName(builder, systemNameOffset);
+  HandshakeResult.addModelName(builder, modelNameOffset);
+  return HandshakeResult.endHandshakeResult(builder);
+}
 }
 }
 /**
@@ -455,7 +526,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Run {
  * @returns Run
  */
 static getRootAsRun(bb:flatbuffers.ByteBuffer, obj?:Run):Run {
-  return (obj || new Run).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new Run()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Run= obj
+ * @returns Run
+ */
+static getSizePrefixedRootAsRun(bb:flatbuffers.ByteBuffer, obj?:Run):Run {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new Run()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
@@ -474,6 +555,10 @@ static endRun(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 };
 
+static createRun(builder:flatbuffers.Builder):flatbuffers.Offset {
+  Run.startRun(builder);
+  return Run.endRun(builder);
+}
 }
 }
 /**
@@ -501,7 +586,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):RunResult {
  * @returns RunResult
  */
 static getRootAsRunResult(bb:flatbuffers.ByteBuffer, obj?:RunResult):RunResult {
-  return (obj || new RunResult).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new RunResult()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param RunResult= obj
+ * @returns RunResult
+ */
+static getSizePrefixedRootAsRunResult(bb:flatbuffers.ByteBuffer, obj?:RunResult):RunResult {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new RunResult()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
@@ -510,7 +605,7 @@ static getRootAsRunResult(bb:flatbuffers.ByteBuffer, obj?:RunResult):RunResult {
  */
 result(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 };
 
 /**
@@ -537,6 +632,11 @@ static endRunResult(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 };
 
+static createRunResult(builder:flatbuffers.Builder, resultOffset:flatbuffers.Offset):flatbuffers.Offset {
+  RunResult.startRunResult(builder);
+  RunResult.addResult(builder, resultOffset);
+  return RunResult.endRunResult(builder);
+}
 }
 }
 /**
@@ -564,7 +664,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Sample {
  * @returns Sample
  */
 static getRootAsSample(bb:flatbuffers.ByteBuffer, obj?:Sample):Sample {
-  return (obj || new Sample).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new Sample()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Sample= obj
+ * @returns Sample
+ */
+static getSizePrefixedRootAsSample(bb:flatbuffers.ByteBuffer, obj?:Sample):Sample {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new Sample()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
@@ -686,6 +796,16 @@ static endSample(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 };
 
+static createSample(builder:flatbuffers.Builder, addressOffset:flatbuffers.Offset, nameOffset:flatbuffers.Offset, distributionType:ppx.Distribution, distributionOffset:flatbuffers.Offset, control:boolean, replace:boolean):flatbuffers.Offset {
+  Sample.startSample(builder);
+  Sample.addAddress(builder, addressOffset);
+  Sample.addName(builder, nameOffset);
+  Sample.addDistributionType(builder, distributionType);
+  Sample.addDistribution(builder, distributionOffset);
+  Sample.addControl(builder, control);
+  Sample.addReplace(builder, replace);
+  return Sample.endSample(builder);
+}
 }
 }
 /**
@@ -713,7 +833,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):SampleResult {
  * @returns SampleResult
  */
 static getRootAsSampleResult(bb:flatbuffers.ByteBuffer, obj?:SampleResult):SampleResult {
-  return (obj || new SampleResult).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new SampleResult()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param SampleResult= obj
+ * @returns SampleResult
+ */
+static getSizePrefixedRootAsSampleResult(bb:flatbuffers.ByteBuffer, obj?:SampleResult):SampleResult {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new SampleResult()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
@@ -722,7 +852,7 @@ static getRootAsSampleResult(bb:flatbuffers.ByteBuffer, obj?:SampleResult):Sampl
  */
 result(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 };
 
 /**
@@ -749,6 +879,11 @@ static endSampleResult(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 };
 
+static createSampleResult(builder:flatbuffers.Builder, resultOffset:flatbuffers.Offset):flatbuffers.Offset {
+  SampleResult.startSampleResult(builder);
+  SampleResult.addResult(builder, resultOffset);
+  return SampleResult.endSampleResult(builder);
+}
 }
 }
 /**
@@ -776,7 +911,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Observe {
  * @returns Observe
  */
 static getRootAsObserve(bb:flatbuffers.ByteBuffer, obj?:Observe):Observe {
-  return (obj || new Observe).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new Observe()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Observe= obj
+ * @returns Observe
+ */
+static getSizePrefixedRootAsObserve(bb:flatbuffers.ByteBuffer, obj?:Observe):Observe {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new Observe()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
@@ -824,7 +969,7 @@ distribution<T extends flatbuffers.Table>(obj:T):T|null {
  */
 value(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 12);
-  return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 };
 
 /**
@@ -883,6 +1028,15 @@ static endObserve(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 };
 
+static createObserve(builder:flatbuffers.Builder, addressOffset:flatbuffers.Offset, nameOffset:flatbuffers.Offset, distributionType:ppx.Distribution, distributionOffset:flatbuffers.Offset, valueOffset:flatbuffers.Offset):flatbuffers.Offset {
+  Observe.startObserve(builder);
+  Observe.addAddress(builder, addressOffset);
+  Observe.addName(builder, nameOffset);
+  Observe.addDistributionType(builder, distributionType);
+  Observe.addDistribution(builder, distributionOffset);
+  Observe.addValue(builder, valueOffset);
+  return Observe.endObserve(builder);
+}
 }
 }
 /**
@@ -910,7 +1064,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):ObserveResult {
  * @returns ObserveResult
  */
 static getRootAsObserveResult(bb:flatbuffers.ByteBuffer, obj?:ObserveResult):ObserveResult {
-  return (obj || new ObserveResult).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new ObserveResult()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param ObserveResult= obj
+ * @returns ObserveResult
+ */
+static getSizePrefixedRootAsObserveResult(bb:flatbuffers.ByteBuffer, obj?:ObserveResult):ObserveResult {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new ObserveResult()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
@@ -929,6 +1093,10 @@ static endObserveResult(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 };
 
+static createObserveResult(builder:flatbuffers.Builder):flatbuffers.Offset {
+  ObserveResult.startObserveResult(builder);
+  return ObserveResult.endObserveResult(builder);
+}
 }
 }
 /**
@@ -956,7 +1124,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Tag {
  * @returns Tag
  */
 static getRootAsTag(bb:flatbuffers.ByteBuffer, obj?:Tag):Tag {
-  return (obj || new Tag).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new Tag()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Tag= obj
+ * @returns Tag
+ */
+static getSizePrefixedRootAsTag(bb:flatbuffers.ByteBuffer, obj?:Tag):Tag {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new Tag()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
@@ -987,7 +1165,7 @@ name(optionalEncoding?:any):string|Uint8Array|null {
  */
 value(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 8);
-  return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 };
 
 /**
@@ -1030,6 +1208,13 @@ static endTag(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 };
 
+static createTag(builder:flatbuffers.Builder, addressOffset:flatbuffers.Offset, nameOffset:flatbuffers.Offset, valueOffset:flatbuffers.Offset):flatbuffers.Offset {
+  Tag.startTag(builder);
+  Tag.addAddress(builder, addressOffset);
+  Tag.addName(builder, nameOffset);
+  Tag.addValue(builder, valueOffset);
+  return Tag.endTag(builder);
+}
 }
 }
 /**
@@ -1057,7 +1242,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):TagResult {
  * @returns TagResult
  */
 static getRootAsTagResult(bb:flatbuffers.ByteBuffer, obj?:TagResult):TagResult {
-  return (obj || new TagResult).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new TagResult()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param TagResult= obj
+ * @returns TagResult
+ */
+static getSizePrefixedRootAsTagResult(bb:flatbuffers.ByteBuffer, obj?:TagResult):TagResult {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new TagResult()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
@@ -1076,6 +1271,10 @@ static endTagResult(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 };
 
+static createTagResult(builder:flatbuffers.Builder):flatbuffers.Offset {
+  TagResult.startTagResult(builder);
+  return TagResult.endTagResult(builder);
+}
 }
 }
 /**
@@ -1103,7 +1302,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Reset {
  * @returns Reset
  */
 static getRootAsReset(bb:flatbuffers.ByteBuffer, obj?:Reset):Reset {
-  return (obj || new Reset).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new Reset()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Reset= obj
+ * @returns Reset
+ */
+static getSizePrefixedRootAsReset(bb:flatbuffers.ByteBuffer, obj?:Reset):Reset {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new Reset()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
@@ -1122,6 +1331,10 @@ static endReset(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 };
 
+static createReset(builder:flatbuffers.Builder):flatbuffers.Offset {
+  Reset.startReset(builder);
+  return Reset.endReset(builder);
+}
 }
 }
 /**
@@ -1149,7 +1362,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Normal {
  * @returns Normal
  */
 static getRootAsNormal(bb:flatbuffers.ByteBuffer, obj?:Normal):Normal {
-  return (obj || new Normal).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new Normal()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Normal= obj
+ * @returns Normal
+ */
+static getSizePrefixedRootAsNormal(bb:flatbuffers.ByteBuffer, obj?:Normal):Normal {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new Normal()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
@@ -1158,7 +1381,7 @@ static getRootAsNormal(bb:flatbuffers.ByteBuffer, obj?:Normal):Normal {
  */
 mean(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 };
 
 /**
@@ -1167,7 +1390,7 @@ mean(obj?:ppx.Tensor):ppx.Tensor|null {
  */
 stddev(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 6);
-  return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 };
 
 /**
@@ -1202,6 +1425,12 @@ static endNormal(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 };
 
+static createNormal(builder:flatbuffers.Builder, meanOffset:flatbuffers.Offset, stddevOffset:flatbuffers.Offset):flatbuffers.Offset {
+  Normal.startNormal(builder);
+  Normal.addMean(builder, meanOffset);
+  Normal.addStddev(builder, stddevOffset);
+  return Normal.endNormal(builder);
+}
 }
 }
 /**
@@ -1229,7 +1458,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Uniform {
  * @returns Uniform
  */
 static getRootAsUniform(bb:flatbuffers.ByteBuffer, obj?:Uniform):Uniform {
-  return (obj || new Uniform).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new Uniform()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Uniform= obj
+ * @returns Uniform
+ */
+static getSizePrefixedRootAsUniform(bb:flatbuffers.ByteBuffer, obj?:Uniform):Uniform {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new Uniform()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
@@ -1238,7 +1477,7 @@ static getRootAsUniform(bb:flatbuffers.ByteBuffer, obj?:Uniform):Uniform {
  */
 low(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 };
 
 /**
@@ -1247,7 +1486,7 @@ low(obj?:ppx.Tensor):ppx.Tensor|null {
  */
 high(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 6);
-  return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 };
 
 /**
@@ -1282,6 +1521,12 @@ static endUniform(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 };
 
+static createUniform(builder:flatbuffers.Builder, lowOffset:flatbuffers.Offset, highOffset:flatbuffers.Offset):flatbuffers.Offset {
+  Uniform.startUniform(builder);
+  Uniform.addLow(builder, lowOffset);
+  Uniform.addHigh(builder, highOffset);
+  return Uniform.endUniform(builder);
+}
 }
 }
 /**
@@ -1309,7 +1554,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Categorical {
  * @returns Categorical
  */
 static getRootAsCategorical(bb:flatbuffers.ByteBuffer, obj?:Categorical):Categorical {
-  return (obj || new Categorical).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new Categorical()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Categorical= obj
+ * @returns Categorical
+ */
+static getSizePrefixedRootAsCategorical(bb:flatbuffers.ByteBuffer, obj?:Categorical):Categorical {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new Categorical()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
@@ -1318,7 +1573,7 @@ static getRootAsCategorical(bb:flatbuffers.ByteBuffer, obj?:Categorical):Categor
  */
 probs(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 };
 
 /**
@@ -1345,6 +1600,11 @@ static endCategorical(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 };
 
+static createCategorical(builder:flatbuffers.Builder, probsOffset:flatbuffers.Offset):flatbuffers.Offset {
+  Categorical.startCategorical(builder);
+  Categorical.addProbs(builder, probsOffset);
+  return Categorical.endCategorical(builder);
+}
 }
 }
 /**
@@ -1372,7 +1632,17 @@ __init(i:number, bb:flatbuffers.ByteBuffer):Poisson {
  * @returns Poisson
  */
 static getRootAsPoisson(bb:flatbuffers.ByteBuffer, obj?:Poisson):Poisson {
-  return (obj || new Poisson).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+  return (obj || new Poisson()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Poisson= obj
+ * @returns Poisson
+ */
+static getSizePrefixedRootAsPoisson(bb:flatbuffers.ByteBuffer, obj?:Poisson):Poisson {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new Poisson()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
 /**
@@ -1381,7 +1651,7 @@ static getRootAsPoisson(bb:flatbuffers.ByteBuffer, obj?:Poisson):Poisson {
  */
 rate(obj?:ppx.Tensor):ppx.Tensor|null {
   var offset = this.bb!.__offset(this.bb_pos, 4);
-  return offset ? (obj || new ppx.Tensor).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
 };
 
 /**
@@ -1408,5 +1678,10 @@ static endPoisson(builder:flatbuffers.Builder):flatbuffers.Offset {
   return offset;
 };
 
+static createPoisson(builder:flatbuffers.Builder, rateOffset:flatbuffers.Offset):flatbuffers.Offset {
+  Poisson.startPoisson(builder);
+  Poisson.addRate(builder, rateOffset);
+  return Poisson.endPoisson(builder);
+}
 }
 }

@@ -6,31 +6,33 @@ namespace ppx
 {
 
 using global::System;
+using global::System.Collections.Generic;
 using global::FlatBuffers;
 
 public struct RunResult : IFlatbufferObject
 {
   private Table __p;
   public ByteBuffer ByteBuffer { get { return __p.bb; } }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_1_12_0(); }
   public static RunResult GetRootAsRunResult(ByteBuffer _bb) { return GetRootAsRunResult(_bb, new RunResult()); }
   public static RunResult GetRootAsRunResult(ByteBuffer _bb, RunResult obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
-  public void __init(int _i, ByteBuffer _bb) { __p.bb_pos = _i; __p.bb = _bb; }
+  public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public RunResult __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public Tensor? Result { get { int o = __p.__offset(4); return o != 0 ? (Tensor?)(new Tensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
+  public ppx.Tensor? Result { get { int o = __p.__offset(4); return o != 0 ? (ppx.Tensor?)(new ppx.Tensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
 
-  public static Offset<RunResult> CreateRunResult(FlatBufferBuilder builder,
-      Offset<Tensor> resultOffset = default(Offset<Tensor>)) {
-    builder.StartObject(1);
+  public static Offset<ppx.RunResult> CreateRunResult(FlatBufferBuilder builder,
+      Offset<ppx.Tensor> resultOffset = default(Offset<ppx.Tensor>)) {
+    builder.StartTable(1);
     RunResult.AddResult(builder, resultOffset);
     return RunResult.EndRunResult(builder);
   }
 
-  public static void StartRunResult(FlatBufferBuilder builder) { builder.StartObject(1); }
-  public static void AddResult(FlatBufferBuilder builder, Offset<Tensor> resultOffset) { builder.AddOffset(0, resultOffset.Value, 0); }
-  public static Offset<RunResult> EndRunResult(FlatBufferBuilder builder) {
-    int o = builder.EndObject();
-    return new Offset<RunResult>(o);
+  public static void StartRunResult(FlatBufferBuilder builder) { builder.StartTable(1); }
+  public static void AddResult(FlatBufferBuilder builder, Offset<ppx.Tensor> resultOffset) { builder.AddOffset(0, resultOffset.Value, 0); }
+  public static Offset<ppx.RunResult> EndRunResult(FlatBufferBuilder builder) {
+    int o = builder.EndTable();
+    return new Offset<ppx.RunResult>(o);
   }
 };
 

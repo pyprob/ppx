@@ -9,38 +9,55 @@
 namespace ppx {
 
 struct Message;
+struct MessageBuilder;
 
 struct Tensor;
+struct TensorBuilder;
 
 struct Handshake;
+struct HandshakeBuilder;
 
 struct HandshakeResult;
+struct HandshakeResultBuilder;
 
 struct Run;
+struct RunBuilder;
 
 struct RunResult;
+struct RunResultBuilder;
 
 struct Sample;
+struct SampleBuilder;
 
 struct SampleResult;
+struct SampleResultBuilder;
 
 struct Observe;
+struct ObserveBuilder;
 
 struct ObserveResult;
+struct ObserveResultBuilder;
 
 struct Tag;
+struct TagBuilder;
 
 struct TagResult;
+struct TagResultBuilder;
 
 struct Reset;
+struct ResetBuilder;
 
 struct Normal;
+struct NormalBuilder;
 
 struct Uniform;
+struct UniformBuilder;
 
 struct Categorical;
+struct CategoricalBuilder;
 
 struct Poisson;
+struct PoissonBuilder;
 
 enum MessageBody {
   MessageBody_NONE = 0,
@@ -78,7 +95,7 @@ inline const MessageBody (&EnumValuesMessageBody())[12] {
 }
 
 inline const char * const *EnumNamesMessageBody() {
-  static const char * const names[] = {
+  static const char * const names[13] = {
     "NONE",
     "Handshake",
     "HandshakeResult",
@@ -97,7 +114,8 @@ inline const char * const *EnumNamesMessageBody() {
 }
 
 inline const char *EnumNameMessageBody(MessageBody e) {
-  const size_t index = static_cast<int>(e);
+  if (flatbuffers::IsOutRange(e, MessageBody_NONE, MessageBody_Reset)) return "";
+  const size_t index = static_cast<size_t>(e);
   return EnumNamesMessageBody()[index];
 }
 
@@ -105,47 +123,47 @@ template<typename T> struct MessageBodyTraits {
   static const MessageBody enum_value = MessageBody_NONE;
 };
 
-template<> struct MessageBodyTraits<Handshake> {
+template<> struct MessageBodyTraits<ppx::Handshake> {
   static const MessageBody enum_value = MessageBody_Handshake;
 };
 
-template<> struct MessageBodyTraits<HandshakeResult> {
+template<> struct MessageBodyTraits<ppx::HandshakeResult> {
   static const MessageBody enum_value = MessageBody_HandshakeResult;
 };
 
-template<> struct MessageBodyTraits<Run> {
+template<> struct MessageBodyTraits<ppx::Run> {
   static const MessageBody enum_value = MessageBody_Run;
 };
 
-template<> struct MessageBodyTraits<RunResult> {
+template<> struct MessageBodyTraits<ppx::RunResult> {
   static const MessageBody enum_value = MessageBody_RunResult;
 };
 
-template<> struct MessageBodyTraits<Sample> {
+template<> struct MessageBodyTraits<ppx::Sample> {
   static const MessageBody enum_value = MessageBody_Sample;
 };
 
-template<> struct MessageBodyTraits<SampleResult> {
+template<> struct MessageBodyTraits<ppx::SampleResult> {
   static const MessageBody enum_value = MessageBody_SampleResult;
 };
 
-template<> struct MessageBodyTraits<Observe> {
+template<> struct MessageBodyTraits<ppx::Observe> {
   static const MessageBody enum_value = MessageBody_Observe;
 };
 
-template<> struct MessageBodyTraits<ObserveResult> {
+template<> struct MessageBodyTraits<ppx::ObserveResult> {
   static const MessageBody enum_value = MessageBody_ObserveResult;
 };
 
-template<> struct MessageBodyTraits<Tag> {
+template<> struct MessageBodyTraits<ppx::Tag> {
   static const MessageBody enum_value = MessageBody_Tag;
 };
 
-template<> struct MessageBodyTraits<TagResult> {
+template<> struct MessageBodyTraits<ppx::TagResult> {
   static const MessageBody enum_value = MessageBody_TagResult;
 };
 
-template<> struct MessageBodyTraits<Reset> {
+template<> struct MessageBodyTraits<ppx::Reset> {
   static const MessageBody enum_value = MessageBody_Reset;
 };
 
@@ -174,7 +192,7 @@ inline const Distribution (&EnumValuesDistribution())[5] {
 }
 
 inline const char * const *EnumNamesDistribution() {
-  static const char * const names[] = {
+  static const char * const names[6] = {
     "NONE",
     "Normal",
     "Uniform",
@@ -186,7 +204,8 @@ inline const char * const *EnumNamesDistribution() {
 }
 
 inline const char *EnumNameDistribution(Distribution e) {
-  const size_t index = static_cast<int>(e);
+  if (flatbuffers::IsOutRange(e, Distribution_NONE, Distribution_Poisson)) return "";
+  const size_t index = static_cast<size_t>(e);
   return EnumNamesDistribution()[index];
 }
 
@@ -194,19 +213,19 @@ template<typename T> struct DistributionTraits {
   static const Distribution enum_value = Distribution_NONE;
 };
 
-template<> struct DistributionTraits<Normal> {
+template<> struct DistributionTraits<ppx::Normal> {
   static const Distribution enum_value = Distribution_Normal;
 };
 
-template<> struct DistributionTraits<Uniform> {
+template<> struct DistributionTraits<ppx::Uniform> {
   static const Distribution enum_value = Distribution_Uniform;
 };
 
-template<> struct DistributionTraits<Categorical> {
+template<> struct DistributionTraits<ppx::Categorical> {
   static const Distribution enum_value = Distribution_Categorical;
 };
 
-template<> struct DistributionTraits<Poisson> {
+template<> struct DistributionTraits<ppx::Poisson> {
   static const Distribution enum_value = Distribution_Poisson;
 };
 
@@ -214,49 +233,50 @@ bool VerifyDistribution(flatbuffers::Verifier &verifier, const void *obj, Distri
 bool VerifyDistributionVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
 
 struct Message FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  enum {
+  typedef MessageBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_BODY_TYPE = 4,
     VT_BODY = 6
   };
-  MessageBody body_type() const {
-    return static_cast<MessageBody>(GetField<uint8_t>(VT_BODY_TYPE, 0));
+  ppx::MessageBody body_type() const {
+    return static_cast<ppx::MessageBody>(GetField<uint8_t>(VT_BODY_TYPE, 0));
   }
   const void *body() const {
     return GetPointer<const void *>(VT_BODY);
   }
   template<typename T> const T *body_as() const;
-  const Handshake *body_as_Handshake() const {
-    return body_type() == MessageBody_Handshake ? static_cast<const Handshake *>(body()) : nullptr;
+  const ppx::Handshake *body_as_Handshake() const {
+    return body_type() == ppx::MessageBody_Handshake ? static_cast<const ppx::Handshake *>(body()) : nullptr;
   }
-  const HandshakeResult *body_as_HandshakeResult() const {
-    return body_type() == MessageBody_HandshakeResult ? static_cast<const HandshakeResult *>(body()) : nullptr;
+  const ppx::HandshakeResult *body_as_HandshakeResult() const {
+    return body_type() == ppx::MessageBody_HandshakeResult ? static_cast<const ppx::HandshakeResult *>(body()) : nullptr;
   }
-  const Run *body_as_Run() const {
-    return body_type() == MessageBody_Run ? static_cast<const Run *>(body()) : nullptr;
+  const ppx::Run *body_as_Run() const {
+    return body_type() == ppx::MessageBody_Run ? static_cast<const ppx::Run *>(body()) : nullptr;
   }
-  const RunResult *body_as_RunResult() const {
-    return body_type() == MessageBody_RunResult ? static_cast<const RunResult *>(body()) : nullptr;
+  const ppx::RunResult *body_as_RunResult() const {
+    return body_type() == ppx::MessageBody_RunResult ? static_cast<const ppx::RunResult *>(body()) : nullptr;
   }
-  const Sample *body_as_Sample() const {
-    return body_type() == MessageBody_Sample ? static_cast<const Sample *>(body()) : nullptr;
+  const ppx::Sample *body_as_Sample() const {
+    return body_type() == ppx::MessageBody_Sample ? static_cast<const ppx::Sample *>(body()) : nullptr;
   }
-  const SampleResult *body_as_SampleResult() const {
-    return body_type() == MessageBody_SampleResult ? static_cast<const SampleResult *>(body()) : nullptr;
+  const ppx::SampleResult *body_as_SampleResult() const {
+    return body_type() == ppx::MessageBody_SampleResult ? static_cast<const ppx::SampleResult *>(body()) : nullptr;
   }
-  const Observe *body_as_Observe() const {
-    return body_type() == MessageBody_Observe ? static_cast<const Observe *>(body()) : nullptr;
+  const ppx::Observe *body_as_Observe() const {
+    return body_type() == ppx::MessageBody_Observe ? static_cast<const ppx::Observe *>(body()) : nullptr;
   }
-  const ObserveResult *body_as_ObserveResult() const {
-    return body_type() == MessageBody_ObserveResult ? static_cast<const ObserveResult *>(body()) : nullptr;
+  const ppx::ObserveResult *body_as_ObserveResult() const {
+    return body_type() == ppx::MessageBody_ObserveResult ? static_cast<const ppx::ObserveResult *>(body()) : nullptr;
   }
-  const Tag *body_as_Tag() const {
-    return body_type() == MessageBody_Tag ? static_cast<const Tag *>(body()) : nullptr;
+  const ppx::Tag *body_as_Tag() const {
+    return body_type() == ppx::MessageBody_Tag ? static_cast<const ppx::Tag *>(body()) : nullptr;
   }
-  const TagResult *body_as_TagResult() const {
-    return body_type() == MessageBody_TagResult ? static_cast<const TagResult *>(body()) : nullptr;
+  const ppx::TagResult *body_as_TagResult() const {
+    return body_type() == ppx::MessageBody_TagResult ? static_cast<const ppx::TagResult *>(body()) : nullptr;
   }
-  const Reset *body_as_Reset() const {
-    return body_type() == MessageBody_Reset ? static_cast<const Reset *>(body()) : nullptr;
+  const ppx::Reset *body_as_Reset() const {
+    return body_type() == ppx::MessageBody_Reset ? static_cast<const ppx::Reset *>(body()) : nullptr;
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -267,54 +287,55 @@ struct Message FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
 };
 
-template<> inline const Handshake *Message::body_as<Handshake>() const {
+template<> inline const ppx::Handshake *Message::body_as<ppx::Handshake>() const {
   return body_as_Handshake();
 }
 
-template<> inline const HandshakeResult *Message::body_as<HandshakeResult>() const {
+template<> inline const ppx::HandshakeResult *Message::body_as<ppx::HandshakeResult>() const {
   return body_as_HandshakeResult();
 }
 
-template<> inline const Run *Message::body_as<Run>() const {
+template<> inline const ppx::Run *Message::body_as<ppx::Run>() const {
   return body_as_Run();
 }
 
-template<> inline const RunResult *Message::body_as<RunResult>() const {
+template<> inline const ppx::RunResult *Message::body_as<ppx::RunResult>() const {
   return body_as_RunResult();
 }
 
-template<> inline const Sample *Message::body_as<Sample>() const {
+template<> inline const ppx::Sample *Message::body_as<ppx::Sample>() const {
   return body_as_Sample();
 }
 
-template<> inline const SampleResult *Message::body_as<SampleResult>() const {
+template<> inline const ppx::SampleResult *Message::body_as<ppx::SampleResult>() const {
   return body_as_SampleResult();
 }
 
-template<> inline const Observe *Message::body_as<Observe>() const {
+template<> inline const ppx::Observe *Message::body_as<ppx::Observe>() const {
   return body_as_Observe();
 }
 
-template<> inline const ObserveResult *Message::body_as<ObserveResult>() const {
+template<> inline const ppx::ObserveResult *Message::body_as<ppx::ObserveResult>() const {
   return body_as_ObserveResult();
 }
 
-template<> inline const Tag *Message::body_as<Tag>() const {
+template<> inline const ppx::Tag *Message::body_as<ppx::Tag>() const {
   return body_as_Tag();
 }
 
-template<> inline const TagResult *Message::body_as<TagResult>() const {
+template<> inline const ppx::TagResult *Message::body_as<ppx::TagResult>() const {
   return body_as_TagResult();
 }
 
-template<> inline const Reset *Message::body_as<Reset>() const {
+template<> inline const ppx::Reset *Message::body_as<ppx::Reset>() const {
   return body_as_Reset();
 }
 
 struct MessageBuilder {
+  typedef Message Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_body_type(MessageBody body_type) {
+  void add_body_type(ppx::MessageBody body_type) {
     fbb_.AddElement<uint8_t>(Message::VT_BODY_TYPE, static_cast<uint8_t>(body_type), 0);
   }
   void add_body(flatbuffers::Offset<void> body) {
@@ -334,7 +355,7 @@ struct MessageBuilder {
 
 inline flatbuffers::Offset<Message> CreateMessage(
     flatbuffers::FlatBufferBuilder &_fbb,
-    MessageBody body_type = MessageBody_NONE,
+    ppx::MessageBody body_type = ppx::MessageBody_NONE,
     flatbuffers::Offset<void> body = 0) {
   MessageBuilder builder_(_fbb);
   builder_.add_body(body);
@@ -343,7 +364,8 @@ inline flatbuffers::Offset<Message> CreateMessage(
 }
 
 struct Tensor FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  enum {
+  typedef TensorBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_DATA = 4,
     VT_SHAPE = 6
   };
@@ -364,6 +386,7 @@ struct Tensor FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 };
 
 struct TensorBuilder {
+  typedef Tensor Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_data(flatbuffers::Offset<flatbuffers::Vector<double>> data) {
@@ -398,14 +421,17 @@ inline flatbuffers::Offset<Tensor> CreateTensorDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const std::vector<double> *data = nullptr,
     const std::vector<int32_t> *shape = nullptr) {
+  auto data__ = data ? _fbb.CreateVector<double>(*data) : 0;
+  auto shape__ = shape ? _fbb.CreateVector<int32_t>(*shape) : 0;
   return ppx::CreateTensor(
       _fbb,
-      data ? _fbb.CreateVector<double>(*data) : 0,
-      shape ? _fbb.CreateVector<int32_t>(*shape) : 0);
+      data__,
+      shape__);
 }
 
 struct Handshake FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  enum {
+  typedef HandshakeBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_SYSTEM_NAME = 4
   };
   const flatbuffers::String *system_name() const {
@@ -420,6 +446,7 @@ struct Handshake FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 };
 
 struct HandshakeBuilder {
+  typedef Handshake Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_system_name(flatbuffers::Offset<flatbuffers::String> system_name) {
@@ -448,13 +475,15 @@ inline flatbuffers::Offset<Handshake> CreateHandshake(
 inline flatbuffers::Offset<Handshake> CreateHandshakeDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const char *system_name = nullptr) {
+  auto system_name__ = system_name ? _fbb.CreateString(system_name) : 0;
   return ppx::CreateHandshake(
       _fbb,
-      system_name ? _fbb.CreateString(system_name) : 0);
+      system_name__);
 }
 
 struct HandshakeResult FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  enum {
+  typedef HandshakeResultBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_SYSTEM_NAME = 4,
     VT_MODEL_NAME = 6
   };
@@ -475,6 +504,7 @@ struct HandshakeResult FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 };
 
 struct HandshakeResultBuilder {
+  typedef HandshakeResult Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_system_name(flatbuffers::Offset<flatbuffers::String> system_name) {
@@ -509,13 +539,16 @@ inline flatbuffers::Offset<HandshakeResult> CreateHandshakeResultDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const char *system_name = nullptr,
     const char *model_name = nullptr) {
+  auto system_name__ = system_name ? _fbb.CreateString(system_name) : 0;
+  auto model_name__ = model_name ? _fbb.CreateString(model_name) : 0;
   return ppx::CreateHandshakeResult(
       _fbb,
-      system_name ? _fbb.CreateString(system_name) : 0,
-      model_name ? _fbb.CreateString(model_name) : 0);
+      system_name__,
+      model_name__);
 }
 
 struct Run FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef RunBuilder Builder;
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            verifier.EndTable();
@@ -523,6 +556,7 @@ struct Run FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 };
 
 struct RunBuilder {
+  typedef Run Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   explicit RunBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -544,11 +578,12 @@ inline flatbuffers::Offset<Run> CreateRun(
 }
 
 struct RunResult FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  enum {
+  typedef RunResultBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_RESULT = 4
   };
-  const Tensor *result() const {
-    return GetPointer<const Tensor *>(VT_RESULT);
+  const ppx::Tensor *result() const {
+    return GetPointer<const ppx::Tensor *>(VT_RESULT);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -559,9 +594,10 @@ struct RunResult FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 };
 
 struct RunResultBuilder {
+  typedef RunResult Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_result(flatbuffers::Offset<Tensor> result) {
+  void add_result(flatbuffers::Offset<ppx::Tensor> result) {
     fbb_.AddOffset(RunResult::VT_RESULT, result);
   }
   explicit RunResultBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -578,14 +614,15 @@ struct RunResultBuilder {
 
 inline flatbuffers::Offset<RunResult> CreateRunResult(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<Tensor> result = 0) {
+    flatbuffers::Offset<ppx::Tensor> result = 0) {
   RunResultBuilder builder_(_fbb);
   builder_.add_result(result);
   return builder_.Finish();
 }
 
 struct Sample FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  enum {
+  typedef SampleBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_ADDRESS = 4,
     VT_NAME = 6,
     VT_DISTRIBUTION_TYPE = 8,
@@ -599,24 +636,24 @@ struct Sample FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::String *name() const {
     return GetPointer<const flatbuffers::String *>(VT_NAME);
   }
-  Distribution distribution_type() const {
-    return static_cast<Distribution>(GetField<uint8_t>(VT_DISTRIBUTION_TYPE, 0));
+  ppx::Distribution distribution_type() const {
+    return static_cast<ppx::Distribution>(GetField<uint8_t>(VT_DISTRIBUTION_TYPE, 0));
   }
   const void *distribution() const {
     return GetPointer<const void *>(VT_DISTRIBUTION);
   }
   template<typename T> const T *distribution_as() const;
-  const Normal *distribution_as_Normal() const {
-    return distribution_type() == Distribution_Normal ? static_cast<const Normal *>(distribution()) : nullptr;
+  const ppx::Normal *distribution_as_Normal() const {
+    return distribution_type() == ppx::Distribution_Normal ? static_cast<const ppx::Normal *>(distribution()) : nullptr;
   }
-  const Uniform *distribution_as_Uniform() const {
-    return distribution_type() == Distribution_Uniform ? static_cast<const Uniform *>(distribution()) : nullptr;
+  const ppx::Uniform *distribution_as_Uniform() const {
+    return distribution_type() == ppx::Distribution_Uniform ? static_cast<const ppx::Uniform *>(distribution()) : nullptr;
   }
-  const Categorical *distribution_as_Categorical() const {
-    return distribution_type() == Distribution_Categorical ? static_cast<const Categorical *>(distribution()) : nullptr;
+  const ppx::Categorical *distribution_as_Categorical() const {
+    return distribution_type() == ppx::Distribution_Categorical ? static_cast<const ppx::Categorical *>(distribution()) : nullptr;
   }
-  const Poisson *distribution_as_Poisson() const {
-    return distribution_type() == Distribution_Poisson ? static_cast<const Poisson *>(distribution()) : nullptr;
+  const ppx::Poisson *distribution_as_Poisson() const {
+    return distribution_type() == ppx::Distribution_Poisson ? static_cast<const ppx::Poisson *>(distribution()) : nullptr;
   }
   bool control() const {
     return GetField<uint8_t>(VT_CONTROL, 1) != 0;
@@ -639,23 +676,24 @@ struct Sample FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
 };
 
-template<> inline const Normal *Sample::distribution_as<Normal>() const {
+template<> inline const ppx::Normal *Sample::distribution_as<ppx::Normal>() const {
   return distribution_as_Normal();
 }
 
-template<> inline const Uniform *Sample::distribution_as<Uniform>() const {
+template<> inline const ppx::Uniform *Sample::distribution_as<ppx::Uniform>() const {
   return distribution_as_Uniform();
 }
 
-template<> inline const Categorical *Sample::distribution_as<Categorical>() const {
+template<> inline const ppx::Categorical *Sample::distribution_as<ppx::Categorical>() const {
   return distribution_as_Categorical();
 }
 
-template<> inline const Poisson *Sample::distribution_as<Poisson>() const {
+template<> inline const ppx::Poisson *Sample::distribution_as<ppx::Poisson>() const {
   return distribution_as_Poisson();
 }
 
 struct SampleBuilder {
+  typedef Sample Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_address(flatbuffers::Offset<flatbuffers::String> address) {
@@ -664,7 +702,7 @@ struct SampleBuilder {
   void add_name(flatbuffers::Offset<flatbuffers::String> name) {
     fbb_.AddOffset(Sample::VT_NAME, name);
   }
-  void add_distribution_type(Distribution distribution_type) {
+  void add_distribution_type(ppx::Distribution distribution_type) {
     fbb_.AddElement<uint8_t>(Sample::VT_DISTRIBUTION_TYPE, static_cast<uint8_t>(distribution_type), 0);
   }
   void add_distribution(flatbuffers::Offset<void> distribution) {
@@ -692,7 +730,7 @@ inline flatbuffers::Offset<Sample> CreateSample(
     flatbuffers::FlatBufferBuilder &_fbb,
     flatbuffers::Offset<flatbuffers::String> address = 0,
     flatbuffers::Offset<flatbuffers::String> name = 0,
-    Distribution distribution_type = Distribution_NONE,
+    ppx::Distribution distribution_type = ppx::Distribution_NONE,
     flatbuffers::Offset<void> distribution = 0,
     bool control = true,
     bool replace = false) {
@@ -710,14 +748,16 @@ inline flatbuffers::Offset<Sample> CreateSampleDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const char *address = nullptr,
     const char *name = nullptr,
-    Distribution distribution_type = Distribution_NONE,
+    ppx::Distribution distribution_type = ppx::Distribution_NONE,
     flatbuffers::Offset<void> distribution = 0,
     bool control = true,
     bool replace = false) {
+  auto address__ = address ? _fbb.CreateString(address) : 0;
+  auto name__ = name ? _fbb.CreateString(name) : 0;
   return ppx::CreateSample(
       _fbb,
-      address ? _fbb.CreateString(address) : 0,
-      name ? _fbb.CreateString(name) : 0,
+      address__,
+      name__,
       distribution_type,
       distribution,
       control,
@@ -725,11 +765,12 @@ inline flatbuffers::Offset<Sample> CreateSampleDirect(
 }
 
 struct SampleResult FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  enum {
+  typedef SampleResultBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_RESULT = 4
   };
-  const Tensor *result() const {
-    return GetPointer<const Tensor *>(VT_RESULT);
+  const ppx::Tensor *result() const {
+    return GetPointer<const ppx::Tensor *>(VT_RESULT);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -740,9 +781,10 @@ struct SampleResult FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 };
 
 struct SampleResultBuilder {
+  typedef SampleResult Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_result(flatbuffers::Offset<Tensor> result) {
+  void add_result(flatbuffers::Offset<ppx::Tensor> result) {
     fbb_.AddOffset(SampleResult::VT_RESULT, result);
   }
   explicit SampleResultBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -759,14 +801,15 @@ struct SampleResultBuilder {
 
 inline flatbuffers::Offset<SampleResult> CreateSampleResult(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<Tensor> result = 0) {
+    flatbuffers::Offset<ppx::Tensor> result = 0) {
   SampleResultBuilder builder_(_fbb);
   builder_.add_result(result);
   return builder_.Finish();
 }
 
 struct Observe FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  enum {
+  typedef ObserveBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_ADDRESS = 4,
     VT_NAME = 6,
     VT_DISTRIBUTION_TYPE = 8,
@@ -779,27 +822,27 @@ struct Observe FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::String *name() const {
     return GetPointer<const flatbuffers::String *>(VT_NAME);
   }
-  Distribution distribution_type() const {
-    return static_cast<Distribution>(GetField<uint8_t>(VT_DISTRIBUTION_TYPE, 0));
+  ppx::Distribution distribution_type() const {
+    return static_cast<ppx::Distribution>(GetField<uint8_t>(VT_DISTRIBUTION_TYPE, 0));
   }
   const void *distribution() const {
     return GetPointer<const void *>(VT_DISTRIBUTION);
   }
   template<typename T> const T *distribution_as() const;
-  const Normal *distribution_as_Normal() const {
-    return distribution_type() == Distribution_Normal ? static_cast<const Normal *>(distribution()) : nullptr;
+  const ppx::Normal *distribution_as_Normal() const {
+    return distribution_type() == ppx::Distribution_Normal ? static_cast<const ppx::Normal *>(distribution()) : nullptr;
   }
-  const Uniform *distribution_as_Uniform() const {
-    return distribution_type() == Distribution_Uniform ? static_cast<const Uniform *>(distribution()) : nullptr;
+  const ppx::Uniform *distribution_as_Uniform() const {
+    return distribution_type() == ppx::Distribution_Uniform ? static_cast<const ppx::Uniform *>(distribution()) : nullptr;
   }
-  const Categorical *distribution_as_Categorical() const {
-    return distribution_type() == Distribution_Categorical ? static_cast<const Categorical *>(distribution()) : nullptr;
+  const ppx::Categorical *distribution_as_Categorical() const {
+    return distribution_type() == ppx::Distribution_Categorical ? static_cast<const ppx::Categorical *>(distribution()) : nullptr;
   }
-  const Poisson *distribution_as_Poisson() const {
-    return distribution_type() == Distribution_Poisson ? static_cast<const Poisson *>(distribution()) : nullptr;
+  const ppx::Poisson *distribution_as_Poisson() const {
+    return distribution_type() == ppx::Distribution_Poisson ? static_cast<const ppx::Poisson *>(distribution()) : nullptr;
   }
-  const Tensor *value() const {
-    return GetPointer<const Tensor *>(VT_VALUE);
+  const ppx::Tensor *value() const {
+    return GetPointer<const ppx::Tensor *>(VT_VALUE);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -816,23 +859,24 @@ struct Observe FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
 };
 
-template<> inline const Normal *Observe::distribution_as<Normal>() const {
+template<> inline const ppx::Normal *Observe::distribution_as<ppx::Normal>() const {
   return distribution_as_Normal();
 }
 
-template<> inline const Uniform *Observe::distribution_as<Uniform>() const {
+template<> inline const ppx::Uniform *Observe::distribution_as<ppx::Uniform>() const {
   return distribution_as_Uniform();
 }
 
-template<> inline const Categorical *Observe::distribution_as<Categorical>() const {
+template<> inline const ppx::Categorical *Observe::distribution_as<ppx::Categorical>() const {
   return distribution_as_Categorical();
 }
 
-template<> inline const Poisson *Observe::distribution_as<Poisson>() const {
+template<> inline const ppx::Poisson *Observe::distribution_as<ppx::Poisson>() const {
   return distribution_as_Poisson();
 }
 
 struct ObserveBuilder {
+  typedef Observe Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_address(flatbuffers::Offset<flatbuffers::String> address) {
@@ -841,13 +885,13 @@ struct ObserveBuilder {
   void add_name(flatbuffers::Offset<flatbuffers::String> name) {
     fbb_.AddOffset(Observe::VT_NAME, name);
   }
-  void add_distribution_type(Distribution distribution_type) {
+  void add_distribution_type(ppx::Distribution distribution_type) {
     fbb_.AddElement<uint8_t>(Observe::VT_DISTRIBUTION_TYPE, static_cast<uint8_t>(distribution_type), 0);
   }
   void add_distribution(flatbuffers::Offset<void> distribution) {
     fbb_.AddOffset(Observe::VT_DISTRIBUTION, distribution);
   }
-  void add_value(flatbuffers::Offset<Tensor> value) {
+  void add_value(flatbuffers::Offset<ppx::Tensor> value) {
     fbb_.AddOffset(Observe::VT_VALUE, value);
   }
   explicit ObserveBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -866,9 +910,9 @@ inline flatbuffers::Offset<Observe> CreateObserve(
     flatbuffers::FlatBufferBuilder &_fbb,
     flatbuffers::Offset<flatbuffers::String> address = 0,
     flatbuffers::Offset<flatbuffers::String> name = 0,
-    Distribution distribution_type = Distribution_NONE,
+    ppx::Distribution distribution_type = ppx::Distribution_NONE,
     flatbuffers::Offset<void> distribution = 0,
-    flatbuffers::Offset<Tensor> value = 0) {
+    flatbuffers::Offset<ppx::Tensor> value = 0) {
   ObserveBuilder builder_(_fbb);
   builder_.add_value(value);
   builder_.add_distribution(distribution);
@@ -882,19 +926,22 @@ inline flatbuffers::Offset<Observe> CreateObserveDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const char *address = nullptr,
     const char *name = nullptr,
-    Distribution distribution_type = Distribution_NONE,
+    ppx::Distribution distribution_type = ppx::Distribution_NONE,
     flatbuffers::Offset<void> distribution = 0,
-    flatbuffers::Offset<Tensor> value = 0) {
+    flatbuffers::Offset<ppx::Tensor> value = 0) {
+  auto address__ = address ? _fbb.CreateString(address) : 0;
+  auto name__ = name ? _fbb.CreateString(name) : 0;
   return ppx::CreateObserve(
       _fbb,
-      address ? _fbb.CreateString(address) : 0,
-      name ? _fbb.CreateString(name) : 0,
+      address__,
+      name__,
       distribution_type,
       distribution,
       value);
 }
 
 struct ObserveResult FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef ObserveResultBuilder Builder;
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            verifier.EndTable();
@@ -902,6 +949,7 @@ struct ObserveResult FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 };
 
 struct ObserveResultBuilder {
+  typedef ObserveResult Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   explicit ObserveResultBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -923,7 +971,8 @@ inline flatbuffers::Offset<ObserveResult> CreateObserveResult(
 }
 
 struct Tag FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  enum {
+  typedef TagBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_ADDRESS = 4,
     VT_NAME = 6,
     VT_VALUE = 8
@@ -934,8 +983,8 @@ struct Tag FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const flatbuffers::String *name() const {
     return GetPointer<const flatbuffers::String *>(VT_NAME);
   }
-  const Tensor *value() const {
-    return GetPointer<const Tensor *>(VT_VALUE);
+  const ppx::Tensor *value() const {
+    return GetPointer<const ppx::Tensor *>(VT_VALUE);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -950,6 +999,7 @@ struct Tag FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 };
 
 struct TagBuilder {
+  typedef Tag Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_address(flatbuffers::Offset<flatbuffers::String> address) {
@@ -958,7 +1008,7 @@ struct TagBuilder {
   void add_name(flatbuffers::Offset<flatbuffers::String> name) {
     fbb_.AddOffset(Tag::VT_NAME, name);
   }
-  void add_value(flatbuffers::Offset<Tensor> value) {
+  void add_value(flatbuffers::Offset<ppx::Tensor> value) {
     fbb_.AddOffset(Tag::VT_VALUE, value);
   }
   explicit TagBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -977,7 +1027,7 @@ inline flatbuffers::Offset<Tag> CreateTag(
     flatbuffers::FlatBufferBuilder &_fbb,
     flatbuffers::Offset<flatbuffers::String> address = 0,
     flatbuffers::Offset<flatbuffers::String> name = 0,
-    flatbuffers::Offset<Tensor> value = 0) {
+    flatbuffers::Offset<ppx::Tensor> value = 0) {
   TagBuilder builder_(_fbb);
   builder_.add_value(value);
   builder_.add_name(name);
@@ -989,15 +1039,18 @@ inline flatbuffers::Offset<Tag> CreateTagDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const char *address = nullptr,
     const char *name = nullptr,
-    flatbuffers::Offset<Tensor> value = 0) {
+    flatbuffers::Offset<ppx::Tensor> value = 0) {
+  auto address__ = address ? _fbb.CreateString(address) : 0;
+  auto name__ = name ? _fbb.CreateString(name) : 0;
   return ppx::CreateTag(
       _fbb,
-      address ? _fbb.CreateString(address) : 0,
-      name ? _fbb.CreateString(name) : 0,
+      address__,
+      name__,
       value);
 }
 
 struct TagResult FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef TagResultBuilder Builder;
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            verifier.EndTable();
@@ -1005,6 +1058,7 @@ struct TagResult FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 };
 
 struct TagResultBuilder {
+  typedef TagResult Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   explicit TagResultBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -1026,6 +1080,7 @@ inline flatbuffers::Offset<TagResult> CreateTagResult(
 }
 
 struct Reset FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef ResetBuilder Builder;
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            verifier.EndTable();
@@ -1033,6 +1088,7 @@ struct Reset FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 };
 
 struct ResetBuilder {
+  typedef Reset Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   explicit ResetBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -1054,15 +1110,16 @@ inline flatbuffers::Offset<Reset> CreateReset(
 }
 
 struct Normal FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  enum {
+  typedef NormalBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_MEAN = 4,
     VT_STDDEV = 6
   };
-  const Tensor *mean() const {
-    return GetPointer<const Tensor *>(VT_MEAN);
+  const ppx::Tensor *mean() const {
+    return GetPointer<const ppx::Tensor *>(VT_MEAN);
   }
-  const Tensor *stddev() const {
-    return GetPointer<const Tensor *>(VT_STDDEV);
+  const ppx::Tensor *stddev() const {
+    return GetPointer<const ppx::Tensor *>(VT_STDDEV);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -1075,12 +1132,13 @@ struct Normal FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 };
 
 struct NormalBuilder {
+  typedef Normal Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_mean(flatbuffers::Offset<Tensor> mean) {
+  void add_mean(flatbuffers::Offset<ppx::Tensor> mean) {
     fbb_.AddOffset(Normal::VT_MEAN, mean);
   }
-  void add_stddev(flatbuffers::Offset<Tensor> stddev) {
+  void add_stddev(flatbuffers::Offset<ppx::Tensor> stddev) {
     fbb_.AddOffset(Normal::VT_STDDEV, stddev);
   }
   explicit NormalBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -1097,8 +1155,8 @@ struct NormalBuilder {
 
 inline flatbuffers::Offset<Normal> CreateNormal(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<Tensor> mean = 0,
-    flatbuffers::Offset<Tensor> stddev = 0) {
+    flatbuffers::Offset<ppx::Tensor> mean = 0,
+    flatbuffers::Offset<ppx::Tensor> stddev = 0) {
   NormalBuilder builder_(_fbb);
   builder_.add_stddev(stddev);
   builder_.add_mean(mean);
@@ -1106,15 +1164,16 @@ inline flatbuffers::Offset<Normal> CreateNormal(
 }
 
 struct Uniform FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  enum {
+  typedef UniformBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_LOW = 4,
     VT_HIGH = 6
   };
-  const Tensor *low() const {
-    return GetPointer<const Tensor *>(VT_LOW);
+  const ppx::Tensor *low() const {
+    return GetPointer<const ppx::Tensor *>(VT_LOW);
   }
-  const Tensor *high() const {
-    return GetPointer<const Tensor *>(VT_HIGH);
+  const ppx::Tensor *high() const {
+    return GetPointer<const ppx::Tensor *>(VT_HIGH);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -1127,12 +1186,13 @@ struct Uniform FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 };
 
 struct UniformBuilder {
+  typedef Uniform Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_low(flatbuffers::Offset<Tensor> low) {
+  void add_low(flatbuffers::Offset<ppx::Tensor> low) {
     fbb_.AddOffset(Uniform::VT_LOW, low);
   }
-  void add_high(flatbuffers::Offset<Tensor> high) {
+  void add_high(flatbuffers::Offset<ppx::Tensor> high) {
     fbb_.AddOffset(Uniform::VT_HIGH, high);
   }
   explicit UniformBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -1149,8 +1209,8 @@ struct UniformBuilder {
 
 inline flatbuffers::Offset<Uniform> CreateUniform(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<Tensor> low = 0,
-    flatbuffers::Offset<Tensor> high = 0) {
+    flatbuffers::Offset<ppx::Tensor> low = 0,
+    flatbuffers::Offset<ppx::Tensor> high = 0) {
   UniformBuilder builder_(_fbb);
   builder_.add_high(high);
   builder_.add_low(low);
@@ -1158,11 +1218,12 @@ inline flatbuffers::Offset<Uniform> CreateUniform(
 }
 
 struct Categorical FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  enum {
+  typedef CategoricalBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_PROBS = 4
   };
-  const Tensor *probs() const {
-    return GetPointer<const Tensor *>(VT_PROBS);
+  const ppx::Tensor *probs() const {
+    return GetPointer<const ppx::Tensor *>(VT_PROBS);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -1173,9 +1234,10 @@ struct Categorical FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 };
 
 struct CategoricalBuilder {
+  typedef Categorical Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_probs(flatbuffers::Offset<Tensor> probs) {
+  void add_probs(flatbuffers::Offset<ppx::Tensor> probs) {
     fbb_.AddOffset(Categorical::VT_PROBS, probs);
   }
   explicit CategoricalBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -1192,18 +1254,19 @@ struct CategoricalBuilder {
 
 inline flatbuffers::Offset<Categorical> CreateCategorical(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<Tensor> probs = 0) {
+    flatbuffers::Offset<ppx::Tensor> probs = 0) {
   CategoricalBuilder builder_(_fbb);
   builder_.add_probs(probs);
   return builder_.Finish();
 }
 
 struct Poisson FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  enum {
+  typedef PoissonBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_RATE = 4
   };
-  const Tensor *rate() const {
-    return GetPointer<const Tensor *>(VT_RATE);
+  const ppx::Tensor *rate() const {
+    return GetPointer<const ppx::Tensor *>(VT_RATE);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -1214,9 +1277,10 @@ struct Poisson FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
 };
 
 struct PoissonBuilder {
+  typedef Poisson Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_rate(flatbuffers::Offset<Tensor> rate) {
+  void add_rate(flatbuffers::Offset<ppx::Tensor> rate) {
     fbb_.AddOffset(Poisson::VT_RATE, rate);
   }
   explicit PoissonBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -1233,7 +1297,7 @@ struct PoissonBuilder {
 
 inline flatbuffers::Offset<Poisson> CreatePoisson(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<Tensor> rate = 0) {
+    flatbuffers::Offset<ppx::Tensor> rate = 0) {
   PoissonBuilder builder_(_fbb);
   builder_.add_rate(rate);
   return builder_.Finish();
@@ -1245,50 +1309,50 @@ inline bool VerifyMessageBody(flatbuffers::Verifier &verifier, const void *obj, 
       return true;
     }
     case MessageBody_Handshake: {
-      auto ptr = reinterpret_cast<const Handshake *>(obj);
+      auto ptr = reinterpret_cast<const ppx::Handshake *>(obj);
       return verifier.VerifyTable(ptr);
     }
     case MessageBody_HandshakeResult: {
-      auto ptr = reinterpret_cast<const HandshakeResult *>(obj);
+      auto ptr = reinterpret_cast<const ppx::HandshakeResult *>(obj);
       return verifier.VerifyTable(ptr);
     }
     case MessageBody_Run: {
-      auto ptr = reinterpret_cast<const Run *>(obj);
+      auto ptr = reinterpret_cast<const ppx::Run *>(obj);
       return verifier.VerifyTable(ptr);
     }
     case MessageBody_RunResult: {
-      auto ptr = reinterpret_cast<const RunResult *>(obj);
+      auto ptr = reinterpret_cast<const ppx::RunResult *>(obj);
       return verifier.VerifyTable(ptr);
     }
     case MessageBody_Sample: {
-      auto ptr = reinterpret_cast<const Sample *>(obj);
+      auto ptr = reinterpret_cast<const ppx::Sample *>(obj);
       return verifier.VerifyTable(ptr);
     }
     case MessageBody_SampleResult: {
-      auto ptr = reinterpret_cast<const SampleResult *>(obj);
+      auto ptr = reinterpret_cast<const ppx::SampleResult *>(obj);
       return verifier.VerifyTable(ptr);
     }
     case MessageBody_Observe: {
-      auto ptr = reinterpret_cast<const Observe *>(obj);
+      auto ptr = reinterpret_cast<const ppx::Observe *>(obj);
       return verifier.VerifyTable(ptr);
     }
     case MessageBody_ObserveResult: {
-      auto ptr = reinterpret_cast<const ObserveResult *>(obj);
+      auto ptr = reinterpret_cast<const ppx::ObserveResult *>(obj);
       return verifier.VerifyTable(ptr);
     }
     case MessageBody_Tag: {
-      auto ptr = reinterpret_cast<const Tag *>(obj);
+      auto ptr = reinterpret_cast<const ppx::Tag *>(obj);
       return verifier.VerifyTable(ptr);
     }
     case MessageBody_TagResult: {
-      auto ptr = reinterpret_cast<const TagResult *>(obj);
+      auto ptr = reinterpret_cast<const ppx::TagResult *>(obj);
       return verifier.VerifyTable(ptr);
     }
     case MessageBody_Reset: {
-      auto ptr = reinterpret_cast<const Reset *>(obj);
+      auto ptr = reinterpret_cast<const ppx::Reset *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    default: return false;
+    default: return true;
   }
 }
 
@@ -1310,22 +1374,22 @@ inline bool VerifyDistribution(flatbuffers::Verifier &verifier, const void *obj,
       return true;
     }
     case Distribution_Normal: {
-      auto ptr = reinterpret_cast<const Normal *>(obj);
+      auto ptr = reinterpret_cast<const ppx::Normal *>(obj);
       return verifier.VerifyTable(ptr);
     }
     case Distribution_Uniform: {
-      auto ptr = reinterpret_cast<const Uniform *>(obj);
+      auto ptr = reinterpret_cast<const ppx::Uniform *>(obj);
       return verifier.VerifyTable(ptr);
     }
     case Distribution_Categorical: {
-      auto ptr = reinterpret_cast<const Categorical *>(obj);
+      auto ptr = reinterpret_cast<const ppx::Categorical *>(obj);
       return verifier.VerifyTable(ptr);
     }
     case Distribution_Poisson: {
-      auto ptr = reinterpret_cast<const Poisson *>(obj);
+      auto ptr = reinterpret_cast<const ppx::Poisson *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    default: return false;
+    default: return true;
   }
 }
 

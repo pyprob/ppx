@@ -6,22 +6,24 @@ namespace ppx
 {
 
 using global::System;
+using global::System.Collections.Generic;
 using global::FlatBuffers;
 
 public struct Run : IFlatbufferObject
 {
   private Table __p;
   public ByteBuffer ByteBuffer { get { return __p.bb; } }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_1_12_0(); }
   public static Run GetRootAsRun(ByteBuffer _bb) { return GetRootAsRun(_bb, new Run()); }
   public static Run GetRootAsRun(ByteBuffer _bb, Run obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
-  public void __init(int _i, ByteBuffer _bb) { __p.bb_pos = _i; __p.bb = _bb; }
+  public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public Run __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
 
-  public static void StartRun(FlatBufferBuilder builder) { builder.StartObject(0); }
-  public static Offset<Run> EndRun(FlatBufferBuilder builder) {
-    int o = builder.EndObject();
-    return new Offset<Run>(o);
+  public static void StartRun(FlatBufferBuilder builder) { builder.StartTable(0); }
+  public static Offset<ppx.Run> EndRun(FlatBufferBuilder builder) {
+    int o = builder.EndTable();
+    return new Offset<ppx.Run>(o);
   }
 };
 

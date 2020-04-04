@@ -6,47 +6,49 @@ namespace ppx
 {
 
 using global::System;
+using global::System.Collections.Generic;
 using global::FlatBuffers;
 
 public struct HandshakeResult : IFlatbufferObject
 {
   private Table __p;
   public ByteBuffer ByteBuffer { get { return __p.bb; } }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_1_12_0(); }
   public static HandshakeResult GetRootAsHandshakeResult(ByteBuffer _bb) { return GetRootAsHandshakeResult(_bb, new HandshakeResult()); }
   public static HandshakeResult GetRootAsHandshakeResult(ByteBuffer _bb, HandshakeResult obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
-  public void __init(int _i, ByteBuffer _bb) { __p.bb_pos = _i; __p.bb = _bb; }
+  public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public HandshakeResult __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public string SystemName { get { int o = __p.__offset(4); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
-  public Span<byte> GetSystemNameBytes() { return __p.__vector_as_span(4); }
+  public Span<byte> GetSystemNameBytes() { return __p.__vector_as_span<byte>(4, 1); }
 #else
   public ArraySegment<byte>? GetSystemNameBytes() { return __p.__vector_as_arraysegment(4); }
 #endif
   public byte[] GetSystemNameArray() { return __p.__vector_as_array<byte>(4); }
   public string ModelName { get { int o = __p.__offset(6); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
-  public Span<byte> GetModelNameBytes() { return __p.__vector_as_span(6); }
+  public Span<byte> GetModelNameBytes() { return __p.__vector_as_span<byte>(6, 1); }
 #else
   public ArraySegment<byte>? GetModelNameBytes() { return __p.__vector_as_arraysegment(6); }
 #endif
   public byte[] GetModelNameArray() { return __p.__vector_as_array<byte>(6); }
 
-  public static Offset<HandshakeResult> CreateHandshakeResult(FlatBufferBuilder builder,
+  public static Offset<ppx.HandshakeResult> CreateHandshakeResult(FlatBufferBuilder builder,
       StringOffset system_nameOffset = default(StringOffset),
       StringOffset model_nameOffset = default(StringOffset)) {
-    builder.StartObject(2);
+    builder.StartTable(2);
     HandshakeResult.AddModelName(builder, model_nameOffset);
     HandshakeResult.AddSystemName(builder, system_nameOffset);
     return HandshakeResult.EndHandshakeResult(builder);
   }
 
-  public static void StartHandshakeResult(FlatBufferBuilder builder) { builder.StartObject(2); }
+  public static void StartHandshakeResult(FlatBufferBuilder builder) { builder.StartTable(2); }
   public static void AddSystemName(FlatBufferBuilder builder, StringOffset systemNameOffset) { builder.AddOffset(0, systemNameOffset.Value, 0); }
   public static void AddModelName(FlatBufferBuilder builder, StringOffset modelNameOffset) { builder.AddOffset(1, modelNameOffset.Value, 0); }
-  public static Offset<HandshakeResult> EndHandshakeResult(FlatBufferBuilder builder) {
-    int o = builder.EndObject();
-    return new Offset<HandshakeResult>(o);
+  public static Offset<ppx.HandshakeResult> EndHandshakeResult(FlatBufferBuilder builder) {
+    int o = builder.EndTable();
+    return new Offset<ppx.HandshakeResult>(o);
   }
 };
 

@@ -9,26 +9,34 @@ import com.google.flatbuffers.*;
 
 @SuppressWarnings("unused")
 public final class Poisson extends Table {
+  public static void ValidateVersion() { Constants.FLATBUFFERS_1_12_0(); }
   public static Poisson getRootAsPoisson(ByteBuffer _bb) { return getRootAsPoisson(_bb, new Poisson()); }
   public static Poisson getRootAsPoisson(ByteBuffer _bb, Poisson obj) { _bb.order(ByteOrder.LITTLE_ENDIAN); return (obj.__assign(_bb.getInt(_bb.position()) + _bb.position(), _bb)); }
-  public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; }
+  public void __init(int _i, ByteBuffer _bb) { __reset(_i, _bb); }
   public Poisson __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public Tensor rate() { return rate(new Tensor()); }
-  public Tensor rate(Tensor obj) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
+  public ppx.Tensor rate() { return rate(new ppx.Tensor()); }
+  public ppx.Tensor rate(ppx.Tensor obj) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
 
   public static int createPoisson(FlatBufferBuilder builder,
       int rateOffset) {
-    builder.startObject(1);
+    builder.startTable(1);
     Poisson.addRate(builder, rateOffset);
     return Poisson.endPoisson(builder);
   }
 
-  public static void startPoisson(FlatBufferBuilder builder) { builder.startObject(1); }
+  public static void startPoisson(FlatBufferBuilder builder) { builder.startTable(1); }
   public static void addRate(FlatBufferBuilder builder, int rateOffset) { builder.addOffset(0, rateOffset, 0); }
   public static int endPoisson(FlatBufferBuilder builder) {
-    int o = builder.endObject();
+    int o = builder.endTable();
     return o;
+  }
+
+  public static final class Vector extends BaseVector {
+    public Vector __assign(int _vector, int _element_size, ByteBuffer _bb) { __reset(_vector, _element_size, _bb); return this; }
+
+    public Poisson get(int j) { return get(new Poisson(), j); }
+    public Poisson get(Poisson obj, int j) {  return obj.__assign(__indirect(__element(j), bb), bb); }
   }
 }
 

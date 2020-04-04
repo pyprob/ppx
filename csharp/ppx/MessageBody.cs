@@ -7,18 +7,18 @@ namespace ppx
 
 public enum MessageBody : byte
 {
- NONE = 0,
- Handshake = 1,
- HandshakeResult = 2,
- Run = 3,
- RunResult = 4,
- Sample = 5,
- SampleResult = 6,
- Observe = 7,
- ObserveResult = 8,
- Tag = 9,
- TagResult = 10,
- Reset = 11,
+  NONE = 0,
+  Handshake = 1,
+  HandshakeResult = 2,
+  Run = 3,
+  RunResult = 4,
+  Sample = 5,
+  SampleResult = 6,
+  Observe = 7,
+  ObserveResult = 8,
+  Tag = 9,
+  TagResult = 10,
+  Reset = 11,
 };
 
 

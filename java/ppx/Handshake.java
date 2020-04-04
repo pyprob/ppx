@@ -9,9 +9,10 @@ import com.google.flatbuffers.*;
 
 @SuppressWarnings("unused")
 public final class Handshake extends Table {
+  public static void ValidateVersion() { Constants.FLATBUFFERS_1_12_0(); }
   public static Handshake getRootAsHandshake(ByteBuffer _bb) { return getRootAsHandshake(_bb, new Handshake()); }
   public static Handshake getRootAsHandshake(ByteBuffer _bb, Handshake obj) { _bb.order(ByteOrder.LITTLE_ENDIAN); return (obj.__assign(_bb.getInt(_bb.position()) + _bb.position(), _bb)); }
-  public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; }
+  public void __init(int _i, ByteBuffer _bb) { __reset(_i, _bb); }
   public Handshake __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public String systemName() { int o = __offset(4); return o != 0 ? __string(o + bb_pos) : null; }
@@ -20,16 +21,23 @@ public final class Handshake extends Table {
 
   public static int createHandshake(FlatBufferBuilder builder,
       int system_nameOffset) {
-    builder.startObject(1);
+    builder.startTable(1);
     Handshake.addSystemName(builder, system_nameOffset);
     return Handshake.endHandshake(builder);
   }
 
-  public static void startHandshake(FlatBufferBuilder builder) { builder.startObject(1); }
+  public static void startHandshake(FlatBufferBuilder builder) { builder.startTable(1); }
   public static void addSystemName(FlatBufferBuilder builder, int systemNameOffset) { builder.addOffset(0, systemNameOffset, 0); }
   public static int endHandshake(FlatBufferBuilder builder) {
-    int o = builder.endObject();
+    int o = builder.endTable();
     return o;
+  }
+
+  public static final class Vector extends BaseVector {
+    public Vector __assign(int _vector, int _element_size, ByteBuffer _bb) { __reset(_vector, _element_size, _bb); return this; }
+
+    public Handshake get(int j) { return get(new Handshake(), j); }
+    public Handshake get(Handshake obj, int j) {  return obj.__assign(__indirect(__element(j), bb), bb); }
   }
 }
 

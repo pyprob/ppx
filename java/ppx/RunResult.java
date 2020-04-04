@@ -9,26 +9,34 @@ import com.google.flatbuffers.*;
 
 @SuppressWarnings("unused")
 public final class RunResult extends Table {
+  public static void ValidateVersion() { Constants.FLATBUFFERS_1_12_0(); }
   public static RunResult getRootAsRunResult(ByteBuffer _bb) { return getRootAsRunResult(_bb, new RunResult()); }
   public static RunResult getRootAsRunResult(ByteBuffer _bb, RunResult obj) { _bb.order(ByteOrder.LITTLE_ENDIAN); return (obj.__assign(_bb.getInt(_bb.position()) + _bb.position(), _bb)); }
-  public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; }
+  public void __init(int _i, ByteBuffer _bb) { __reset(_i, _bb); }
   public RunResult __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public Tensor result() { return result(new Tensor()); }
-  public Tensor result(Tensor obj) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
+  public ppx.Tensor result() { return result(new ppx.Tensor()); }
+  public ppx.Tensor result(ppx.Tensor obj) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
 
   public static int createRunResult(FlatBufferBuilder builder,
       int resultOffset) {
-    builder.startObject(1);
+    builder.startTable(1);
     RunResult.addResult(builder, resultOffset);
     return RunResult.endRunResult(builder);
   }
 
-  public static void startRunResult(FlatBufferBuilder builder) { builder.startObject(1); }
+  public static void startRunResult(FlatBufferBuilder builder) { builder.startTable(1); }
   public static void addResult(FlatBufferBuilder builder, int resultOffset) { builder.addOffset(0, resultOffset, 0); }
   public static int endRunResult(FlatBufferBuilder builder) {
-    int o = builder.endObject();
+    int o = builder.endTable();
     return o;
+  }
+
+  public static final class Vector extends BaseVector {
+    public Vector __assign(int _vector, int _element_size, ByteBuffer _bb) { __reset(_vector, _element_size, _bb); return this; }
+
+    public RunResult get(int j) { return get(new RunResult(), j); }
+    public RunResult get(RunResult obj, int j) {  return obj.__assign(__indirect(__element(j), bb), bb); }
   }
 }
 

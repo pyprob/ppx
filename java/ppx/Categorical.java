@@ -9,26 +9,34 @@ import com.google.flatbuffers.*;
 
 @SuppressWarnings("unused")
 public final class Categorical extends Table {
+  public static void ValidateVersion() { Constants.FLATBUFFERS_1_12_0(); }
   public static Categorical getRootAsCategorical(ByteBuffer _bb) { return getRootAsCategorical(_bb, new Categorical()); }
   public static Categorical getRootAsCategorical(ByteBuffer _bb, Categorical obj) { _bb.order(ByteOrder.LITTLE_ENDIAN); return (obj.__assign(_bb.getInt(_bb.position()) + _bb.position(), _bb)); }
-  public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; }
+  public void __init(int _i, ByteBuffer _bb) { __reset(_i, _bb); }
   public Categorical __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public Tensor probs() { return probs(new Tensor()); }
-  public Tensor probs(Tensor obj) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
+  public ppx.Tensor probs() { return probs(new ppx.Tensor()); }
+  public ppx.Tensor probs(ppx.Tensor obj) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
 
   public static int createCategorical(FlatBufferBuilder builder,
       int probsOffset) {
-    builder.startObject(1);
+    builder.startTable(1);
     Categorical.addProbs(builder, probsOffset);
     return Categorical.endCategorical(builder);
   }
 
-  public static void startCategorical(FlatBufferBuilder builder) { builder.startObject(1); }
+  public static void startCategorical(FlatBufferBuilder builder) { builder.startTable(1); }
   public static void addProbs(FlatBufferBuilder builder, int probsOffset) { builder.addOffset(0, probsOffset, 0); }
   public static int endCategorical(FlatBufferBuilder builder) {
-    int o = builder.endObject();
+    int o = builder.endTable();
     return o;
+  }
+
+  public static final class Vector extends BaseVector {
+    public Vector __assign(int _vector, int _element_size, ByteBuffer _bb) { __reset(_vector, _element_size, _bb); return this; }
+
+    public Categorical get(int j) { return get(new Categorical(), j); }
+    public Categorical get(Categorical obj, int j) {  return obj.__assign(__indirect(__element(j), bb), bb); }
   }
 }
 

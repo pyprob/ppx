@@ -6,22 +6,24 @@ namespace ppx
 {
 
 using global::System;
+using global::System.Collections.Generic;
 using global::FlatBuffers;
 
 public struct TagResult : IFlatbufferObject
 {
   private Table __p;
   public ByteBuffer ByteBuffer { get { return __p.bb; } }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_1_12_0(); }
   public static TagResult GetRootAsTagResult(ByteBuffer _bb) { return GetRootAsTagResult(_bb, new TagResult()); }
   public static TagResult GetRootAsTagResult(ByteBuffer _bb, TagResult obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
-  public void __init(int _i, ByteBuffer _bb) { __p.bb_pos = _i; __p.bb = _bb; }
+  public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public TagResult __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
 
-  public static void StartTagResult(FlatBufferBuilder builder) { builder.StartObject(0); }
-  public static Offset<TagResult> EndTagResult(FlatBufferBuilder builder) {
-    int o = builder.EndObject();
-    return new Offset<TagResult>(o);
+  public static void StartTagResult(FlatBufferBuilder builder) { builder.StartTable(0); }
+  public static Offset<ppx.TagResult> EndTagResult(FlatBufferBuilder builder) {
+    int o = builder.EndTable();
+    return new Offset<ppx.TagResult>(o);
   }
 };
 

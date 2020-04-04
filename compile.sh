@@ -30,6 +30,14 @@ echo Compiling PPX to JavaScript...
 rm -rf js
 flatc --js -o js ppx.fbs
 
+echo Compiling PPX to Json schema...
+rm -rf jsonschema
+flatc --jsonschema -o jsonschema ppx.fbs
+
+echo Compiling PPX to Kotlin...
+rm -rf kotlin
+flatc --kotlin -o kotlin ppx.fbs
+
 echo Compiling PPX to Lobster...
 rm -rf lobster
 flatc --lobster -o lobster ppx.fbs
@@ -49,6 +57,10 @@ flatc --python -o python ppx.fbs
 echo Compiling PPX to Rust...
 rm -rf rust
 flatc --rust -o rust ppx.fbs
+
+echo Compiling PPX to Swift...
+rm -rf swift
+flatc --swift -o swift ppx.fbs
 
 echo Compiling PPX to TypeScript...
 rm -rf ts

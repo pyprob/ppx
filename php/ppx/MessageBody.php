@@ -19,18 +19,18 @@ class MessageBody
     const Reset = 11;
 
     private static $names = array(
-        "NONE",
-        "Handshake",
-        "HandshakeResult",
-        "Run",
-        "RunResult",
-        "Sample",
-        "SampleResult",
-        "Observe",
-        "ObserveResult",
-        "Tag",
-        "TagResult",
-        "Reset",
+        MessageBody::NONE=>"NONE",
+        MessageBody::Handshake=>"Handshake",
+        MessageBody::HandshakeResult=>"HandshakeResult",
+        MessageBody::Run=>"Run",
+        MessageBody::RunResult=>"RunResult",
+        MessageBody::Sample=>"Sample",
+        MessageBody::SampleResult=>"SampleResult",
+        MessageBody::Observe=>"Observe",
+        MessageBody::ObserveResult=>"ObserveResult",
+        MessageBody::Tag=>"Tag",
+        MessageBody::TagResult=>"TagResult",
+        MessageBody::Reset=>"Reset",
     );
 
     public static function Name($e)

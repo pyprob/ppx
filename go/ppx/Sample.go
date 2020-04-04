@@ -42,16 +42,16 @@ func (rcv *Sample) Name() []byte {
 	return nil
 }
 
-func (rcv *Sample) DistributionType() byte {
+func (rcv *Sample) DistributionType() Distribution {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
-		return rcv._tab.GetByte(o + rcv._tab.Pos)
+		return Distribution(rcv._tab.GetByte(o + rcv._tab.Pos))
 	}
 	return 0
 }
 
-func (rcv *Sample) MutateDistributionType(n byte) bool {
-	return rcv._tab.MutateByteSlot(8, n)
+func (rcv *Sample) MutateDistributionType(n Distribution) bool {
+	return rcv._tab.MutateByteSlot(8, byte(n))
 }
 
 func (rcv *Sample) Distribution(obj *flatbuffers.Table) bool {
@@ -63,28 +63,28 @@ func (rcv *Sample) Distribution(obj *flatbuffers.Table) bool {
 	return false
 }
 
-func (rcv *Sample) Control() byte {
+func (rcv *Sample) Control() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(12))
 	if o != 0 {
-		return rcv._tab.GetByte(o + rcv._tab.Pos)
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
 	}
-	return 1
+	return true
 }
 
-func (rcv *Sample) MutateControl(n byte) bool {
-	return rcv._tab.MutateByteSlot(12, n)
+func (rcv *Sample) MutateControl(n bool) bool {
+	return rcv._tab.MutateBoolSlot(12, n)
 }
 
-func (rcv *Sample) Replace() byte {
+func (rcv *Sample) Replace() bool {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
 	if o != 0 {
-		return rcv._tab.GetByte(o + rcv._tab.Pos)
+		return rcv._tab.GetBool(o + rcv._tab.Pos)
 	}
-	return 0
+	return false
 }
 
-func (rcv *Sample) MutateReplace(n byte) bool {
-	return rcv._tab.MutateByteSlot(14, n)
+func (rcv *Sample) MutateReplace(n bool) bool {
+	return rcv._tab.MutateBoolSlot(14, n)
 }
 
 func SampleStart(builder *flatbuffers.Builder) {
@@ -96,17 +96,17 @@ func SampleAddAddress(builder *flatbuffers.Builder, address flatbuffers.UOffsetT
 func SampleAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(name), 0)
 }
-func SampleAddDistributionType(builder *flatbuffers.Builder, distributionType byte) {
-	builder.PrependByteSlot(2, distributionType, 0)
+func SampleAddDistributionType(builder *flatbuffers.Builder, distributionType Distribution) {
+	builder.PrependByteSlot(2, byte(distributionType), 0)
 }
 func SampleAddDistribution(builder *flatbuffers.Builder, distribution flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(distribution), 0)
 }
-func SampleAddControl(builder *flatbuffers.Builder, control byte) {
-	builder.PrependByteSlot(4, control, 1)
+func SampleAddControl(builder *flatbuffers.Builder, control bool) {
+	builder.PrependBoolSlot(4, control, true)
 }
-func SampleAddReplace(builder *flatbuffers.Builder, replace byte) {
-	builder.PrependByteSlot(5, replace, 0)
+func SampleAddReplace(builder *flatbuffers.Builder, replace bool) {
+	builder.PrependBoolSlot(5, replace, false)
 }
 func SampleEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

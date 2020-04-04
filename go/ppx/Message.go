@@ -26,16 +26,16 @@ func (rcv *Message) Table() flatbuffers.Table {
 	return rcv._tab
 }
 
-func (rcv *Message) BodyType() byte {
+func (rcv *Message) BodyType() MessageBody {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(4))
 	if o != 0 {
-		return rcv._tab.GetByte(o + rcv._tab.Pos)
+		return MessageBody(rcv._tab.GetByte(o + rcv._tab.Pos))
 	}
 	return 0
 }
 
-func (rcv *Message) MutateBodyType(n byte) bool {
-	return rcv._tab.MutateByteSlot(4, n)
+func (rcv *Message) MutateBodyType(n MessageBody) bool {
+	return rcv._tab.MutateByteSlot(4, byte(n))
 }
 
 func (rcv *Message) Body(obj *flatbuffers.Table) bool {
@@ -50,8 +50,8 @@ func (rcv *Message) Body(obj *flatbuffers.Table) bool {
 func MessageStart(builder *flatbuffers.Builder) {
 	builder.StartObject(2)
 }
-func MessageAddBodyType(builder *flatbuffers.Builder, bodyType byte) {
-	builder.PrependByteSlot(0, bodyType, 0)
+func MessageAddBodyType(builder *flatbuffers.Builder, bodyType MessageBody) {
+	builder.PrependByteSlot(0, byte(bodyType), 0)
 }
 func MessageAddBody(builder *flatbuffers.Builder, body flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(body), 0)

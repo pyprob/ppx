@@ -7,7 +7,7 @@
 var ppx = ppx || {};
 
 /**
- * @enum
+ * @enum {number}
  */
 ppx.MessageBody = {
   NONE: 0,
@@ -25,7 +25,25 @@ ppx.MessageBody = {
 };
 
 /**
- * @enum
+ * @enum {string}
+ */
+ppx.MessageBodyName = {
+  '0': 'NONE',
+  '1': 'Handshake',
+  '2': 'HandshakeResult',
+  '3': 'Run',
+  '4': 'RunResult',
+  '5': 'Sample',
+  '6': 'SampleResult',
+  '7': 'Observe',
+  '8': 'ObserveResult',
+  '9': 'Tag',
+  '10': 'TagResult',
+  '11': 'Reset'
+};
+
+/**
+ * @enum {number}
  */
 ppx.Distribution = {
   NONE: 0,
@@ -33,6 +51,17 @@ ppx.Distribution = {
   Uniform: 2,
   Categorical: 3,
   Poisson: 4
+};
+
+/**
+ * @enum {string}
+ */
+ppx.DistributionName = {
+  '0': 'NONE',
+  '1': 'Normal',
+  '2': 'Uniform',
+  '3': 'Categorical',
+  '4': 'Poisson'
 };
 
 /**
@@ -67,6 +96,16 @@ ppx.Message.prototype.__init = function(i, bb) {
  * @returns {ppx.Message}
  */
 ppx.Message.getRootAsMessage = function(bb, obj) {
+  return (obj || new ppx.Message).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Message=} obj
+ * @returns {ppx.Message}
+ */
+ppx.Message.getSizePrefixedRootAsMessage = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
   return (obj || new ppx.Message).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
@@ -136,6 +175,27 @@ ppx.Message.finishMessageBuffer = function(builder, offset) {
 };
 
 /**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} offset
+ */
+ppx.Message.finishSizePrefixedMessageBuffer = function(builder, offset) {
+  builder.finish(offset, 'PPXF', true);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {ppx.MessageBody} bodyType
+ * @param {flatbuffers.Offset} bodyOffset
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Message.createMessage = function(builder, bodyType, bodyOffset) {
+  ppx.Message.startMessage(builder);
+  ppx.Message.addBodyType(builder, bodyType);
+  ppx.Message.addBody(builder, bodyOffset);
+  return ppx.Message.endMessage(builder);
+}
+
+/**
  * @constructor
  */
 ppx.Tensor = function() {
@@ -167,6 +227,16 @@ ppx.Tensor.prototype.__init = function(i, bb) {
  * @returns {ppx.Tensor}
  */
 ppx.Tensor.getRootAsTensor = function(bb, obj) {
+  return (obj || new ppx.Tensor).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor}
+ */
+ppx.Tensor.getSizePrefixedRootAsTensor = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
   return (obj || new ppx.Tensor).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
@@ -295,6 +365,19 @@ ppx.Tensor.endTensor = function(builder) {
 };
 
 /**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} dataOffset
+ * @param {flatbuffers.Offset} shapeOffset
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Tensor.createTensor = function(builder, dataOffset, shapeOffset) {
+  ppx.Tensor.startTensor(builder);
+  ppx.Tensor.addData(builder, dataOffset);
+  ppx.Tensor.addShape(builder, shapeOffset);
+  return ppx.Tensor.endTensor(builder);
+}
+
+/**
  * @constructor
  */
 ppx.Handshake = function() {
@@ -326,6 +409,16 @@ ppx.Handshake.prototype.__init = function(i, bb) {
  * @returns {ppx.Handshake}
  */
 ppx.Handshake.getRootAsHandshake = function(bb, obj) {
+  return (obj || new ppx.Handshake).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Handshake=} obj
+ * @returns {ppx.Handshake}
+ */
+ppx.Handshake.getSizePrefixedRootAsHandshake = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
   return (obj || new ppx.Handshake).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
@@ -363,6 +456,17 @@ ppx.Handshake.endHandshake = function(builder) {
 };
 
 /**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} systemNameOffset
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Handshake.createHandshake = function(builder, systemNameOffset) {
+  ppx.Handshake.startHandshake(builder);
+  ppx.Handshake.addSystemName(builder, systemNameOffset);
+  return ppx.Handshake.endHandshake(builder);
+}
+
+/**
  * @constructor
  */
 ppx.HandshakeResult = function() {
@@ -394,6 +498,16 @@ ppx.HandshakeResult.prototype.__init = function(i, bb) {
  * @returns {ppx.HandshakeResult}
  */
 ppx.HandshakeResult.getRootAsHandshakeResult = function(bb, obj) {
+  return (obj || new ppx.HandshakeResult).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.HandshakeResult=} obj
+ * @returns {ppx.HandshakeResult}
+ */
+ppx.HandshakeResult.getSizePrefixedRootAsHandshakeResult = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
   return (obj || new ppx.HandshakeResult).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
@@ -448,6 +562,19 @@ ppx.HandshakeResult.endHandshakeResult = function(builder) {
 };
 
 /**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} systemNameOffset
+ * @param {flatbuffers.Offset} modelNameOffset
+ * @returns {flatbuffers.Offset}
+ */
+ppx.HandshakeResult.createHandshakeResult = function(builder, systemNameOffset, modelNameOffset) {
+  ppx.HandshakeResult.startHandshakeResult(builder);
+  ppx.HandshakeResult.addSystemName(builder, systemNameOffset);
+  ppx.HandshakeResult.addModelName(builder, modelNameOffset);
+  return ppx.HandshakeResult.endHandshakeResult(builder);
+}
+
+/**
  * @constructor
  */
 ppx.Run = function() {
@@ -483,6 +610,16 @@ ppx.Run.getRootAsRun = function(bb, obj) {
 };
 
 /**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Run=} obj
+ * @returns {ppx.Run}
+ */
+ppx.Run.getSizePrefixedRootAsRun = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new ppx.Run).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
  * @param {flatbuffers.Builder} builder
  */
 ppx.Run.startRun = function(builder) {
@@ -497,6 +634,15 @@ ppx.Run.endRun = function(builder) {
   var offset = builder.endObject();
   return offset;
 };
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Run.createRun = function(builder) {
+  ppx.Run.startRun(builder);
+  return ppx.Run.endRun(builder);
+}
 
 /**
  * @constructor
@@ -534,6 +680,16 @@ ppx.RunResult.getRootAsRunResult = function(bb, obj) {
 };
 
 /**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.RunResult=} obj
+ * @returns {ppx.RunResult}
+ */
+ppx.RunResult.getSizePrefixedRootAsRunResult = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new ppx.RunResult).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
  * @param {ppx.Tensor=} obj
  * @returns {ppx.Tensor|null}
  */
@@ -567,6 +723,17 @@ ppx.RunResult.endRunResult = function(builder) {
 };
 
 /**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} resultOffset
+ * @returns {flatbuffers.Offset}
+ */
+ppx.RunResult.createRunResult = function(builder, resultOffset) {
+  ppx.RunResult.startRunResult(builder);
+  ppx.RunResult.addResult(builder, resultOffset);
+  return ppx.RunResult.endRunResult(builder);
+}
+
+/**
  * @constructor
  */
 ppx.Sample = function() {
@@ -598,6 +765,16 @@ ppx.Sample.prototype.__init = function(i, bb) {
  * @returns {ppx.Sample}
  */
 ppx.Sample.getRootAsSample = function(bb, obj) {
+  return (obj || new ppx.Sample).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Sample=} obj
+ * @returns {ppx.Sample}
+ */
+ppx.Sample.getSizePrefixedRootAsSample = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
   return (obj || new ppx.Sample).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
@@ -717,6 +894,27 @@ ppx.Sample.endSample = function(builder) {
 };
 
 /**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} addressOffset
+ * @param {flatbuffers.Offset} nameOffset
+ * @param {ppx.Distribution} distributionType
+ * @param {flatbuffers.Offset} distributionOffset
+ * @param {boolean} control
+ * @param {boolean} replace
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Sample.createSample = function(builder, addressOffset, nameOffset, distributionType, distributionOffset, control, replace) {
+  ppx.Sample.startSample(builder);
+  ppx.Sample.addAddress(builder, addressOffset);
+  ppx.Sample.addName(builder, nameOffset);
+  ppx.Sample.addDistributionType(builder, distributionType);
+  ppx.Sample.addDistribution(builder, distributionOffset);
+  ppx.Sample.addControl(builder, control);
+  ppx.Sample.addReplace(builder, replace);
+  return ppx.Sample.endSample(builder);
+}
+
+/**
  * @constructor
  */
 ppx.SampleResult = function() {
@@ -748,6 +946,16 @@ ppx.SampleResult.prototype.__init = function(i, bb) {
  * @returns {ppx.SampleResult}
  */
 ppx.SampleResult.getRootAsSampleResult = function(bb, obj) {
+  return (obj || new ppx.SampleResult).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.SampleResult=} obj
+ * @returns {ppx.SampleResult}
+ */
+ppx.SampleResult.getSizePrefixedRootAsSampleResult = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
   return (obj || new ppx.SampleResult).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
@@ -785,6 +993,17 @@ ppx.SampleResult.endSampleResult = function(builder) {
 };
 
 /**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} resultOffset
+ * @returns {flatbuffers.Offset}
+ */
+ppx.SampleResult.createSampleResult = function(builder, resultOffset) {
+  ppx.SampleResult.startSampleResult(builder);
+  ppx.SampleResult.addResult(builder, resultOffset);
+  return ppx.SampleResult.endSampleResult(builder);
+}
+
+/**
  * @constructor
  */
 ppx.Observe = function() {
@@ -816,6 +1035,16 @@ ppx.Observe.prototype.__init = function(i, bb) {
  * @returns {ppx.Observe}
  */
 ppx.Observe.getRootAsObserve = function(bb, obj) {
+  return (obj || new ppx.Observe).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Observe=} obj
+ * @returns {ppx.Observe}
+ */
+ppx.Observe.getSizePrefixedRootAsObserve = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
   return (obj || new ppx.Observe).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
@@ -920,6 +1149,25 @@ ppx.Observe.endObserve = function(builder) {
 };
 
 /**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} addressOffset
+ * @param {flatbuffers.Offset} nameOffset
+ * @param {ppx.Distribution} distributionType
+ * @param {flatbuffers.Offset} distributionOffset
+ * @param {flatbuffers.Offset} valueOffset
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Observe.createObserve = function(builder, addressOffset, nameOffset, distributionType, distributionOffset, valueOffset) {
+  ppx.Observe.startObserve(builder);
+  ppx.Observe.addAddress(builder, addressOffset);
+  ppx.Observe.addName(builder, nameOffset);
+  ppx.Observe.addDistributionType(builder, distributionType);
+  ppx.Observe.addDistribution(builder, distributionOffset);
+  ppx.Observe.addValue(builder, valueOffset);
+  return ppx.Observe.endObserve(builder);
+}
+
+/**
  * @constructor
  */
 ppx.ObserveResult = function() {
@@ -955,6 +1203,16 @@ ppx.ObserveResult.getRootAsObserveResult = function(bb, obj) {
 };
 
 /**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.ObserveResult=} obj
+ * @returns {ppx.ObserveResult}
+ */
+ppx.ObserveResult.getSizePrefixedRootAsObserveResult = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new ppx.ObserveResult).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
  * @param {flatbuffers.Builder} builder
  */
 ppx.ObserveResult.startObserveResult = function(builder) {
@@ -969,6 +1227,15 @@ ppx.ObserveResult.endObserveResult = function(builder) {
   var offset = builder.endObject();
   return offset;
 };
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @returns {flatbuffers.Offset}
+ */
+ppx.ObserveResult.createObserveResult = function(builder) {
+  ppx.ObserveResult.startObserveResult(builder);
+  return ppx.ObserveResult.endObserveResult(builder);
+}
 
 /**
  * @constructor
@@ -1002,6 +1269,16 @@ ppx.Tag.prototype.__init = function(i, bb) {
  * @returns {ppx.Tag}
  */
 ppx.Tag.getRootAsTag = function(bb, obj) {
+  return (obj || new ppx.Tag).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Tag=} obj
+ * @returns {ppx.Tag}
+ */
+ppx.Tag.getSizePrefixedRootAsTag = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
   return (obj || new ppx.Tag).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
@@ -1073,6 +1350,21 @@ ppx.Tag.endTag = function(builder) {
 };
 
 /**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} addressOffset
+ * @param {flatbuffers.Offset} nameOffset
+ * @param {flatbuffers.Offset} valueOffset
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Tag.createTag = function(builder, addressOffset, nameOffset, valueOffset) {
+  ppx.Tag.startTag(builder);
+  ppx.Tag.addAddress(builder, addressOffset);
+  ppx.Tag.addName(builder, nameOffset);
+  ppx.Tag.addValue(builder, valueOffset);
+  return ppx.Tag.endTag(builder);
+}
+
+/**
  * @constructor
  */
 ppx.TagResult = function() {
@@ -1108,6 +1400,16 @@ ppx.TagResult.getRootAsTagResult = function(bb, obj) {
 };
 
 /**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.TagResult=} obj
+ * @returns {ppx.TagResult}
+ */
+ppx.TagResult.getSizePrefixedRootAsTagResult = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new ppx.TagResult).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
  * @param {flatbuffers.Builder} builder
  */
 ppx.TagResult.startTagResult = function(builder) {
@@ -1122,6 +1424,15 @@ ppx.TagResult.endTagResult = function(builder) {
   var offset = builder.endObject();
   return offset;
 };
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @returns {flatbuffers.Offset}
+ */
+ppx.TagResult.createTagResult = function(builder) {
+  ppx.TagResult.startTagResult(builder);
+  return ppx.TagResult.endTagResult(builder);
+}
 
 /**
  * @constructor
@@ -1159,6 +1470,16 @@ ppx.Reset.getRootAsReset = function(bb, obj) {
 };
 
 /**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Reset=} obj
+ * @returns {ppx.Reset}
+ */
+ppx.Reset.getSizePrefixedRootAsReset = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new ppx.Reset).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
  * @param {flatbuffers.Builder} builder
  */
 ppx.Reset.startReset = function(builder) {
@@ -1173,6 +1494,15 @@ ppx.Reset.endReset = function(builder) {
   var offset = builder.endObject();
   return offset;
 };
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Reset.createReset = function(builder) {
+  ppx.Reset.startReset(builder);
+  return ppx.Reset.endReset(builder);
+}
 
 /**
  * @constructor
@@ -1206,6 +1536,16 @@ ppx.Normal.prototype.__init = function(i, bb) {
  * @returns {ppx.Normal}
  */
 ppx.Normal.getRootAsNormal = function(bb, obj) {
+  return (obj || new ppx.Normal).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Normal=} obj
+ * @returns {ppx.Normal}
+ */
+ppx.Normal.getSizePrefixedRootAsNormal = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
   return (obj || new ppx.Normal).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
@@ -1260,6 +1600,19 @@ ppx.Normal.endNormal = function(builder) {
 };
 
 /**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} meanOffset
+ * @param {flatbuffers.Offset} stddevOffset
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Normal.createNormal = function(builder, meanOffset, stddevOffset) {
+  ppx.Normal.startNormal(builder);
+  ppx.Normal.addMean(builder, meanOffset);
+  ppx.Normal.addStddev(builder, stddevOffset);
+  return ppx.Normal.endNormal(builder);
+}
+
+/**
  * @constructor
  */
 ppx.Uniform = function() {
@@ -1291,6 +1644,16 @@ ppx.Uniform.prototype.__init = function(i, bb) {
  * @returns {ppx.Uniform}
  */
 ppx.Uniform.getRootAsUniform = function(bb, obj) {
+  return (obj || new ppx.Uniform).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Uniform=} obj
+ * @returns {ppx.Uniform}
+ */
+ppx.Uniform.getSizePrefixedRootAsUniform = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
   return (obj || new ppx.Uniform).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
@@ -1345,6 +1708,19 @@ ppx.Uniform.endUniform = function(builder) {
 };
 
 /**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} lowOffset
+ * @param {flatbuffers.Offset} highOffset
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Uniform.createUniform = function(builder, lowOffset, highOffset) {
+  ppx.Uniform.startUniform(builder);
+  ppx.Uniform.addLow(builder, lowOffset);
+  ppx.Uniform.addHigh(builder, highOffset);
+  return ppx.Uniform.endUniform(builder);
+}
+
+/**
  * @constructor
  */
 ppx.Categorical = function() {
@@ -1376,6 +1752,16 @@ ppx.Categorical.prototype.__init = function(i, bb) {
  * @returns {ppx.Categorical}
  */
 ppx.Categorical.getRootAsCategorical = function(bb, obj) {
+  return (obj || new ppx.Categorical).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Categorical=} obj
+ * @returns {ppx.Categorical}
+ */
+ppx.Categorical.getSizePrefixedRootAsCategorical = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
   return (obj || new ppx.Categorical).__init(bb.readInt32(bb.position()) + bb.position(), bb);
 };
 
@@ -1413,6 +1799,17 @@ ppx.Categorical.endCategorical = function(builder) {
 };
 
 /**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} probsOffset
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Categorical.createCategorical = function(builder, probsOffset) {
+  ppx.Categorical.startCategorical(builder);
+  ppx.Categorical.addProbs(builder, probsOffset);
+  return ppx.Categorical.endCategorical(builder);
+}
+
+/**
  * @constructor
  */
 ppx.Poisson = function() {
@@ -1448,6 +1845,16 @@ ppx.Poisson.getRootAsPoisson = function(bb, obj) {
 };
 
 /**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Poisson=} obj
+ * @returns {ppx.Poisson}
+ */
+ppx.Poisson.getSizePrefixedRootAsPoisson = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new ppx.Poisson).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
  * @param {ppx.Tensor=} obj
  * @returns {ppx.Tensor|null}
  */
@@ -1479,6 +1886,17 @@ ppx.Poisson.endPoisson = function(builder) {
   var offset = builder.endObject();
   return offset;
 };
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} rateOffset
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Poisson.createPoisson = function(builder, rateOffset) {
+  ppx.Poisson.startPoisson(builder);
+  ppx.Poisson.addRate(builder, rateOffset);
+  return ppx.Poisson.endPoisson(builder);
+}
 
 // Exports for Node.js and RequireJS
 this.ppx = ppx;

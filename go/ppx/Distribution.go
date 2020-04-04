@@ -2,20 +2,37 @@
 
 package ppx
 
-type Distribution = byte
+import "strconv"
+
+type Distribution byte
+
 const (
-	DistributionNONE Distribution = 0
-	DistributionNormal Distribution = 1
-	DistributionUniform Distribution = 2
+	DistributionNONE        Distribution = 0
+	DistributionNormal      Distribution = 1
+	DistributionUniform     Distribution = 2
 	DistributionCategorical Distribution = 3
-	DistributionPoisson Distribution = 4
+	DistributionPoisson     Distribution = 4
 )
 
 var EnumNamesDistribution = map[Distribution]string{
-	DistributionNONE:"NONE",
-	DistributionNormal:"Normal",
-	DistributionUniform:"Uniform",
-	DistributionCategorical:"Categorical",
-	DistributionPoisson:"Poisson",
+	DistributionNONE:        "NONE",
+	DistributionNormal:      "Normal",
+	DistributionUniform:     "Uniform",
+	DistributionCategorical: "Categorical",
+	DistributionPoisson:     "Poisson",
 }
 
+var EnumValuesDistribution = map[string]Distribution{
+	"NONE":        DistributionNONE,
+	"Normal":      DistributionNormal,
+	"Uniform":     DistributionUniform,
+	"Categorical": DistributionCategorical,
+	"Poisson":     DistributionPoisson,
+}
+
+func (v Distribution) String() string {
+	if s, ok := EnumNamesDistribution[v]; ok {
+		return s
+	}
+	return "Distribution(" + strconv.FormatInt(int64(v), 10) + ")"
+}

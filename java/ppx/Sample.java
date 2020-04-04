@@ -9,9 +9,10 @@ import com.google.flatbuffers.*;
 
 @SuppressWarnings("unused")
 public final class Sample extends Table {
+  public static void ValidateVersion() { Constants.FLATBUFFERS_1_12_0(); }
   public static Sample getRootAsSample(ByteBuffer _bb) { return getRootAsSample(_bb, new Sample()); }
   public static Sample getRootAsSample(ByteBuffer _bb, Sample obj) { _bb.order(ByteOrder.LITTLE_ENDIAN); return (obj.__assign(_bb.getInt(_bb.position()) + _bb.position(), _bb)); }
-  public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; }
+  public void __init(int _i, ByteBuffer _bb) { __reset(_i, _bb); }
   public Sample __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public String address() { int o = __offset(4); return o != 0 ? __string(o + bb_pos) : null; }
@@ -21,7 +22,7 @@ public final class Sample extends Table {
   public ByteBuffer nameAsByteBuffer() { return __vector_as_bytebuffer(6, 1); }
   public ByteBuffer nameInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 6, 1); }
   public byte distributionType() { int o = __offset(8); return o != 0 ? bb.get(o + bb_pos) : 0; }
-  public Table distribution(Table obj) { int o = __offset(10); return o != 0 ? __union(obj, o) : null; }
+  public Table distribution(Table obj) { int o = __offset(10); return o != 0 ? __union(obj, o + bb_pos) : null; }
   public boolean control() { int o = __offset(12); return o != 0 ? 0!=bb.get(o + bb_pos) : true; }
   public boolean replace() { int o = __offset(14); return o != 0 ? 0!=bb.get(o + bb_pos) : false; }
 
@@ -32,7 +33,7 @@ public final class Sample extends Table {
       int distributionOffset,
       boolean control,
       boolean replace) {
-    builder.startObject(6);
+    builder.startTable(6);
     Sample.addDistribution(builder, distributionOffset);
     Sample.addName(builder, nameOffset);
     Sample.addAddress(builder, addressOffset);
@@ -42,7 +43,7 @@ public final class Sample extends Table {
     return Sample.endSample(builder);
   }
 
-  public static void startSample(FlatBufferBuilder builder) { builder.startObject(6); }
+  public static void startSample(FlatBufferBuilder builder) { builder.startTable(6); }
   public static void addAddress(FlatBufferBuilder builder, int addressOffset) { builder.addOffset(0, addressOffset, 0); }
   public static void addName(FlatBufferBuilder builder, int nameOffset) { builder.addOffset(1, nameOffset, 0); }
   public static void addDistributionType(FlatBufferBuilder builder, byte distributionType) { builder.addByte(2, distributionType, 0); }
@@ -50,8 +51,15 @@ public final class Sample extends Table {
   public static void addControl(FlatBufferBuilder builder, boolean control) { builder.addBoolean(4, control, true); }
   public static void addReplace(FlatBufferBuilder builder, boolean replace) { builder.addBoolean(5, replace, false); }
   public static int endSample(FlatBufferBuilder builder) {
-    int o = builder.endObject();
+    int o = builder.endTable();
     return o;
+  }
+
+  public static final class Vector extends BaseVector {
+    public Vector __assign(int _vector, int _element_size, ByteBuffer _bb) { __reset(_vector, _element_size, _bb); return this; }
+
+    public Sample get(int j) { return get(new Sample(), j); }
+    public Sample get(Sample obj, int j) {  return obj.__assign(__indirect(__element(j), bb), bb); }
   }
 }
 

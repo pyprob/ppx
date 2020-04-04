@@ -1,0 +1,203 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "ppx_MessageBody" : {
+      "type" : "string",
+      "enum": ["NONE", "Handshake", "HandshakeResult", "Run", "RunResult", "Sample", "SampleResult", "Observe", "ObserveResult", "Tag", "TagResult", "Reset"]
+    },
+    "ppx_Distribution" : {
+      "type" : "string",
+      "enum": ["NONE", "Normal", "Uniform", "Categorical", "Poisson"]
+    },
+    "ppx_Message" : {
+      "type" : "object",
+      "properties" : {
+        "body_type" : {
+                "$ref" : "#/definitions/ppx_MessageBody"
+              },
+        "body" : {
+                "anyOf": [{ "$ref" : "#/definitions/ppx_Handshake" },{ "$ref" : "#/definitions/ppx_HandshakeResult" },{ "$ref" : "#/definitions/ppx_Run" },{ "$ref" : "#/definitions/ppx_RunResult" },{ "$ref" : "#/definitions/ppx_Sample" },{ "$ref" : "#/definitions/ppx_SampleResult" },{ "$ref" : "#/definitions/ppx_Observe" },{ "$ref" : "#/definitions/ppx_ObserveResult" },{ "$ref" : "#/definitions/ppx_Tag" },{ "$ref" : "#/definitions/ppx_TagResult" },{ "$ref" : "#/definitions/ppx_Reset" }]
+              }
+      },
+      "additionalProperties" : false
+    },
+    "ppx_Tensor" : {
+      "type" : "object",
+      "properties" : {
+        "data" : {
+                "type" : "array", "items" : { "type" : "number" }
+              },
+        "shape" : {
+                "type" : "array", "items" : { "type" : "number" }
+              }
+      },
+      "additionalProperties" : false
+    },
+    "ppx_Handshake" : {
+      "type" : "object",
+      "properties" : {
+        "system_name" : {
+                "type" : "string"
+              }
+      },
+      "additionalProperties" : false
+    },
+    "ppx_HandshakeResult" : {
+      "type" : "object",
+      "properties" : {
+        "system_name" : {
+                "type" : "string"
+              },
+        "model_name" : {
+                "type" : "string"
+              }
+      },
+      "additionalProperties" : false
+    },
+    "ppx_Run" : {
+      "type" : "object",
+      "properties" : {
+      },
+      "additionalProperties" : false
+    },
+    "ppx_RunResult" : {
+      "type" : "object",
+      "properties" : {
+        "result" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              }
+      },
+      "additionalProperties" : false
+    },
+    "ppx_Sample" : {
+      "type" : "object",
+      "properties" : {
+        "address" : {
+                "type" : "string"
+              },
+        "name" : {
+                "type" : "string"
+              },
+        "distribution_type" : {
+                "$ref" : "#/definitions/ppx_Distribution"
+              },
+        "distribution" : {
+                "anyOf": [{ "$ref" : "#/definitions/ppx_Normal" },{ "$ref" : "#/definitions/ppx_Uniform" },{ "$ref" : "#/definitions/ppx_Categorical" },{ "$ref" : "#/definitions/ppx_Poisson" }]
+              },
+        "control" : {
+                "type" : "boolean"
+              },
+        "replace" : {
+                "type" : "boolean"
+              }
+      },
+      "additionalProperties" : false
+    },
+    "ppx_SampleResult" : {
+      "type" : "object",
+      "properties" : {
+        "result" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              }
+      },
+      "additionalProperties" : false
+    },
+    "ppx_Observe" : {
+      "type" : "object",
+      "properties" : {
+        "address" : {
+                "type" : "string"
+              },
+        "name" : {
+                "type" : "string"
+              },
+        "distribution_type" : {
+                "$ref" : "#/definitions/ppx_Distribution"
+              },
+        "distribution" : {
+                "anyOf": [{ "$ref" : "#/definitions/ppx_Normal" },{ "$ref" : "#/definitions/ppx_Uniform" },{ "$ref" : "#/definitions/ppx_Categorical" },{ "$ref" : "#/definitions/ppx_Poisson" }]
+              },
+        "value" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              }
+      },
+      "additionalProperties" : false
+    },
+    "ppx_ObserveResult" : {
+      "type" : "object",
+      "properties" : {
+      },
+      "additionalProperties" : false
+    },
+    "ppx_Tag" : {
+      "type" : "object",
+      "properties" : {
+        "address" : {
+                "type" : "string"
+              },
+        "name" : {
+                "type" : "string"
+              },
+        "value" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              }
+      },
+      "additionalProperties" : false
+    },
+    "ppx_TagResult" : {
+      "type" : "object",
+      "properties" : {
+      },
+      "additionalProperties" : false
+    },
+    "ppx_Reset" : {
+      "type" : "object",
+      "properties" : {
+      },
+      "additionalProperties" : false
+    },
+    "ppx_Normal" : {
+      "type" : "object",
+      "properties" : {
+        "mean" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              },
+        "stddev" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              }
+      },
+      "additionalProperties" : false
+    },
+    "ppx_Uniform" : {
+      "type" : "object",
+      "properties" : {
+        "low" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              },
+        "high" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              }
+      },
+      "additionalProperties" : false
+    },
+    "ppx_Categorical" : {
+      "type" : "object",
+      "properties" : {
+        "probs" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              }
+      },
+      "additionalProperties" : false
+    },
+    "ppx_Poisson" : {
+      "type" : "object",
+      "properties" : {
+        "rate" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              }
+      },
+      "additionalProperties" : false
+    }
+  },
+  "$ref" : "#/definitions/ppx_Message"
+}

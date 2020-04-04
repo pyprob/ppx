@@ -7,11 +7,11 @@ namespace ppx
 
 public enum Distribution : byte
 {
- NONE = 0,
- Normal = 1,
- Uniform = 2,
- Categorical = 3,
- Poisson = 4,
+  NONE = 0,
+  Normal = 1,
+  Uniform = 2,
+  Categorical = 3,
+  Poisson = 4,
 };
 
 

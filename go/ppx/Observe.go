@@ -42,16 +42,16 @@ func (rcv *Observe) Name() []byte {
 	return nil
 }
 
-func (rcv *Observe) DistributionType() byte {
+func (rcv *Observe) DistributionType() Distribution {
 	o := flatbuffers.UOffsetT(rcv._tab.Offset(8))
 	if o != 0 {
-		return rcv._tab.GetByte(o + rcv._tab.Pos)
+		return Distribution(rcv._tab.GetByte(o + rcv._tab.Pos))
 	}
 	return 0
 }
 
-func (rcv *Observe) MutateDistributionType(n byte) bool {
-	return rcv._tab.MutateByteSlot(8, n)
+func (rcv *Observe) MutateDistributionType(n Distribution) bool {
+	return rcv._tab.MutateByteSlot(8, byte(n))
 }
 
 func (rcv *Observe) Distribution(obj *flatbuffers.Table) bool {
@@ -85,8 +85,8 @@ func ObserveAddAddress(builder *flatbuffers.Builder, address flatbuffers.UOffset
 func ObserveAddName(builder *flatbuffers.Builder, name flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(1, flatbuffers.UOffsetT(name), 0)
 }
-func ObserveAddDistributionType(builder *flatbuffers.Builder, distributionType byte) {
-	builder.PrependByteSlot(2, distributionType, 0)
+func ObserveAddDistributionType(builder *flatbuffers.Builder, distributionType Distribution) {
+	builder.PrependByteSlot(2, byte(distributionType), 0)
 }
 func ObserveAddDistribution(builder *flatbuffers.Builder, distribution flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(3, flatbuffers.UOffsetT(distribution), 0)

@@ -9,30 +9,35 @@ import com.google.flatbuffers.*;
 
 @SuppressWarnings("unused")
 public final class Tensor extends Table {
+  public static void ValidateVersion() { Constants.FLATBUFFERS_1_12_0(); }
   public static Tensor getRootAsTensor(ByteBuffer _bb) { return getRootAsTensor(_bb, new Tensor()); }
   public static Tensor getRootAsTensor(ByteBuffer _bb, Tensor obj) { _bb.order(ByteOrder.LITTLE_ENDIAN); return (obj.__assign(_bb.getInt(_bb.position()) + _bb.position(), _bb)); }
-  public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; }
+  public void __init(int _i, ByteBuffer _bb) { __reset(_i, _bb); }
   public Tensor __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public double data(int j) { int o = __offset(4); return o != 0 ? bb.getDouble(__vector(o) + j * 8) : 0; }
   public int dataLength() { int o = __offset(4); return o != 0 ? __vector_len(o) : 0; }
+  public DoubleVector dataVector() { return dataVector(new DoubleVector()); }
+  public DoubleVector dataVector(DoubleVector obj) { int o = __offset(4); return o != 0 ? obj.__assign(__vector(o), bb) : null; }
   public ByteBuffer dataAsByteBuffer() { return __vector_as_bytebuffer(4, 8); }
   public ByteBuffer dataInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 4, 8); }
   public int shape(int j) { int o = __offset(6); return o != 0 ? bb.getInt(__vector(o) + j * 4) : 0; }
   public int shapeLength() { int o = __offset(6); return o != 0 ? __vector_len(o) : 0; }
+  public IntVector shapeVector() { return shapeVector(new IntVector()); }
+  public IntVector shapeVector(IntVector obj) { int o = __offset(6); return o != 0 ? obj.__assign(__vector(o), bb) : null; }
   public ByteBuffer shapeAsByteBuffer() { return __vector_as_bytebuffer(6, 4); }
   public ByteBuffer shapeInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 6, 4); }
 
   public static int createTensor(FlatBufferBuilder builder,
       int dataOffset,
       int shapeOffset) {
-    builder.startObject(2);
+    builder.startTable(2);
     Tensor.addShape(builder, shapeOffset);
     Tensor.addData(builder, dataOffset);
     return Tensor.endTensor(builder);
   }
 
-  public static void startTensor(FlatBufferBuilder builder) { builder.startObject(2); }
+  public static void startTensor(FlatBufferBuilder builder) { builder.startTable(2); }
   public static void addData(FlatBufferBuilder builder, int dataOffset) { builder.addOffset(0, dataOffset, 0); }
   public static int createDataVector(FlatBufferBuilder builder, double[] data) { builder.startVector(8, data.length, 8); for (int i = data.length - 1; i >= 0; i--) builder.addDouble(data[i]); return builder.endVector(); }
   public static void startDataVector(FlatBufferBuilder builder, int numElems) { builder.startVector(8, numElems, 8); }
@@ -40,8 +45,15 @@ public final class Tensor extends Table {
   public static int createShapeVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addInt(data[i]); return builder.endVector(); }
   public static void startShapeVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
   public static int endTensor(FlatBufferBuilder builder) {
-    int o = builder.endObject();
+    int o = builder.endTable();
     return o;
+  }
+
+  public static final class Vector extends BaseVector {
+    public Vector __assign(int _vector, int _element_size, ByteBuffer _bb) { __reset(_vector, _element_size, _bb); return this; }
+
+    public Tensor get(int j) { return get(new Tensor(), j); }
+    public Tensor get(Tensor obj, int j) {  return obj.__assign(__indirect(__element(j), bb), bb); }
   }
 }
 
