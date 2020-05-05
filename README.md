@@ -57,6 +57,8 @@ docker run --user $UID:$GID --rm -it -v $PWD:/home ppx sh compile.sh
 * [Atılım Güneş Baydin](http://www.robots.ox.ac.uk/~gunes/)
 * [Tuan Anh Le](http://www.tuananhle.co.uk/)
 * [Lukas Heinrich](http://www.lukasheinrich.com/)
+* [Bradley Gram-Hansen](https://bayesianbrad.github.io/)
+* [Christian Schroeder de Witt](https://whirl.cs.ox.ac.uk/member/christian-schroeder-de-witt/)
 * [Wahid Bhimji](http://www.nersc.gov/about/nersc-staff/data-analytics-services/wahid-bhimji/)
 * [Kyle Cranmer](http://theoryandpractice.org/)
 * [Frank Wood](http://www.cs.ubc.ca/~fwood/index.html)
