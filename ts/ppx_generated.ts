@@ -34,7 +34,9 @@ export enum Distribution{
   Beta= 6,
   Exponential= 7,
   Gamma= 8,
-  LogNormal= 9
+  LogNormal= 9,
+  Binomial= 10,
+  Weibull= 11
 }};
 
 /**
@@ -2131,6 +2133,198 @@ static createLogNormal(builder:flatbuffers.Builder, locOffset:flatbuffers.Offset
   LogNormal.addLoc(builder, locOffset);
   LogNormal.addScale(builder, scaleOffset);
   return LogNormal.endLogNormal(builder);
+}
+}
+}
+/**
+ * @constructor
+ */
+export namespace ppx{
+export class Binomial {
+  bb: flatbuffers.ByteBuffer|null = null;
+
+  bb_pos:number = 0;
+/**
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns Binomial
+ */
+__init(i:number, bb:flatbuffers.ByteBuffer):Binomial {
+  this.bb_pos = i;
+  this.bb = bb;
+  return this;
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Binomial= obj
+ * @returns Binomial
+ */
+static getRootAsBinomial(bb:flatbuffers.ByteBuffer, obj?:Binomial):Binomial {
+  return (obj || new Binomial()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Binomial= obj
+ * @returns Binomial
+ */
+static getSizePrefixedRootAsBinomial(bb:flatbuffers.ByteBuffer, obj?:Binomial):Binomial {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new Binomial()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
+ */
+totalCount(obj?:ppx.Tensor):ppx.Tensor|null {
+  var offset = this.bb!.__offset(this.bb_pos, 4);
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+};
+
+/**
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
+ */
+probs(obj?:ppx.Tensor):ppx.Tensor|null {
+  var offset = this.bb!.__offset(this.bb_pos, 6);
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ */
+static startBinomial(builder:flatbuffers.Builder) {
+  builder.startObject(2);
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset totalCountOffset
+ */
+static addTotalCount(builder:flatbuffers.Builder, totalCountOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(0, totalCountOffset, 0);
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset probsOffset
+ */
+static addProbs(builder:flatbuffers.Builder, probsOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(1, probsOffset, 0);
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
+ */
+static endBinomial(builder:flatbuffers.Builder):flatbuffers.Offset {
+  var offset = builder.endObject();
+  return offset;
+};
+
+static createBinomial(builder:flatbuffers.Builder, totalCountOffset:flatbuffers.Offset, probsOffset:flatbuffers.Offset):flatbuffers.Offset {
+  Binomial.startBinomial(builder);
+  Binomial.addTotalCount(builder, totalCountOffset);
+  Binomial.addProbs(builder, probsOffset);
+  return Binomial.endBinomial(builder);
+}
+}
+}
+/**
+ * @constructor
+ */
+export namespace ppx{
+export class Weibull {
+  bb: flatbuffers.ByteBuffer|null = null;
+
+  bb_pos:number = 0;
+/**
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns Weibull
+ */
+__init(i:number, bb:flatbuffers.ByteBuffer):Weibull {
+  this.bb_pos = i;
+  this.bb = bb;
+  return this;
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Weibull= obj
+ * @returns Weibull
+ */
+static getRootAsWeibull(bb:flatbuffers.ByteBuffer, obj?:Weibull):Weibull {
+  return (obj || new Weibull()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Weibull= obj
+ * @returns Weibull
+ */
+static getSizePrefixedRootAsWeibull(bb:flatbuffers.ByteBuffer, obj?:Weibull):Weibull {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new Weibull()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
+ */
+scale(obj?:ppx.Tensor):ppx.Tensor|null {
+  var offset = this.bb!.__offset(this.bb_pos, 4);
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+};
+
+/**
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
+ */
+concentration(obj?:ppx.Tensor):ppx.Tensor|null {
+  var offset = this.bb!.__offset(this.bb_pos, 6);
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ */
+static startWeibull(builder:flatbuffers.Builder) {
+  builder.startObject(2);
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset scaleOffset
+ */
+static addScale(builder:flatbuffers.Builder, scaleOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(0, scaleOffset, 0);
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset concentrationOffset
+ */
+static addConcentration(builder:flatbuffers.Builder, concentrationOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(1, concentrationOffset, 0);
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
+ */
+static endWeibull(builder:flatbuffers.Builder):flatbuffers.Offset {
+  var offset = builder.endObject();
+  return offset;
+};
+
+static createWeibull(builder:flatbuffers.Builder, scaleOffset:flatbuffers.Offset, concentrationOffset:flatbuffers.Offset):flatbuffers.Offset {
+  Weibull.startWeibull(builder);
+  Weibull.addScale(builder, scaleOffset);
+  Weibull.addConcentration(builder, concentrationOffset);
+  return Weibull.endWeibull(builder);
 }
 }
 }

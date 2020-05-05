@@ -28,6 +28,8 @@ enum Distribution:
     Distribution_Exponential = 7
     Distribution_Gamma = 8
     Distribution_LogNormal = 9
+    Distribution_Binomial = 10
+    Distribution_Weibull = 11
 
 class Message
 
@@ -72,6 +74,10 @@ class Exponential
 class Gamma
 
 class LogNormal
+
+class Binomial
+
+class Weibull
 
 class Message : flatbuffers_handle
     def body_type():
@@ -249,6 +255,10 @@ class Sample : flatbuffers_handle
         return ppx_Gamma { buf_, buf_.flatbuffers_field_table(pos_, 10) }
     def distribution_as_LogNormal():
         return ppx_LogNormal { buf_, buf_.flatbuffers_field_table(pos_, 10) }
+    def distribution_as_Binomial():
+        return ppx_Binomial { buf_, buf_.flatbuffers_field_table(pos_, 10) }
+    def distribution_as_Weibull():
+        return ppx_Weibull { buf_, buf_.flatbuffers_field_table(pos_, 10) }
     def control():
         return buf_.flatbuffers_field_int8(pos_, 12, 1)
     def replace():
@@ -325,6 +335,10 @@ class Observe : flatbuffers_handle
         return ppx_Gamma { buf_, buf_.flatbuffers_field_table(pos_, 10) }
     def distribution_as_LogNormal():
         return ppx_LogNormal { buf_, buf_.flatbuffers_field_table(pos_, 10) }
+    def distribution_as_Binomial():
+        return ppx_Binomial { buf_, buf_.flatbuffers_field_table(pos_, 10) }
+    def distribution_as_Weibull():
+        return ppx_Weibull { buf_, buf_.flatbuffers_field_table(pos_, 10) }
     def value():
         let o = buf_.flatbuffers_field_table(pos_, 12)
         return if o: ppx_Tensor { buf_, o } else: nil
@@ -606,6 +620,54 @@ struct LogNormalBuilder:
         return this
     def add_scale(scale:flatbuffers_offset):
         b_.PrependUOffsetTRelativeSlot(1, scale)
+        return this
+    def end():
+        return b_.EndObject()
+
+class Binomial : flatbuffers_handle
+    def total_count():
+        let o = buf_.flatbuffers_field_table(pos_, 4)
+        return if o: ppx_Tensor { buf_, o } else: nil
+    def probs():
+        let o = buf_.flatbuffers_field_table(pos_, 6)
+        return if o: ppx_Tensor { buf_, o } else: nil
+
+def GetRootAsBinomial(buf:string): return Binomial { buf, buf.flatbuffers_indirect(0) }
+
+struct BinomialBuilder:
+    b_:flatbuffers_builder
+    def start():
+        b_.StartObject(2)
+        return this
+    def add_total_count(total_count:flatbuffers_offset):
+        b_.PrependUOffsetTRelativeSlot(0, total_count)
+        return this
+    def add_probs(probs:flatbuffers_offset):
+        b_.PrependUOffsetTRelativeSlot(1, probs)
+        return this
+    def end():
+        return b_.EndObject()
+
+class Weibull : flatbuffers_handle
+    def scale():
+        let o = buf_.flatbuffers_field_table(pos_, 4)
+        return if o: ppx_Tensor { buf_, o } else: nil
+    def concentration():
+        let o = buf_.flatbuffers_field_table(pos_, 6)
+        return if o: ppx_Tensor { buf_, o } else: nil
+
+def GetRootAsWeibull(buf:string): return Weibull { buf, buf.flatbuffers_indirect(0) }
+
+struct WeibullBuilder:
+    b_:flatbuffers_builder
+    def start():
+        b_.StartObject(2)
+        return this
+    def add_scale(scale:flatbuffers_offset):
+        b_.PrependUOffsetTRelativeSlot(0, scale)
+        return this
+    def add_concentration(concentration:flatbuffers_offset):
+        b_.PrependUOffsetTRelativeSlot(1, concentration)
         return this
     def end():
         return b_.EndObject()

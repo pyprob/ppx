@@ -74,6 +74,12 @@ struct GammaBuilder;
 struct LogNormal;
 struct LogNormalBuilder;
 
+struct Binomial;
+struct BinomialBuilder;
+
+struct Weibull;
+struct WeibullBuilder;
+
 enum MessageBody {
   MessageBody_NONE = 0,
   MessageBody_Handshake = 1,
@@ -196,11 +202,13 @@ enum Distribution {
   Distribution_Exponential = 7,
   Distribution_Gamma = 8,
   Distribution_LogNormal = 9,
+  Distribution_Binomial = 10,
+  Distribution_Weibull = 11,
   Distribution_MIN = Distribution_NONE,
-  Distribution_MAX = Distribution_LogNormal
+  Distribution_MAX = Distribution_Weibull
 };
 
-inline const Distribution (&EnumValuesDistribution())[10] {
+inline const Distribution (&EnumValuesDistribution())[12] {
   static const Distribution values[] = {
     Distribution_NONE,
     Distribution_Normal,
@@ -211,13 +219,15 @@ inline const Distribution (&EnumValuesDistribution())[10] {
     Distribution_Beta,
     Distribution_Exponential,
     Distribution_Gamma,
-    Distribution_LogNormal
+    Distribution_LogNormal,
+    Distribution_Binomial,
+    Distribution_Weibull
   };
   return values;
 }
 
 inline const char * const *EnumNamesDistribution() {
-  static const char * const names[11] = {
+  static const char * const names[13] = {
     "NONE",
     "Normal",
     "Uniform",
@@ -228,13 +238,15 @@ inline const char * const *EnumNamesDistribution() {
     "Exponential",
     "Gamma",
     "LogNormal",
+    "Binomial",
+    "Weibull",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameDistribution(Distribution e) {
-  if (flatbuffers::IsOutRange(e, Distribution_NONE, Distribution_LogNormal)) return "";
+  if (flatbuffers::IsOutRange(e, Distribution_NONE, Distribution_Weibull)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesDistribution()[index];
 }
@@ -277,6 +289,14 @@ template<> struct DistributionTraits<ppx::Gamma> {
 
 template<> struct DistributionTraits<ppx::LogNormal> {
   static const Distribution enum_value = Distribution_LogNormal;
+};
+
+template<> struct DistributionTraits<ppx::Binomial> {
+  static const Distribution enum_value = Distribution_Binomial;
+};
+
+template<> struct DistributionTraits<ppx::Weibull> {
+  static const Distribution enum_value = Distribution_Weibull;
 };
 
 bool VerifyDistribution(flatbuffers::Verifier &verifier, const void *obj, Distribution type);
@@ -720,6 +740,12 @@ struct Sample FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const ppx::LogNormal *distribution_as_LogNormal() const {
     return distribution_type() == ppx::Distribution_LogNormal ? static_cast<const ppx::LogNormal *>(distribution()) : nullptr;
   }
+  const ppx::Binomial *distribution_as_Binomial() const {
+    return distribution_type() == ppx::Distribution_Binomial ? static_cast<const ppx::Binomial *>(distribution()) : nullptr;
+  }
+  const ppx::Weibull *distribution_as_Weibull() const {
+    return distribution_type() == ppx::Distribution_Weibull ? static_cast<const ppx::Weibull *>(distribution()) : nullptr;
+  }
   bool control() const {
     return GetField<uint8_t>(VT_CONTROL, 1) != 0;
   }
@@ -775,6 +801,14 @@ template<> inline const ppx::Gamma *Sample::distribution_as<ppx::Gamma>() const 
 
 template<> inline const ppx::LogNormal *Sample::distribution_as<ppx::LogNormal>() const {
   return distribution_as_LogNormal();
+}
+
+template<> inline const ppx::Binomial *Sample::distribution_as<ppx::Binomial>() const {
+  return distribution_as_Binomial();
+}
+
+template<> inline const ppx::Weibull *Sample::distribution_as<ppx::Weibull>() const {
+  return distribution_as_Weibull();
 }
 
 struct SampleBuilder {
@@ -941,6 +975,12 @@ struct Observe FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const ppx::LogNormal *distribution_as_LogNormal() const {
     return distribution_type() == ppx::Distribution_LogNormal ? static_cast<const ppx::LogNormal *>(distribution()) : nullptr;
   }
+  const ppx::Binomial *distribution_as_Binomial() const {
+    return distribution_type() == ppx::Distribution_Binomial ? static_cast<const ppx::Binomial *>(distribution()) : nullptr;
+  }
+  const ppx::Weibull *distribution_as_Weibull() const {
+    return distribution_type() == ppx::Distribution_Weibull ? static_cast<const ppx::Weibull *>(distribution()) : nullptr;
+  }
   const ppx::Tensor *value() const {
     return GetPointer<const ppx::Tensor *>(VT_VALUE);
   }
@@ -993,6 +1033,14 @@ template<> inline const ppx::Gamma *Observe::distribution_as<ppx::Gamma>() const
 
 template<> inline const ppx::LogNormal *Observe::distribution_as<ppx::LogNormal>() const {
   return distribution_as_LogNormal();
+}
+
+template<> inline const ppx::Binomial *Observe::distribution_as<ppx::Binomial>() const {
+  return distribution_as_Binomial();
+}
+
+template<> inline const ppx::Weibull *Observe::distribution_as<ppx::Weibull>() const {
+  return distribution_as_Weibull();
 }
 
 struct ObserveBuilder {
@@ -1671,6 +1719,114 @@ inline flatbuffers::Offset<LogNormal> CreateLogNormal(
   return builder_.Finish();
 }
 
+struct Binomial FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef BinomialBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_TOTAL_COUNT = 4,
+    VT_PROBS = 6
+  };
+  const ppx::Tensor *total_count() const {
+    return GetPointer<const ppx::Tensor *>(VT_TOTAL_COUNT);
+  }
+  const ppx::Tensor *probs() const {
+    return GetPointer<const ppx::Tensor *>(VT_PROBS);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_TOTAL_COUNT) &&
+           verifier.VerifyTable(total_count()) &&
+           VerifyOffset(verifier, VT_PROBS) &&
+           verifier.VerifyTable(probs()) &&
+           verifier.EndTable();
+  }
+};
+
+struct BinomialBuilder {
+  typedef Binomial Table;
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_total_count(flatbuffers::Offset<ppx::Tensor> total_count) {
+    fbb_.AddOffset(Binomial::VT_TOTAL_COUNT, total_count);
+  }
+  void add_probs(flatbuffers::Offset<ppx::Tensor> probs) {
+    fbb_.AddOffset(Binomial::VT_PROBS, probs);
+  }
+  explicit BinomialBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  BinomialBuilder &operator=(const BinomialBuilder &);
+  flatbuffers::Offset<Binomial> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<Binomial>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<Binomial> CreateBinomial(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    flatbuffers::Offset<ppx::Tensor> total_count = 0,
+    flatbuffers::Offset<ppx::Tensor> probs = 0) {
+  BinomialBuilder builder_(_fbb);
+  builder_.add_probs(probs);
+  builder_.add_total_count(total_count);
+  return builder_.Finish();
+}
+
+struct Weibull FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef WeibullBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_SCALE = 4,
+    VT_CONCENTRATION = 6
+  };
+  const ppx::Tensor *scale() const {
+    return GetPointer<const ppx::Tensor *>(VT_SCALE);
+  }
+  const ppx::Tensor *concentration() const {
+    return GetPointer<const ppx::Tensor *>(VT_CONCENTRATION);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_SCALE) &&
+           verifier.VerifyTable(scale()) &&
+           VerifyOffset(verifier, VT_CONCENTRATION) &&
+           verifier.VerifyTable(concentration()) &&
+           verifier.EndTable();
+  }
+};
+
+struct WeibullBuilder {
+  typedef Weibull Table;
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_scale(flatbuffers::Offset<ppx::Tensor> scale) {
+    fbb_.AddOffset(Weibull::VT_SCALE, scale);
+  }
+  void add_concentration(flatbuffers::Offset<ppx::Tensor> concentration) {
+    fbb_.AddOffset(Weibull::VT_CONCENTRATION, concentration);
+  }
+  explicit WeibullBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  WeibullBuilder &operator=(const WeibullBuilder &);
+  flatbuffers::Offset<Weibull> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<Weibull>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<Weibull> CreateWeibull(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    flatbuffers::Offset<ppx::Tensor> scale = 0,
+    flatbuffers::Offset<ppx::Tensor> concentration = 0) {
+  WeibullBuilder builder_(_fbb);
+  builder_.add_concentration(concentration);
+  builder_.add_scale(scale);
+  return builder_.Finish();
+}
+
 inline bool VerifyMessageBody(flatbuffers::Verifier &verifier, const void *obj, MessageBody type) {
   switch (type) {
     case MessageBody_NONE: {
@@ -1775,6 +1931,14 @@ inline bool VerifyDistribution(flatbuffers::Verifier &verifier, const void *obj,
     }
     case Distribution_LogNormal: {
       auto ptr = reinterpret_cast<const ppx::LogNormal *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case Distribution_Binomial: {
+      auto ptr = reinterpret_cast<const ppx::Binomial *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case Distribution_Weibull: {
+      auto ptr = reinterpret_cast<const ppx::Weibull *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

@@ -55,7 +55,9 @@ ppx.Distribution = {
   Beta: 6,
   Exponential: 7,
   Gamma: 8,
-  LogNormal: 9
+  LogNormal: 9,
+  Binomial: 10,
+  Weibull: 11
 };
 
 /**
@@ -71,7 +73,9 @@ ppx.DistributionName = {
   '6': 'Beta',
   '7': 'Exponential',
   '8': 'Gamma',
-  '9': 'LogNormal'
+  '9': 'LogNormal',
+  '10': 'Binomial',
+  '11': 'Weibull'
 };
 
 /**
@@ -2408,6 +2412,222 @@ ppx.LogNormal.createLogNormal = function(builder, locOffset, scaleOffset) {
   ppx.LogNormal.addLoc(builder, locOffset);
   ppx.LogNormal.addScale(builder, scaleOffset);
   return ppx.LogNormal.endLogNormal(builder);
+}
+
+/**
+ * @constructor
+ */
+ppx.Binomial = function() {
+  /**
+   * @type {flatbuffers.ByteBuffer}
+   */
+  this.bb = null;
+
+  /**
+   * @type {number}
+   */
+  this.bb_pos = 0;
+};
+
+/**
+ * @param {number} i
+ * @param {flatbuffers.ByteBuffer} bb
+ * @returns {ppx.Binomial}
+ */
+ppx.Binomial.prototype.__init = function(i, bb) {
+  this.bb_pos = i;
+  this.bb = bb;
+  return this;
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Binomial=} obj
+ * @returns {ppx.Binomial}
+ */
+ppx.Binomial.getRootAsBinomial = function(bb, obj) {
+  return (obj || new ppx.Binomial).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Binomial=} obj
+ * @returns {ppx.Binomial}
+ */
+ppx.Binomial.getSizePrefixedRootAsBinomial = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new ppx.Binomial).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
+ */
+ppx.Binomial.prototype.totalCount = function(obj) {
+  var offset = this.bb.__offset(this.bb_pos, 4);
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+};
+
+/**
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
+ */
+ppx.Binomial.prototype.probs = function(obj) {
+  var offset = this.bb.__offset(this.bb_pos, 6);
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ */
+ppx.Binomial.startBinomial = function(builder) {
+  builder.startObject(2);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} totalCountOffset
+ */
+ppx.Binomial.addTotalCount = function(builder, totalCountOffset) {
+  builder.addFieldOffset(0, totalCountOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} probsOffset
+ */
+ppx.Binomial.addProbs = function(builder, probsOffset) {
+  builder.addFieldOffset(1, probsOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Binomial.endBinomial = function(builder) {
+  var offset = builder.endObject();
+  return offset;
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} totalCountOffset
+ * @param {flatbuffers.Offset} probsOffset
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Binomial.createBinomial = function(builder, totalCountOffset, probsOffset) {
+  ppx.Binomial.startBinomial(builder);
+  ppx.Binomial.addTotalCount(builder, totalCountOffset);
+  ppx.Binomial.addProbs(builder, probsOffset);
+  return ppx.Binomial.endBinomial(builder);
+}
+
+/**
+ * @constructor
+ */
+ppx.Weibull = function() {
+  /**
+   * @type {flatbuffers.ByteBuffer}
+   */
+  this.bb = null;
+
+  /**
+   * @type {number}
+   */
+  this.bb_pos = 0;
+};
+
+/**
+ * @param {number} i
+ * @param {flatbuffers.ByteBuffer} bb
+ * @returns {ppx.Weibull}
+ */
+ppx.Weibull.prototype.__init = function(i, bb) {
+  this.bb_pos = i;
+  this.bb = bb;
+  return this;
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Weibull=} obj
+ * @returns {ppx.Weibull}
+ */
+ppx.Weibull.getRootAsWeibull = function(bb, obj) {
+  return (obj || new ppx.Weibull).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Weibull=} obj
+ * @returns {ppx.Weibull}
+ */
+ppx.Weibull.getSizePrefixedRootAsWeibull = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new ppx.Weibull).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
+ */
+ppx.Weibull.prototype.scale = function(obj) {
+  var offset = this.bb.__offset(this.bb_pos, 4);
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+};
+
+/**
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
+ */
+ppx.Weibull.prototype.concentration = function(obj) {
+  var offset = this.bb.__offset(this.bb_pos, 6);
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ */
+ppx.Weibull.startWeibull = function(builder) {
+  builder.startObject(2);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} scaleOffset
+ */
+ppx.Weibull.addScale = function(builder, scaleOffset) {
+  builder.addFieldOffset(0, scaleOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} concentrationOffset
+ */
+ppx.Weibull.addConcentration = function(builder, concentrationOffset) {
+  builder.addFieldOffset(1, concentrationOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Weibull.endWeibull = function(builder) {
+  var offset = builder.endObject();
+  return offset;
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} scaleOffset
+ * @param {flatbuffers.Offset} concentrationOffset
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Weibull.createWeibull = function(builder, scaleOffset, concentrationOffset) {
+  ppx.Weibull.startWeibull(builder);
+  ppx.Weibull.addScale(builder, scaleOffset);
+  ppx.Weibull.addConcentration(builder, concentrationOffset);
+  return ppx.Weibull.endWeibull(builder);
 }
 
 // Exports for Node.js and RequireJS

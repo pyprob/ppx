@@ -69,7 +69,7 @@ class DistributionTypeId {
   }
 
   static const int minValue = 0;
-  static const int maxValue = 9;
+  static const int maxValue = 11;
   static bool containsValue(int value) => values.containsKey(value);
 
   static const DistributionTypeId NONE = const DistributionTypeId._(0);
@@ -82,7 +82,9 @@ class DistributionTypeId {
   static const DistributionTypeId Exponential = const DistributionTypeId._(7);
   static const DistributionTypeId Gamma = const DistributionTypeId._(8);
   static const DistributionTypeId LogNormal = const DistributionTypeId._(9);
-  static get values => {0: NONE,1: Normal,2: Uniform,3: Categorical,4: Poisson,5: Bernoulli,6: Beta,7: Exponential,8: Gamma,9: LogNormal,};
+  static const DistributionTypeId Binomial = const DistributionTypeId._(10);
+  static const DistributionTypeId Weibull = const DistributionTypeId._(11);
+  static get values => {0: NONE,1: Normal,2: Uniform,3: Categorical,4: Poisson,5: Bernoulli,6: Beta,7: Exponential,8: Gamma,9: LogNormal,10: Binomial,11: Weibull,};
 
   static const fb.Reader<DistributionTypeId> reader = const _DistributionTypeIdReader();
 
@@ -625,6 +627,8 @@ class Sample {
       case 7: return Exponential.reader.vTableGet(_bc, _bcOffset, 10, null);
       case 8: return Gamma.reader.vTableGet(_bc, _bcOffset, 10, null);
       case 9: return LogNormal.reader.vTableGet(_bc, _bcOffset, 10, null);
+      case 10: return Binomial.reader.vTableGet(_bc, _bcOffset, 10, null);
+      case 11: return Weibull.reader.vTableGet(_bc, _bcOffset, 10, null);
       default: return null;
     }
   }
@@ -847,6 +851,8 @@ class Observe {
       case 7: return Exponential.reader.vTableGet(_bc, _bcOffset, 10, null);
       case 8: return Gamma.reader.vTableGet(_bc, _bcOffset, 10, null);
       case 9: return LogNormal.reader.vTableGet(_bc, _bcOffset, 10, null);
+      case 10: return Binomial.reader.vTableGet(_bc, _bcOffset, 10, null);
+      case 11: return Weibull.reader.vTableGet(_bc, _bcOffset, 10, null);
       default: return null;
     }
   }
@@ -1967,6 +1973,188 @@ class LogNormalObjectBuilder extends fb.ObjectBuilder {
     }
     if (scaleOffset != null) {
       fbBuilder.addOffset(1, scaleOffset);
+    }
+    return fbBuilder.endTable();
+  }
+
+  /// Convenience method to serialize to byte list.
+  @override
+  Uint8List toBytes([String fileIdentifier]) {
+    fb.Builder fbBuilder = new fb.Builder();
+    int offset = finish(fbBuilder);
+    return fbBuilder.finish(offset, fileIdentifier);
+  }
+}
+class Binomial {
+  Binomial._(this._bc, this._bcOffset);
+  factory Binomial(List<int> bytes) {
+    fb.BufferContext rootRef = new fb.BufferContext.fromBytes(bytes);
+    return reader.read(rootRef, 0);
+  }
+
+  static const fb.Reader<Binomial> reader = const _BinomialReader();
+
+  final fb.BufferContext _bc;
+  final int _bcOffset;
+
+  Tensor get totalCount => Tensor.reader.vTableGet(_bc, _bcOffset, 4, null);
+  Tensor get probs => Tensor.reader.vTableGet(_bc, _bcOffset, 6, null);
+
+  @override
+  String toString() {
+    return 'Binomial{totalCount: $totalCount, probs: $probs}';
+  }
+}
+
+class _BinomialReader extends fb.TableReader<Binomial> {
+  const _BinomialReader();
+
+  @override
+  Binomial createObject(fb.BufferContext bc, int offset) => 
+    new Binomial._(bc, offset);
+}
+
+class BinomialBuilder {
+  BinomialBuilder(this.fbBuilder) {
+    assert(fbBuilder != null);
+  }
+
+  final fb.Builder fbBuilder;
+
+  void begin() {
+    fbBuilder.startTable();
+  }
+
+  int addTotalCountOffset(int offset) {
+    fbBuilder.addOffset(0, offset);
+    return fbBuilder.offset;
+  }
+  int addProbsOffset(int offset) {
+    fbBuilder.addOffset(1, offset);
+    return fbBuilder.offset;
+  }
+
+  int finish() {
+    return fbBuilder.endTable();
+  }
+}
+
+class BinomialObjectBuilder extends fb.ObjectBuilder {
+  final TensorObjectBuilder _totalCount;
+  final TensorObjectBuilder _probs;
+
+  BinomialObjectBuilder({
+    TensorObjectBuilder totalCount,
+    TensorObjectBuilder probs,
+  })
+      : _totalCount = totalCount,
+        _probs = probs;
+
+  /// Finish building, and store into the [fbBuilder].
+  @override
+  int finish(
+    fb.Builder fbBuilder) {
+    assert(fbBuilder != null);
+    final int totalCountOffset = _totalCount?.getOrCreateOffset(fbBuilder);
+    final int probsOffset = _probs?.getOrCreateOffset(fbBuilder);
+
+    fbBuilder.startTable();
+    if (totalCountOffset != null) {
+      fbBuilder.addOffset(0, totalCountOffset);
+    }
+    if (probsOffset != null) {
+      fbBuilder.addOffset(1, probsOffset);
+    }
+    return fbBuilder.endTable();
+  }
+
+  /// Convenience method to serialize to byte list.
+  @override
+  Uint8List toBytes([String fileIdentifier]) {
+    fb.Builder fbBuilder = new fb.Builder();
+    int offset = finish(fbBuilder);
+    return fbBuilder.finish(offset, fileIdentifier);
+  }
+}
+class Weibull {
+  Weibull._(this._bc, this._bcOffset);
+  factory Weibull(List<int> bytes) {
+    fb.BufferContext rootRef = new fb.BufferContext.fromBytes(bytes);
+    return reader.read(rootRef, 0);
+  }
+
+  static const fb.Reader<Weibull> reader = const _WeibullReader();
+
+  final fb.BufferContext _bc;
+  final int _bcOffset;
+
+  Tensor get scale => Tensor.reader.vTableGet(_bc, _bcOffset, 4, null);
+  Tensor get concentration => Tensor.reader.vTableGet(_bc, _bcOffset, 6, null);
+
+  @override
+  String toString() {
+    return 'Weibull{scale: $scale, concentration: $concentration}';
+  }
+}
+
+class _WeibullReader extends fb.TableReader<Weibull> {
+  const _WeibullReader();
+
+  @override
+  Weibull createObject(fb.BufferContext bc, int offset) => 
+    new Weibull._(bc, offset);
+}
+
+class WeibullBuilder {
+  WeibullBuilder(this.fbBuilder) {
+    assert(fbBuilder != null);
+  }
+
+  final fb.Builder fbBuilder;
+
+  void begin() {
+    fbBuilder.startTable();
+  }
+
+  int addScaleOffset(int offset) {
+    fbBuilder.addOffset(0, offset);
+    return fbBuilder.offset;
+  }
+  int addConcentrationOffset(int offset) {
+    fbBuilder.addOffset(1, offset);
+    return fbBuilder.offset;
+  }
+
+  int finish() {
+    return fbBuilder.endTable();
+  }
+}
+
+class WeibullObjectBuilder extends fb.ObjectBuilder {
+  final TensorObjectBuilder _scale;
+  final TensorObjectBuilder _concentration;
+
+  WeibullObjectBuilder({
+    TensorObjectBuilder scale,
+    TensorObjectBuilder concentration,
+  })
+      : _scale = scale,
+        _concentration = concentration;
+
+  /// Finish building, and store into the [fbBuilder].
+  @override
+  int finish(
+    fb.Builder fbBuilder) {
+    assert(fbBuilder != null);
+    final int scaleOffset = _scale?.getOrCreateOffset(fbBuilder);
+    final int concentrationOffset = _concentration?.getOrCreateOffset(fbBuilder);
+
+    fbBuilder.startTable();
+    if (scaleOffset != null) {
+      fbBuilder.addOffset(0, scaleOffset);
+    }
+    if (concentrationOffset != null) {
+      fbBuilder.addOffset(1, concentrationOffset);
     }
     return fbBuilder.endTable();
   }

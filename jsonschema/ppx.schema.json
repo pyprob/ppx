@@ -7,7 +7,7 @@
     },
     "ppx_Distribution" : {
       "type" : "string",
-      "enum": ["NONE", "Normal", "Uniform", "Categorical", "Poisson", "Bernoulli", "Beta", "Exponential", "Gamma", "LogNormal"]
+      "enum": ["NONE", "Normal", "Uniform", "Categorical", "Poisson", "Bernoulli", "Beta", "Exponential", "Gamma", "LogNormal", "Binomial", "Weibull"]
     },
     "ppx_Message" : {
       "type" : "object",
@@ -82,7 +82,7 @@
                 "$ref" : "#/definitions/ppx_Distribution"
               },
         "distribution" : {
-                "anyOf": [{ "$ref" : "#/definitions/ppx_Normal" },{ "$ref" : "#/definitions/ppx_Uniform" },{ "$ref" : "#/definitions/ppx_Categorical" },{ "$ref" : "#/definitions/ppx_Poisson" },{ "$ref" : "#/definitions/ppx_Bernoulli" },{ "$ref" : "#/definitions/ppx_Beta" },{ "$ref" : "#/definitions/ppx_Exponential" },{ "$ref" : "#/definitions/ppx_Gamma" },{ "$ref" : "#/definitions/ppx_LogNormal" }]
+                "anyOf": [{ "$ref" : "#/definitions/ppx_Normal" },{ "$ref" : "#/definitions/ppx_Uniform" },{ "$ref" : "#/definitions/ppx_Categorical" },{ "$ref" : "#/definitions/ppx_Poisson" },{ "$ref" : "#/definitions/ppx_Bernoulli" },{ "$ref" : "#/definitions/ppx_Beta" },{ "$ref" : "#/definitions/ppx_Exponential" },{ "$ref" : "#/definitions/ppx_Gamma" },{ "$ref" : "#/definitions/ppx_LogNormal" },{ "$ref" : "#/definitions/ppx_Binomial" },{ "$ref" : "#/definitions/ppx_Weibull" }]
               },
         "control" : {
                 "type" : "boolean"
@@ -115,7 +115,7 @@
                 "$ref" : "#/definitions/ppx_Distribution"
               },
         "distribution" : {
-                "anyOf": [{ "$ref" : "#/definitions/ppx_Normal" },{ "$ref" : "#/definitions/ppx_Uniform" },{ "$ref" : "#/definitions/ppx_Categorical" },{ "$ref" : "#/definitions/ppx_Poisson" },{ "$ref" : "#/definitions/ppx_Bernoulli" },{ "$ref" : "#/definitions/ppx_Beta" },{ "$ref" : "#/definitions/ppx_Exponential" },{ "$ref" : "#/definitions/ppx_Gamma" },{ "$ref" : "#/definitions/ppx_LogNormal" }]
+                "anyOf": [{ "$ref" : "#/definitions/ppx_Normal" },{ "$ref" : "#/definitions/ppx_Uniform" },{ "$ref" : "#/definitions/ppx_Categorical" },{ "$ref" : "#/definitions/ppx_Poisson" },{ "$ref" : "#/definitions/ppx_Bernoulli" },{ "$ref" : "#/definitions/ppx_Beta" },{ "$ref" : "#/definitions/ppx_Exponential" },{ "$ref" : "#/definitions/ppx_Gamma" },{ "$ref" : "#/definitions/ppx_LogNormal" },{ "$ref" : "#/definitions/ppx_Binomial" },{ "$ref" : "#/definitions/ppx_Weibull" }]
               },
         "value" : {
                 "$ref" : "#/definitions/ppx_Tensor"
@@ -247,6 +247,30 @@
                 "$ref" : "#/definitions/ppx_Tensor"
               },
         "scale" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              }
+      },
+      "additionalProperties" : false
+    },
+    "ppx_Binomial" : {
+      "type" : "object",
+      "properties" : {
+        "total_count" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              },
+        "probs" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              }
+      },
+      "additionalProperties" : false
+    },
+    "ppx_Weibull" : {
+      "type" : "object",
+      "properties" : {
+        "scale" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              },
+        "concentration" : {
                 "$ref" : "#/definitions/ppx_Tensor"
               }
       },

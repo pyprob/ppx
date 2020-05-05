@@ -40,9 +40,11 @@ public enum Distribution: UInt8, Enum {
 	case exponential = 7
 	case gamma = 8
 	case lognormal = 9
+	case binomial = 10
+	case weibull = 11
 
 
-	public static var max: Distribution { return .lognormal }
+	public static var max: Distribution { return .weibull }
 	public static var min: Distribution { return .none }
 }
 
@@ -644,6 +646,62 @@ public struct LogNormal: FlatBufferObject {
 		LogNormal.add(loc: loc, fbb)
 		LogNormal.add(scale: scale, fbb)
 		return LogNormal.endLogNormal(fbb, start: __start)
+	}
+}
+
+public struct Binomial: FlatBufferObject {
+
+	static func validateVersion() { FlatBuffersVersion_1_12_0() }
+	public var __buffer: ByteBuffer! { return _accessor.bb }
+
+	private var _accessor: Table
+	public static func finish(_ fbb: FlatBufferBuilder, end: Offset<UOffset>, prefix: Bool = false) { fbb.finish(offset: end, fileId: "PPXF", addPrefix: prefix) }
+	public static func getRootAsBinomial(bb: ByteBuffer) -> Binomial { return Binomial(Table(bb: bb, position: Int32(bb.read(def: UOffset.self, position: bb.reader)) + Int32(bb.reader))) }
+
+	private init(_ t: Table) { _accessor = t }
+	public init(_ bb: ByteBuffer, o: Int32) { _accessor = Table(bb: bb, position: o) }
+
+	public var totalCount: ppx.Tensor? { let o = _accessor.offset(4); return o == 0 ? nil : ppx.Tensor(_accessor.bb, o: _accessor.indirect(o + _accessor.postion)) }
+	public var probs: ppx.Tensor? { let o = _accessor.offset(6); return o == 0 ? nil : ppx.Tensor(_accessor.bb, o: _accessor.indirect(o + _accessor.postion)) }
+	public static func startBinomial(_ fbb: FlatBufferBuilder) -> UOffset { fbb.startTable(with: 2) }
+	public static func add(totalCount: Offset<UOffset>, _ fbb: FlatBufferBuilder) { fbb.add(offset: totalCount, at: 0)  }
+	public static func add(probs: Offset<UOffset>, _ fbb: FlatBufferBuilder) { fbb.add(offset: probs, at: 1)  }
+	public static func endBinomial(_ fbb: FlatBufferBuilder, start: UOffset) -> Offset<UOffset> { let end = Offset<UOffset>(offset: fbb.endTable(at: start)); return end }
+	public static func createBinomial(_ fbb: FlatBufferBuilder,
+		offsetOfTotalCount totalCount: Offset<UOffset> = Offset(),
+		offsetOfProbs probs: Offset<UOffset> = Offset()) -> Offset<UOffset> {
+		let __start = Binomial.startBinomial(fbb)
+		Binomial.add(totalCount: totalCount, fbb)
+		Binomial.add(probs: probs, fbb)
+		return Binomial.endBinomial(fbb, start: __start)
+	}
+}
+
+public struct Weibull: FlatBufferObject {
+
+	static func validateVersion() { FlatBuffersVersion_1_12_0() }
+	public var __buffer: ByteBuffer! { return _accessor.bb }
+
+	private var _accessor: Table
+	public static func finish(_ fbb: FlatBufferBuilder, end: Offset<UOffset>, prefix: Bool = false) { fbb.finish(offset: end, fileId: "PPXF", addPrefix: prefix) }
+	public static func getRootAsWeibull(bb: ByteBuffer) -> Weibull { return Weibull(Table(bb: bb, position: Int32(bb.read(def: UOffset.self, position: bb.reader)) + Int32(bb.reader))) }
+
+	private init(_ t: Table) { _accessor = t }
+	public init(_ bb: ByteBuffer, o: Int32) { _accessor = Table(bb: bb, position: o) }
+
+	public var scale: ppx.Tensor? { let o = _accessor.offset(4); return o == 0 ? nil : ppx.Tensor(_accessor.bb, o: _accessor.indirect(o + _accessor.postion)) }
+	public var concentration: ppx.Tensor? { let o = _accessor.offset(6); return o == 0 ? nil : ppx.Tensor(_accessor.bb, o: _accessor.indirect(o + _accessor.postion)) }
+	public static func startWeibull(_ fbb: FlatBufferBuilder) -> UOffset { fbb.startTable(with: 2) }
+	public static func add(scale: Offset<UOffset>, _ fbb: FlatBufferBuilder) { fbb.add(offset: scale, at: 0)  }
+	public static func add(concentration: Offset<UOffset>, _ fbb: FlatBufferBuilder) { fbb.add(offset: concentration, at: 1)  }
+	public static func endWeibull(_ fbb: FlatBufferBuilder, start: UOffset) -> Offset<UOffset> { let end = Offset<UOffset>(offset: fbb.endTable(at: start)); return end }
+	public static func createWeibull(_ fbb: FlatBufferBuilder,
+		offsetOfScale scale: Offset<UOffset> = Offset(),
+		offsetOfConcentration concentration: Offset<UOffset> = Offset()) -> Offset<UOffset> {
+		let __start = Weibull.startWeibull(fbb)
+		Weibull.add(scale: scale, fbb)
+		Weibull.add(concentration: concentration, fbb)
+		return Weibull.endWeibull(fbb, start: __start)
 	}
 }
 

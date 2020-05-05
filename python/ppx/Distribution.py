@@ -13,4 +13,6 @@ class Distribution(object):
     Exponential = 7
     Gamma = 8
     LogNormal = 9
+    Binomial = 10
+    Weibull = 11
 

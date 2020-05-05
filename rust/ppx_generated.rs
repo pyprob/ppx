@@ -122,11 +122,13 @@ pub enum Distribution {
   Exponential = 7,
   Gamma = 8,
   LogNormal = 9,
+  Binomial = 10,
+  Weibull = 11,
 
 }
 
 pub const ENUM_MIN_DISTRIBUTION: u8 = 0;
-pub const ENUM_MAX_DISTRIBUTION: u8 = 9;
+pub const ENUM_MAX_DISTRIBUTION: u8 = 11;
 
 impl<'a> flatbuffers::Follow<'a> for Distribution {
   type Inner = Self;
@@ -160,7 +162,7 @@ impl flatbuffers::Push for Distribution {
 }
 
 #[allow(non_camel_case_types)]
-pub const ENUM_VALUES_DISTRIBUTION:[Distribution; 10] = [
+pub const ENUM_VALUES_DISTRIBUTION:[Distribution; 12] = [
   Distribution::NONE,
   Distribution::Normal,
   Distribution::Uniform,
@@ -170,11 +172,13 @@ pub const ENUM_VALUES_DISTRIBUTION:[Distribution; 10] = [
   Distribution::Beta,
   Distribution::Exponential,
   Distribution::Gamma,
-  Distribution::LogNormal
+  Distribution::LogNormal,
+  Distribution::Binomial,
+  Distribution::Weibull
 ];
 
 #[allow(non_camel_case_types)]
-pub const ENUM_NAMES_DISTRIBUTION:[&'static str; 10] = [
+pub const ENUM_NAMES_DISTRIBUTION:[&'static str; 12] = [
     "NONE",
     "Normal",
     "Uniform",
@@ -184,7 +188,9 @@ pub const ENUM_NAMES_DISTRIBUTION:[&'static str; 10] = [
     "Beta",
     "Exponential",
     "Gamma",
-    "LogNormal"
+    "LogNormal",
+    "Binomial",
+    "Weibull"
 ];
 
 pub fn enum_name_distribution(e: Distribution) -> &'static str {
@@ -941,6 +947,26 @@ impl<'a> Sample<'a> {
     }
   }
 
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn distribution_as_binomial(&self) -> Option<Binomial<'a>> {
+    if self.distribution_type() == Distribution::Binomial {
+      self.distribution().map(|u| Binomial::init_from_table(u))
+    } else {
+      None
+    }
+  }
+
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn distribution_as_weibull(&self) -> Option<Weibull<'a>> {
+    if self.distribution_type() == Distribution::Weibull {
+      self.distribution().map(|u| Weibull::init_from_table(u))
+    } else {
+      None
+    }
+  }
+
 }
 
 pub struct SampleArgs<'a> {
@@ -1232,6 +1258,26 @@ impl<'a> Observe<'a> {
   pub fn distribution_as_log_normal(&self) -> Option<LogNormal<'a>> {
     if self.distribution_type() == Distribution::LogNormal {
       self.distribution().map(|u| LogNormal::init_from_table(u))
+    } else {
+      None
+    }
+  }
+
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn distribution_as_binomial(&self) -> Option<Binomial<'a>> {
+    if self.distribution_type() == Distribution::Binomial {
+      self.distribution().map(|u| Binomial::init_from_table(u))
+    } else {
+      None
+    }
+  }
+
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn distribution_as_weibull(&self) -> Option<Weibull<'a>> {
+    if self.distribution_type() == Distribution::Weibull {
+      self.distribution().map(|u| Weibull::init_from_table(u))
     } else {
       None
     }
@@ -2326,6 +2372,182 @@ impl<'a: 'b, 'b> LogNormalBuilder<'a, 'b> {
   }
   #[inline]
   pub fn finish(self) -> flatbuffers::WIPOffset<LogNormal<'a>> {
+    let o = self.fbb_.end_table(self.start_);
+    flatbuffers::WIPOffset::new(o.value())
+  }
+}
+
+pub enum BinomialOffset {}
+#[derive(Copy, Clone, Debug, PartialEq)]
+
+pub struct Binomial<'a> {
+  pub _tab: flatbuffers::Table<'a>,
+}
+
+impl<'a> flatbuffers::Follow<'a> for Binomial<'a> {
+    type Inner = Binomial<'a>;
+    #[inline]
+    fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+        Self {
+            _tab: flatbuffers::Table { buf: buf, loc: loc },
+        }
+    }
+}
+
+impl<'a> Binomial<'a> {
+    #[inline]
+    pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+        Binomial {
+            _tab: table,
+        }
+    }
+    #[allow(unused_mut)]
+    pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+        _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+        args: &'args BinomialArgs<'args>) -> flatbuffers::WIPOffset<Binomial<'bldr>> {
+      let mut builder = BinomialBuilder::new(_fbb);
+      if let Some(x) = args.probs { builder.add_probs(x); }
+      if let Some(x) = args.total_count { builder.add_total_count(x); }
+      builder.finish()
+    }
+
+    pub const VT_TOTAL_COUNT: flatbuffers::VOffsetT = 4;
+    pub const VT_PROBS: flatbuffers::VOffsetT = 6;
+
+  #[inline]
+  pub fn total_count(&self) -> Option<Tensor<'a>> {
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Binomial::VT_TOTAL_COUNT, None)
+  }
+  #[inline]
+  pub fn probs(&self) -> Option<Tensor<'a>> {
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Binomial::VT_PROBS, None)
+  }
+}
+
+pub struct BinomialArgs<'a> {
+    pub total_count: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+    pub probs: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+}
+impl<'a> Default for BinomialArgs<'a> {
+    #[inline]
+    fn default() -> Self {
+        BinomialArgs {
+            total_count: None,
+            probs: None,
+        }
+    }
+}
+pub struct BinomialBuilder<'a: 'b, 'b> {
+  fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+  start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+}
+impl<'a: 'b, 'b> BinomialBuilder<'a, 'b> {
+  #[inline]
+  pub fn add_total_count(&mut self, total_count: flatbuffers::WIPOffset<Tensor<'b >>) {
+    self.fbb_.push_slot_always::<flatbuffers::WIPOffset<Tensor>>(Binomial::VT_TOTAL_COUNT, total_count);
+  }
+  #[inline]
+  pub fn add_probs(&mut self, probs: flatbuffers::WIPOffset<Tensor<'b >>) {
+    self.fbb_.push_slot_always::<flatbuffers::WIPOffset<Tensor>>(Binomial::VT_PROBS, probs);
+  }
+  #[inline]
+  pub fn new(_fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>) -> BinomialBuilder<'a, 'b> {
+    let start = _fbb.start_table();
+    BinomialBuilder {
+      fbb_: _fbb,
+      start_: start,
+    }
+  }
+  #[inline]
+  pub fn finish(self) -> flatbuffers::WIPOffset<Binomial<'a>> {
+    let o = self.fbb_.end_table(self.start_);
+    flatbuffers::WIPOffset::new(o.value())
+  }
+}
+
+pub enum WeibullOffset {}
+#[derive(Copy, Clone, Debug, PartialEq)]
+
+pub struct Weibull<'a> {
+  pub _tab: flatbuffers::Table<'a>,
+}
+
+impl<'a> flatbuffers::Follow<'a> for Weibull<'a> {
+    type Inner = Weibull<'a>;
+    #[inline]
+    fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+        Self {
+            _tab: flatbuffers::Table { buf: buf, loc: loc },
+        }
+    }
+}
+
+impl<'a> Weibull<'a> {
+    #[inline]
+    pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+        Weibull {
+            _tab: table,
+        }
+    }
+    #[allow(unused_mut)]
+    pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+        _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+        args: &'args WeibullArgs<'args>) -> flatbuffers::WIPOffset<Weibull<'bldr>> {
+      let mut builder = WeibullBuilder::new(_fbb);
+      if let Some(x) = args.concentration { builder.add_concentration(x); }
+      if let Some(x) = args.scale { builder.add_scale(x); }
+      builder.finish()
+    }
+
+    pub const VT_SCALE: flatbuffers::VOffsetT = 4;
+    pub const VT_CONCENTRATION: flatbuffers::VOffsetT = 6;
+
+  #[inline]
+  pub fn scale(&self) -> Option<Tensor<'a>> {
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Weibull::VT_SCALE, None)
+  }
+  #[inline]
+  pub fn concentration(&self) -> Option<Tensor<'a>> {
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Weibull::VT_CONCENTRATION, None)
+  }
+}
+
+pub struct WeibullArgs<'a> {
+    pub scale: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+    pub concentration: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+}
+impl<'a> Default for WeibullArgs<'a> {
+    #[inline]
+    fn default() -> Self {
+        WeibullArgs {
+            scale: None,
+            concentration: None,
+        }
+    }
+}
+pub struct WeibullBuilder<'a: 'b, 'b> {
+  fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+  start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+}
+impl<'a: 'b, 'b> WeibullBuilder<'a, 'b> {
+  #[inline]
+  pub fn add_scale(&mut self, scale: flatbuffers::WIPOffset<Tensor<'b >>) {
+    self.fbb_.push_slot_always::<flatbuffers::WIPOffset<Tensor>>(Weibull::VT_SCALE, scale);
+  }
+  #[inline]
+  pub fn add_concentration(&mut self, concentration: flatbuffers::WIPOffset<Tensor<'b >>) {
+    self.fbb_.push_slot_always::<flatbuffers::WIPOffset<Tensor>>(Weibull::VT_CONCENTRATION, concentration);
+  }
+  #[inline]
+  pub fn new(_fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>) -> WeibullBuilder<'a, 'b> {
+    let start = _fbb.start_table();
+    WeibullBuilder {
+      fbb_: _fbb,
+      start_: start,
+    }
+  }
+  #[inline]
+  pub fn finish(self) -> flatbuffers::WIPOffset<Weibull<'a>> {
     let o = self.fbb_.end_table(self.start_);
     flatbuffers::WIPOffset::new(o.value())
   }

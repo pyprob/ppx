@@ -17,6 +17,8 @@ const (
 	DistributionExponential Distribution = 7
 	DistributionGamma       Distribution = 8
 	DistributionLogNormal   Distribution = 9
+	DistributionBinomial    Distribution = 10
+	DistributionWeibull     Distribution = 11
 )
 
 var EnumNamesDistribution = map[Distribution]string{
@@ -30,6 +32,8 @@ var EnumNamesDistribution = map[Distribution]string{
 	DistributionExponential: "Exponential",
 	DistributionGamma:       "Gamma",
 	DistributionLogNormal:   "LogNormal",
+	DistributionBinomial:    "Binomial",
+	DistributionWeibull:     "Weibull",
 }
 
 var EnumValuesDistribution = map[string]Distribution{
@@ -43,6 +47,8 @@ var EnumValuesDistribution = map[string]Distribution{
 	"Exponential": DistributionExponential,
 	"Gamma":       DistributionGamma,
 	"LogNormal":   DistributionLogNormal,
+	"Binomial":    DistributionBinomial,
+	"Weibull":     DistributionWeibull,
 }
 
 func (v Distribution) String() string {

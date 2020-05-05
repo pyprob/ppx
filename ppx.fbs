@@ -1,5 +1,5 @@
 // ppx
-// 0.1.4
+// 0.1.5
 //
 // Probabilistic programming execution protocol
 // https://github.com/pyprob/ppx
@@ -38,7 +38,9 @@ union Distribution {
   Beta,
   Exponential,
   Gamma,
-  LogNormal
+  LogNormal,
+  Binomial,
+  Weibull
 }
 
 table Handshake {
@@ -126,6 +128,16 @@ table Gamma {
 table LogNormal {
   loc: Tensor;
   scale: Tensor;
+}
+
+table Binomial {
+  total_count: Tensor;
+  probs: Tensor;
+}
+
+table Weibull {
+  scale: Tensor;
+  concentration: Tensor;
 }
 
 root_type Message;

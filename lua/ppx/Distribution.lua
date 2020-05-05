@@ -13,6 +13,8 @@ local Distribution = {
     Exponential = 7,
     Gamma = 8,
     LogNormal = 9,
+    Binomial = 10,
+    Weibull = 11,
 }
 
 return Distribution -- return the module

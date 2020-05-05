@@ -16,7 +16,9 @@ class Distribution private constructor() {
         const val Exponential: UByte = 7u
         const val Gamma: UByte = 8u
         const val LogNormal: UByte = 9u
-        val names : Array<String> = arrayOf("NONE", "Normal", "Uniform", "Categorical", "Poisson", "Bernoulli", "Beta", "Exponential", "Gamma", "LogNormal")
+        const val Binomial: UByte = 10u
+        const val Weibull: UByte = 11u
+        val names : Array<String> = arrayOf("NONE", "Normal", "Uniform", "Categorical", "Poisson", "Bernoulli", "Beta", "Exponential", "Gamma", "LogNormal", "Binomial", "Weibull")
         fun name(e: Int) : String = names[e]
     }
 }

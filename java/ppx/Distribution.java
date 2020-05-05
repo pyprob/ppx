@@ -14,8 +14,10 @@ public final class Distribution {
   public static final byte Exponential = 7;
   public static final byte Gamma = 8;
   public static final byte LogNormal = 9;
+  public static final byte Binomial = 10;
+  public static final byte Weibull = 11;
 
-  public static final String[] names = { "NONE", "Normal", "Uniform", "Categorical", "Poisson", "Bernoulli", "Beta", "Exponential", "Gamma", "LogNormal", };
+  public static final String[] names = { "NONE", "Normal", "Uniform", "Categorical", "Poisson", "Bernoulli", "Beta", "Exponential", "Gamma", "LogNormal", "Binomial", "Weibull", };
 
   public static String name(int e) { return names[e]; }
 }

@@ -15,6 +15,8 @@ class Distribution
     const Exponential = 7;
     const Gamma = 8;
     const LogNormal = 9;
+    const Binomial = 10;
+    const Weibull = 11;
 
     private static $names = array(
         Distribution::NONE=>"NONE",
@@ -27,6 +29,8 @@ class Distribution
         Distribution::Exponential=>"Exponential",
         Distribution::Gamma=>"Gamma",
         Distribution::LogNormal=>"LogNormal",
+        Distribution::Binomial=>"Binomial",
+        Distribution::Weibull=>"Weibull",
     );
 
     public static function Name($e)
