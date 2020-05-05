@@ -7,7 +7,7 @@
     },
     "ppx_Distribution" : {
       "type" : "string",
-      "enum": ["NONE", "Normal", "Uniform", "Categorical", "Poisson"]
+      "enum": ["NONE", "Normal", "Uniform", "Categorical", "Poisson", "Bernoulli", "Beta", "Exponential", "Gamma", "LogNormal"]
     },
     "ppx_Message" : {
       "type" : "object",
@@ -82,7 +82,7 @@
                 "$ref" : "#/definitions/ppx_Distribution"
               },
         "distribution" : {
-                "anyOf": [{ "$ref" : "#/definitions/ppx_Normal" },{ "$ref" : "#/definitions/ppx_Uniform" },{ "$ref" : "#/definitions/ppx_Categorical" },{ "$ref" : "#/definitions/ppx_Poisson" }]
+                "anyOf": [{ "$ref" : "#/definitions/ppx_Normal" },{ "$ref" : "#/definitions/ppx_Uniform" },{ "$ref" : "#/definitions/ppx_Categorical" },{ "$ref" : "#/definitions/ppx_Poisson" },{ "$ref" : "#/definitions/ppx_Bernoulli" },{ "$ref" : "#/definitions/ppx_Beta" },{ "$ref" : "#/definitions/ppx_Exponential" },{ "$ref" : "#/definitions/ppx_Gamma" },{ "$ref" : "#/definitions/ppx_LogNormal" }]
               },
         "control" : {
                 "type" : "boolean"
@@ -115,7 +115,7 @@
                 "$ref" : "#/definitions/ppx_Distribution"
               },
         "distribution" : {
-                "anyOf": [{ "$ref" : "#/definitions/ppx_Normal" },{ "$ref" : "#/definitions/ppx_Uniform" },{ "$ref" : "#/definitions/ppx_Categorical" },{ "$ref" : "#/definitions/ppx_Poisson" }]
+                "anyOf": [{ "$ref" : "#/definitions/ppx_Normal" },{ "$ref" : "#/definitions/ppx_Uniform" },{ "$ref" : "#/definitions/ppx_Categorical" },{ "$ref" : "#/definitions/ppx_Poisson" },{ "$ref" : "#/definitions/ppx_Bernoulli" },{ "$ref" : "#/definitions/ppx_Beta" },{ "$ref" : "#/definitions/ppx_Exponential" },{ "$ref" : "#/definitions/ppx_Gamma" },{ "$ref" : "#/definitions/ppx_LogNormal" }]
               },
         "value" : {
                 "$ref" : "#/definitions/ppx_Tensor"
@@ -193,6 +193,60 @@
       "type" : "object",
       "properties" : {
         "rate" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              }
+      },
+      "additionalProperties" : false
+    },
+    "ppx_Bernoulli" : {
+      "type" : "object",
+      "properties" : {
+        "probs" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              }
+      },
+      "additionalProperties" : false
+    },
+    "ppx_Beta" : {
+      "type" : "object",
+      "properties" : {
+        "concentration1" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              },
+        "concentration0" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              }
+      },
+      "additionalProperties" : false
+    },
+    "ppx_Exponential" : {
+      "type" : "object",
+      "properties" : {
+        "rate" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              }
+      },
+      "additionalProperties" : false
+    },
+    "ppx_Gamma" : {
+      "type" : "object",
+      "properties" : {
+        "concentration" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              },
+        "rate" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              }
+      },
+      "additionalProperties" : false
+    },
+    "ppx_LogNormal" : {
+      "type" : "object",
+      "properties" : {
+        "loc" : {
+                "$ref" : "#/definitions/ppx_Tensor"
+              },
+        "scale" : {
                 "$ref" : "#/definitions/ppx_Tensor"
               }
       },

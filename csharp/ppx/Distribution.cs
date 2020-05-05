@@ -12,6 +12,11 @@ public enum Distribution : byte
   Uniform = 2,
   Categorical = 3,
   Poisson = 4,
+  Bernoulli = 5,
+  Beta = 6,
+  Exponential = 7,
+  Gamma = 8,
+  LogNormal = 9,
 };
 
 

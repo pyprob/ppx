@@ -117,11 +117,16 @@ pub enum Distribution {
   Uniform = 2,
   Categorical = 3,
   Poisson = 4,
+  Bernoulli = 5,
+  Beta = 6,
+  Exponential = 7,
+  Gamma = 8,
+  LogNormal = 9,
 
 }
 
 pub const ENUM_MIN_DISTRIBUTION: u8 = 0;
-pub const ENUM_MAX_DISTRIBUTION: u8 = 4;
+pub const ENUM_MAX_DISTRIBUTION: u8 = 9;
 
 impl<'a> flatbuffers::Follow<'a> for Distribution {
   type Inner = Self;
@@ -155,21 +160,31 @@ impl flatbuffers::Push for Distribution {
 }
 
 #[allow(non_camel_case_types)]
-pub const ENUM_VALUES_DISTRIBUTION:[Distribution; 5] = [
+pub const ENUM_VALUES_DISTRIBUTION:[Distribution; 10] = [
   Distribution::NONE,
   Distribution::Normal,
   Distribution::Uniform,
   Distribution::Categorical,
-  Distribution::Poisson
+  Distribution::Poisson,
+  Distribution::Bernoulli,
+  Distribution::Beta,
+  Distribution::Exponential,
+  Distribution::Gamma,
+  Distribution::LogNormal
 ];
 
 #[allow(non_camel_case_types)]
-pub const ENUM_NAMES_DISTRIBUTION:[&'static str; 5] = [
+pub const ENUM_NAMES_DISTRIBUTION:[&'static str; 10] = [
     "NONE",
     "Normal",
     "Uniform",
     "Categorical",
-    "Poisson"
+    "Poisson",
+    "Bernoulli",
+    "Beta",
+    "Exponential",
+    "Gamma",
+    "LogNormal"
 ];
 
 pub fn enum_name_distribution(e: Distribution) -> &'static str {
@@ -876,6 +891,56 @@ impl<'a> Sample<'a> {
     }
   }
 
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn distribution_as_bernoulli(&self) -> Option<Bernoulli<'a>> {
+    if self.distribution_type() == Distribution::Bernoulli {
+      self.distribution().map(|u| Bernoulli::init_from_table(u))
+    } else {
+      None
+    }
+  }
+
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn distribution_as_beta(&self) -> Option<Beta<'a>> {
+    if self.distribution_type() == Distribution::Beta {
+      self.distribution().map(|u| Beta::init_from_table(u))
+    } else {
+      None
+    }
+  }
+
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn distribution_as_exponential(&self) -> Option<Exponential<'a>> {
+    if self.distribution_type() == Distribution::Exponential {
+      self.distribution().map(|u| Exponential::init_from_table(u))
+    } else {
+      None
+    }
+  }
+
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn distribution_as_gamma(&self) -> Option<Gamma<'a>> {
+    if self.distribution_type() == Distribution::Gamma {
+      self.distribution().map(|u| Gamma::init_from_table(u))
+    } else {
+      None
+    }
+  }
+
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn distribution_as_log_normal(&self) -> Option<LogNormal<'a>> {
+    if self.distribution_type() == Distribution::LogNormal {
+      self.distribution().map(|u| LogNormal::init_from_table(u))
+    } else {
+      None
+    }
+  }
+
 }
 
 pub struct SampleArgs<'a> {
@@ -1117,6 +1182,56 @@ impl<'a> Observe<'a> {
   pub fn distribution_as_poisson(&self) -> Option<Poisson<'a>> {
     if self.distribution_type() == Distribution::Poisson {
       self.distribution().map(|u| Poisson::init_from_table(u))
+    } else {
+      None
+    }
+  }
+
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn distribution_as_bernoulli(&self) -> Option<Bernoulli<'a>> {
+    if self.distribution_type() == Distribution::Bernoulli {
+      self.distribution().map(|u| Bernoulli::init_from_table(u))
+    } else {
+      None
+    }
+  }
+
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn distribution_as_beta(&self) -> Option<Beta<'a>> {
+    if self.distribution_type() == Distribution::Beta {
+      self.distribution().map(|u| Beta::init_from_table(u))
+    } else {
+      None
+    }
+  }
+
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn distribution_as_exponential(&self) -> Option<Exponential<'a>> {
+    if self.distribution_type() == Distribution::Exponential {
+      self.distribution().map(|u| Exponential::init_from_table(u))
+    } else {
+      None
+    }
+  }
+
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn distribution_as_gamma(&self) -> Option<Gamma<'a>> {
+    if self.distribution_type() == Distribution::Gamma {
+      self.distribution().map(|u| Gamma::init_from_table(u))
+    } else {
+      None
+    }
+  }
+
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn distribution_as_log_normal(&self) -> Option<LogNormal<'a>> {
+    if self.distribution_type() == Distribution::LogNormal {
+      self.distribution().map(|u| LogNormal::init_from_table(u))
     } else {
       None
     }
@@ -1795,6 +1910,422 @@ impl<'a: 'b, 'b> PoissonBuilder<'a, 'b> {
   }
   #[inline]
   pub fn finish(self) -> flatbuffers::WIPOffset<Poisson<'a>> {
+    let o = self.fbb_.end_table(self.start_);
+    flatbuffers::WIPOffset::new(o.value())
+  }
+}
+
+pub enum BernoulliOffset {}
+#[derive(Copy, Clone, Debug, PartialEq)]
+
+pub struct Bernoulli<'a> {
+  pub _tab: flatbuffers::Table<'a>,
+}
+
+impl<'a> flatbuffers::Follow<'a> for Bernoulli<'a> {
+    type Inner = Bernoulli<'a>;
+    #[inline]
+    fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+        Self {
+            _tab: flatbuffers::Table { buf: buf, loc: loc },
+        }
+    }
+}
+
+impl<'a> Bernoulli<'a> {
+    #[inline]
+    pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+        Bernoulli {
+            _tab: table,
+        }
+    }
+    #[allow(unused_mut)]
+    pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+        _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+        args: &'args BernoulliArgs<'args>) -> flatbuffers::WIPOffset<Bernoulli<'bldr>> {
+      let mut builder = BernoulliBuilder::new(_fbb);
+      if let Some(x) = args.probs { builder.add_probs(x); }
+      builder.finish()
+    }
+
+    pub const VT_PROBS: flatbuffers::VOffsetT = 4;
+
+  #[inline]
+  pub fn probs(&self) -> Option<Tensor<'a>> {
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Bernoulli::VT_PROBS, None)
+  }
+}
+
+pub struct BernoulliArgs<'a> {
+    pub probs: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+}
+impl<'a> Default for BernoulliArgs<'a> {
+    #[inline]
+    fn default() -> Self {
+        BernoulliArgs {
+            probs: None,
+        }
+    }
+}
+pub struct BernoulliBuilder<'a: 'b, 'b> {
+  fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+  start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+}
+impl<'a: 'b, 'b> BernoulliBuilder<'a, 'b> {
+  #[inline]
+  pub fn add_probs(&mut self, probs: flatbuffers::WIPOffset<Tensor<'b >>) {
+    self.fbb_.push_slot_always::<flatbuffers::WIPOffset<Tensor>>(Bernoulli::VT_PROBS, probs);
+  }
+  #[inline]
+  pub fn new(_fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>) -> BernoulliBuilder<'a, 'b> {
+    let start = _fbb.start_table();
+    BernoulliBuilder {
+      fbb_: _fbb,
+      start_: start,
+    }
+  }
+  #[inline]
+  pub fn finish(self) -> flatbuffers::WIPOffset<Bernoulli<'a>> {
+    let o = self.fbb_.end_table(self.start_);
+    flatbuffers::WIPOffset::new(o.value())
+  }
+}
+
+pub enum BetaOffset {}
+#[derive(Copy, Clone, Debug, PartialEq)]
+
+pub struct Beta<'a> {
+  pub _tab: flatbuffers::Table<'a>,
+}
+
+impl<'a> flatbuffers::Follow<'a> for Beta<'a> {
+    type Inner = Beta<'a>;
+    #[inline]
+    fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+        Self {
+            _tab: flatbuffers::Table { buf: buf, loc: loc },
+        }
+    }
+}
+
+impl<'a> Beta<'a> {
+    #[inline]
+    pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+        Beta {
+            _tab: table,
+        }
+    }
+    #[allow(unused_mut)]
+    pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+        _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+        args: &'args BetaArgs<'args>) -> flatbuffers::WIPOffset<Beta<'bldr>> {
+      let mut builder = BetaBuilder::new(_fbb);
+      if let Some(x) = args.concentration0 { builder.add_concentration0(x); }
+      if let Some(x) = args.concentration1 { builder.add_concentration1(x); }
+      builder.finish()
+    }
+
+    pub const VT_CONCENTRATION1: flatbuffers::VOffsetT = 4;
+    pub const VT_CONCENTRATION0: flatbuffers::VOffsetT = 6;
+
+  #[inline]
+  pub fn concentration1(&self) -> Option<Tensor<'a>> {
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Beta::VT_CONCENTRATION1, None)
+  }
+  #[inline]
+  pub fn concentration0(&self) -> Option<Tensor<'a>> {
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Beta::VT_CONCENTRATION0, None)
+  }
+}
+
+pub struct BetaArgs<'a> {
+    pub concentration1: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+    pub concentration0: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+}
+impl<'a> Default for BetaArgs<'a> {
+    #[inline]
+    fn default() -> Self {
+        BetaArgs {
+            concentration1: None,
+            concentration0: None,
+        }
+    }
+}
+pub struct BetaBuilder<'a: 'b, 'b> {
+  fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+  start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+}
+impl<'a: 'b, 'b> BetaBuilder<'a, 'b> {
+  #[inline]
+  pub fn add_concentration1(&mut self, concentration1: flatbuffers::WIPOffset<Tensor<'b >>) {
+    self.fbb_.push_slot_always::<flatbuffers::WIPOffset<Tensor>>(Beta::VT_CONCENTRATION1, concentration1);
+  }
+  #[inline]
+  pub fn add_concentration0(&mut self, concentration0: flatbuffers::WIPOffset<Tensor<'b >>) {
+    self.fbb_.push_slot_always::<flatbuffers::WIPOffset<Tensor>>(Beta::VT_CONCENTRATION0, concentration0);
+  }
+  #[inline]
+  pub fn new(_fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>) -> BetaBuilder<'a, 'b> {
+    let start = _fbb.start_table();
+    BetaBuilder {
+      fbb_: _fbb,
+      start_: start,
+    }
+  }
+  #[inline]
+  pub fn finish(self) -> flatbuffers::WIPOffset<Beta<'a>> {
+    let o = self.fbb_.end_table(self.start_);
+    flatbuffers::WIPOffset::new(o.value())
+  }
+}
+
+pub enum ExponentialOffset {}
+#[derive(Copy, Clone, Debug, PartialEq)]
+
+pub struct Exponential<'a> {
+  pub _tab: flatbuffers::Table<'a>,
+}
+
+impl<'a> flatbuffers::Follow<'a> for Exponential<'a> {
+    type Inner = Exponential<'a>;
+    #[inline]
+    fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+        Self {
+            _tab: flatbuffers::Table { buf: buf, loc: loc },
+        }
+    }
+}
+
+impl<'a> Exponential<'a> {
+    #[inline]
+    pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+        Exponential {
+            _tab: table,
+        }
+    }
+    #[allow(unused_mut)]
+    pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+        _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+        args: &'args ExponentialArgs<'args>) -> flatbuffers::WIPOffset<Exponential<'bldr>> {
+      let mut builder = ExponentialBuilder::new(_fbb);
+      if let Some(x) = args.rate { builder.add_rate(x); }
+      builder.finish()
+    }
+
+    pub const VT_RATE: flatbuffers::VOffsetT = 4;
+
+  #[inline]
+  pub fn rate(&self) -> Option<Tensor<'a>> {
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Exponential::VT_RATE, None)
+  }
+}
+
+pub struct ExponentialArgs<'a> {
+    pub rate: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+}
+impl<'a> Default for ExponentialArgs<'a> {
+    #[inline]
+    fn default() -> Self {
+        ExponentialArgs {
+            rate: None,
+        }
+    }
+}
+pub struct ExponentialBuilder<'a: 'b, 'b> {
+  fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+  start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+}
+impl<'a: 'b, 'b> ExponentialBuilder<'a, 'b> {
+  #[inline]
+  pub fn add_rate(&mut self, rate: flatbuffers::WIPOffset<Tensor<'b >>) {
+    self.fbb_.push_slot_always::<flatbuffers::WIPOffset<Tensor>>(Exponential::VT_RATE, rate);
+  }
+  #[inline]
+  pub fn new(_fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>) -> ExponentialBuilder<'a, 'b> {
+    let start = _fbb.start_table();
+    ExponentialBuilder {
+      fbb_: _fbb,
+      start_: start,
+    }
+  }
+  #[inline]
+  pub fn finish(self) -> flatbuffers::WIPOffset<Exponential<'a>> {
+    let o = self.fbb_.end_table(self.start_);
+    flatbuffers::WIPOffset::new(o.value())
+  }
+}
+
+pub enum GammaOffset {}
+#[derive(Copy, Clone, Debug, PartialEq)]
+
+pub struct Gamma<'a> {
+  pub _tab: flatbuffers::Table<'a>,
+}
+
+impl<'a> flatbuffers::Follow<'a> for Gamma<'a> {
+    type Inner = Gamma<'a>;
+    #[inline]
+    fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+        Self {
+            _tab: flatbuffers::Table { buf: buf, loc: loc },
+        }
+    }
+}
+
+impl<'a> Gamma<'a> {
+    #[inline]
+    pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+        Gamma {
+            _tab: table,
+        }
+    }
+    #[allow(unused_mut)]
+    pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+        _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+        args: &'args GammaArgs<'args>) -> flatbuffers::WIPOffset<Gamma<'bldr>> {
+      let mut builder = GammaBuilder::new(_fbb);
+      if let Some(x) = args.rate { builder.add_rate(x); }
+      if let Some(x) = args.concentration { builder.add_concentration(x); }
+      builder.finish()
+    }
+
+    pub const VT_CONCENTRATION: flatbuffers::VOffsetT = 4;
+    pub const VT_RATE: flatbuffers::VOffsetT = 6;
+
+  #[inline]
+  pub fn concentration(&self) -> Option<Tensor<'a>> {
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Gamma::VT_CONCENTRATION, None)
+  }
+  #[inline]
+  pub fn rate(&self) -> Option<Tensor<'a>> {
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Gamma::VT_RATE, None)
+  }
+}
+
+pub struct GammaArgs<'a> {
+    pub concentration: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+    pub rate: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+}
+impl<'a> Default for GammaArgs<'a> {
+    #[inline]
+    fn default() -> Self {
+        GammaArgs {
+            concentration: None,
+            rate: None,
+        }
+    }
+}
+pub struct GammaBuilder<'a: 'b, 'b> {
+  fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+  start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+}
+impl<'a: 'b, 'b> GammaBuilder<'a, 'b> {
+  #[inline]
+  pub fn add_concentration(&mut self, concentration: flatbuffers::WIPOffset<Tensor<'b >>) {
+    self.fbb_.push_slot_always::<flatbuffers::WIPOffset<Tensor>>(Gamma::VT_CONCENTRATION, concentration);
+  }
+  #[inline]
+  pub fn add_rate(&mut self, rate: flatbuffers::WIPOffset<Tensor<'b >>) {
+    self.fbb_.push_slot_always::<flatbuffers::WIPOffset<Tensor>>(Gamma::VT_RATE, rate);
+  }
+  #[inline]
+  pub fn new(_fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>) -> GammaBuilder<'a, 'b> {
+    let start = _fbb.start_table();
+    GammaBuilder {
+      fbb_: _fbb,
+      start_: start,
+    }
+  }
+  #[inline]
+  pub fn finish(self) -> flatbuffers::WIPOffset<Gamma<'a>> {
+    let o = self.fbb_.end_table(self.start_);
+    flatbuffers::WIPOffset::new(o.value())
+  }
+}
+
+pub enum LogNormalOffset {}
+#[derive(Copy, Clone, Debug, PartialEq)]
+
+pub struct LogNormal<'a> {
+  pub _tab: flatbuffers::Table<'a>,
+}
+
+impl<'a> flatbuffers::Follow<'a> for LogNormal<'a> {
+    type Inner = LogNormal<'a>;
+    #[inline]
+    fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+        Self {
+            _tab: flatbuffers::Table { buf: buf, loc: loc },
+        }
+    }
+}
+
+impl<'a> LogNormal<'a> {
+    #[inline]
+    pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+        LogNormal {
+            _tab: table,
+        }
+    }
+    #[allow(unused_mut)]
+    pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+        _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+        args: &'args LogNormalArgs<'args>) -> flatbuffers::WIPOffset<LogNormal<'bldr>> {
+      let mut builder = LogNormalBuilder::new(_fbb);
+      if let Some(x) = args.scale { builder.add_scale(x); }
+      if let Some(x) = args.loc { builder.add_loc(x); }
+      builder.finish()
+    }
+
+    pub const VT_LOC: flatbuffers::VOffsetT = 4;
+    pub const VT_SCALE: flatbuffers::VOffsetT = 6;
+
+  #[inline]
+  pub fn loc(&self) -> Option<Tensor<'a>> {
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(LogNormal::VT_LOC, None)
+  }
+  #[inline]
+  pub fn scale(&self) -> Option<Tensor<'a>> {
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(LogNormal::VT_SCALE, None)
+  }
+}
+
+pub struct LogNormalArgs<'a> {
+    pub loc: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+    pub scale: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+}
+impl<'a> Default for LogNormalArgs<'a> {
+    #[inline]
+    fn default() -> Self {
+        LogNormalArgs {
+            loc: None,
+            scale: None,
+        }
+    }
+}
+pub struct LogNormalBuilder<'a: 'b, 'b> {
+  fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+  start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+}
+impl<'a: 'b, 'b> LogNormalBuilder<'a, 'b> {
+  #[inline]
+  pub fn add_loc(&mut self, loc: flatbuffers::WIPOffset<Tensor<'b >>) {
+    self.fbb_.push_slot_always::<flatbuffers::WIPOffset<Tensor>>(LogNormal::VT_LOC, loc);
+  }
+  #[inline]
+  pub fn add_scale(&mut self, scale: flatbuffers::WIPOffset<Tensor<'b >>) {
+    self.fbb_.push_slot_always::<flatbuffers::WIPOffset<Tensor>>(LogNormal::VT_SCALE, scale);
+  }
+  #[inline]
+  pub fn new(_fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>) -> LogNormalBuilder<'a, 'b> {
+    let start = _fbb.start_table();
+    LogNormalBuilder {
+      fbb_: _fbb,
+      start_: start,
+    }
+  }
+  #[inline]
+  pub fn finish(self) -> flatbuffers::WIPOffset<LogNormal<'a>> {
     let o = self.fbb_.end_table(self.start_);
     flatbuffers::WIPOffset::new(o.value())
   }

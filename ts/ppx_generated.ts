@@ -29,7 +29,12 @@ export enum Distribution{
   Normal= 1,
   Uniform= 2,
   Categorical= 3,
-  Poisson= 4
+  Poisson= 4,
+  Bernoulli= 5,
+  Beta= 6,
+  Exponential= 7,
+  Gamma= 8,
+  LogNormal= 9
 }};
 
 /**
@@ -1682,6 +1687,450 @@ static createPoisson(builder:flatbuffers.Builder, rateOffset:flatbuffers.Offset)
   Poisson.startPoisson(builder);
   Poisson.addRate(builder, rateOffset);
   return Poisson.endPoisson(builder);
+}
+}
+}
+/**
+ * @constructor
+ */
+export namespace ppx{
+export class Bernoulli {
+  bb: flatbuffers.ByteBuffer|null = null;
+
+  bb_pos:number = 0;
+/**
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns Bernoulli
+ */
+__init(i:number, bb:flatbuffers.ByteBuffer):Bernoulli {
+  this.bb_pos = i;
+  this.bb = bb;
+  return this;
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Bernoulli= obj
+ * @returns Bernoulli
+ */
+static getRootAsBernoulli(bb:flatbuffers.ByteBuffer, obj?:Bernoulli):Bernoulli {
+  return (obj || new Bernoulli()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Bernoulli= obj
+ * @returns Bernoulli
+ */
+static getSizePrefixedRootAsBernoulli(bb:flatbuffers.ByteBuffer, obj?:Bernoulli):Bernoulli {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new Bernoulli()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
+ */
+probs(obj?:ppx.Tensor):ppx.Tensor|null {
+  var offset = this.bb!.__offset(this.bb_pos, 4);
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ */
+static startBernoulli(builder:flatbuffers.Builder) {
+  builder.startObject(1);
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset probsOffset
+ */
+static addProbs(builder:flatbuffers.Builder, probsOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(0, probsOffset, 0);
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
+ */
+static endBernoulli(builder:flatbuffers.Builder):flatbuffers.Offset {
+  var offset = builder.endObject();
+  return offset;
+};
+
+static createBernoulli(builder:flatbuffers.Builder, probsOffset:flatbuffers.Offset):flatbuffers.Offset {
+  Bernoulli.startBernoulli(builder);
+  Bernoulli.addProbs(builder, probsOffset);
+  return Bernoulli.endBernoulli(builder);
+}
+}
+}
+/**
+ * @constructor
+ */
+export namespace ppx{
+export class Beta {
+  bb: flatbuffers.ByteBuffer|null = null;
+
+  bb_pos:number = 0;
+/**
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns Beta
+ */
+__init(i:number, bb:flatbuffers.ByteBuffer):Beta {
+  this.bb_pos = i;
+  this.bb = bb;
+  return this;
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Beta= obj
+ * @returns Beta
+ */
+static getRootAsBeta(bb:flatbuffers.ByteBuffer, obj?:Beta):Beta {
+  return (obj || new Beta()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Beta= obj
+ * @returns Beta
+ */
+static getSizePrefixedRootAsBeta(bb:flatbuffers.ByteBuffer, obj?:Beta):Beta {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new Beta()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
+ */
+concentration1(obj?:ppx.Tensor):ppx.Tensor|null {
+  var offset = this.bb!.__offset(this.bb_pos, 4);
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+};
+
+/**
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
+ */
+concentration0(obj?:ppx.Tensor):ppx.Tensor|null {
+  var offset = this.bb!.__offset(this.bb_pos, 6);
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ */
+static startBeta(builder:flatbuffers.Builder) {
+  builder.startObject(2);
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset concentration1Offset
+ */
+static addConcentration1(builder:flatbuffers.Builder, concentration1Offset:flatbuffers.Offset) {
+  builder.addFieldOffset(0, concentration1Offset, 0);
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset concentration0Offset
+ */
+static addConcentration0(builder:flatbuffers.Builder, concentration0Offset:flatbuffers.Offset) {
+  builder.addFieldOffset(1, concentration0Offset, 0);
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
+ */
+static endBeta(builder:flatbuffers.Builder):flatbuffers.Offset {
+  var offset = builder.endObject();
+  return offset;
+};
+
+static createBeta(builder:flatbuffers.Builder, concentration1Offset:flatbuffers.Offset, concentration0Offset:flatbuffers.Offset):flatbuffers.Offset {
+  Beta.startBeta(builder);
+  Beta.addConcentration1(builder, concentration1Offset);
+  Beta.addConcentration0(builder, concentration0Offset);
+  return Beta.endBeta(builder);
+}
+}
+}
+/**
+ * @constructor
+ */
+export namespace ppx{
+export class Exponential {
+  bb: flatbuffers.ByteBuffer|null = null;
+
+  bb_pos:number = 0;
+/**
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns Exponential
+ */
+__init(i:number, bb:flatbuffers.ByteBuffer):Exponential {
+  this.bb_pos = i;
+  this.bb = bb;
+  return this;
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Exponential= obj
+ * @returns Exponential
+ */
+static getRootAsExponential(bb:flatbuffers.ByteBuffer, obj?:Exponential):Exponential {
+  return (obj || new Exponential()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Exponential= obj
+ * @returns Exponential
+ */
+static getSizePrefixedRootAsExponential(bb:flatbuffers.ByteBuffer, obj?:Exponential):Exponential {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new Exponential()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
+ */
+rate(obj?:ppx.Tensor):ppx.Tensor|null {
+  var offset = this.bb!.__offset(this.bb_pos, 4);
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ */
+static startExponential(builder:flatbuffers.Builder) {
+  builder.startObject(1);
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset rateOffset
+ */
+static addRate(builder:flatbuffers.Builder, rateOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(0, rateOffset, 0);
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
+ */
+static endExponential(builder:flatbuffers.Builder):flatbuffers.Offset {
+  var offset = builder.endObject();
+  return offset;
+};
+
+static createExponential(builder:flatbuffers.Builder, rateOffset:flatbuffers.Offset):flatbuffers.Offset {
+  Exponential.startExponential(builder);
+  Exponential.addRate(builder, rateOffset);
+  return Exponential.endExponential(builder);
+}
+}
+}
+/**
+ * @constructor
+ */
+export namespace ppx{
+export class Gamma {
+  bb: flatbuffers.ByteBuffer|null = null;
+
+  bb_pos:number = 0;
+/**
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns Gamma
+ */
+__init(i:number, bb:flatbuffers.ByteBuffer):Gamma {
+  this.bb_pos = i;
+  this.bb = bb;
+  return this;
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Gamma= obj
+ * @returns Gamma
+ */
+static getRootAsGamma(bb:flatbuffers.ByteBuffer, obj?:Gamma):Gamma {
+  return (obj || new Gamma()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param Gamma= obj
+ * @returns Gamma
+ */
+static getSizePrefixedRootAsGamma(bb:flatbuffers.ByteBuffer, obj?:Gamma):Gamma {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new Gamma()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
+ */
+concentration(obj?:ppx.Tensor):ppx.Tensor|null {
+  var offset = this.bb!.__offset(this.bb_pos, 4);
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+};
+
+/**
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
+ */
+rate(obj?:ppx.Tensor):ppx.Tensor|null {
+  var offset = this.bb!.__offset(this.bb_pos, 6);
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ */
+static startGamma(builder:flatbuffers.Builder) {
+  builder.startObject(2);
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset concentrationOffset
+ */
+static addConcentration(builder:flatbuffers.Builder, concentrationOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(0, concentrationOffset, 0);
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset rateOffset
+ */
+static addRate(builder:flatbuffers.Builder, rateOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(1, rateOffset, 0);
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
+ */
+static endGamma(builder:flatbuffers.Builder):flatbuffers.Offset {
+  var offset = builder.endObject();
+  return offset;
+};
+
+static createGamma(builder:flatbuffers.Builder, concentrationOffset:flatbuffers.Offset, rateOffset:flatbuffers.Offset):flatbuffers.Offset {
+  Gamma.startGamma(builder);
+  Gamma.addConcentration(builder, concentrationOffset);
+  Gamma.addRate(builder, rateOffset);
+  return Gamma.endGamma(builder);
+}
+}
+}
+/**
+ * @constructor
+ */
+export namespace ppx{
+export class LogNormal {
+  bb: flatbuffers.ByteBuffer|null = null;
+
+  bb_pos:number = 0;
+/**
+ * @param number i
+ * @param flatbuffers.ByteBuffer bb
+ * @returns LogNormal
+ */
+__init(i:number, bb:flatbuffers.ByteBuffer):LogNormal {
+  this.bb_pos = i;
+  this.bb = bb;
+  return this;
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param LogNormal= obj
+ * @returns LogNormal
+ */
+static getRootAsLogNormal(bb:flatbuffers.ByteBuffer, obj?:LogNormal):LogNormal {
+  return (obj || new LogNormal()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param flatbuffers.ByteBuffer bb
+ * @param LogNormal= obj
+ * @returns LogNormal
+ */
+static getSizePrefixedRootAsLogNormal(bb:flatbuffers.ByteBuffer, obj?:LogNormal):LogNormal {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new LogNormal()).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
+ */
+loc(obj?:ppx.Tensor):ppx.Tensor|null {
+  var offset = this.bb!.__offset(this.bb_pos, 4);
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+};
+
+/**
+ * @param ppx.Tensor= obj
+ * @returns ppx.Tensor|null
+ */
+scale(obj?:ppx.Tensor):ppx.Tensor|null {
+  var offset = this.bb!.__offset(this.bb_pos, 6);
+  return offset ? (obj || new ppx.Tensor()).__init(this.bb!.__indirect(this.bb_pos + offset), this.bb!) : null;
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ */
+static startLogNormal(builder:flatbuffers.Builder) {
+  builder.startObject(2);
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset locOffset
+ */
+static addLoc(builder:flatbuffers.Builder, locOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(0, locOffset, 0);
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ * @param flatbuffers.Offset scaleOffset
+ */
+static addScale(builder:flatbuffers.Builder, scaleOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(1, scaleOffset, 0);
+};
+
+/**
+ * @param flatbuffers.Builder builder
+ * @returns flatbuffers.Offset
+ */
+static endLogNormal(builder:flatbuffers.Builder):flatbuffers.Offset {
+  var offset = builder.endObject();
+  return offset;
+};
+
+static createLogNormal(builder:flatbuffers.Builder, locOffset:flatbuffers.Offset, scaleOffset:flatbuffers.Offset):flatbuffers.Offset {
+  LogNormal.startLogNormal(builder);
+  LogNormal.addLoc(builder, locOffset);
+  LogNormal.addScale(builder, scaleOffset);
+  return LogNormal.endLogNormal(builder);
 }
 }
 }

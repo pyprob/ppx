@@ -35,9 +35,14 @@ public enum Distribution: UInt8, Enum {
 	case uniform = 2
 	case categorical = 3
 	case poisson = 4
+	case bernoulli = 5
+	case beta = 6
+	case exponential = 7
+	case gamma = 8
+	case lognormal = 9
 
 
-	public static var max: Distribution { return .poisson }
+	public static var max: Distribution { return .lognormal }
 	public static var min: Distribution { return .none }
 }
 
@@ -507,6 +512,138 @@ public struct Poisson: FlatBufferObject {
 		let __start = Poisson.startPoisson(fbb)
 		Poisson.add(rate: rate, fbb)
 		return Poisson.endPoisson(fbb, start: __start)
+	}
+}
+
+public struct Bernoulli: FlatBufferObject {
+
+	static func validateVersion() { FlatBuffersVersion_1_12_0() }
+	public var __buffer: ByteBuffer! { return _accessor.bb }
+
+	private var _accessor: Table
+	public static func finish(_ fbb: FlatBufferBuilder, end: Offset<UOffset>, prefix: Bool = false) { fbb.finish(offset: end, fileId: "PPXF", addPrefix: prefix) }
+	public static func getRootAsBernoulli(bb: ByteBuffer) -> Bernoulli { return Bernoulli(Table(bb: bb, position: Int32(bb.read(def: UOffset.self, position: bb.reader)) + Int32(bb.reader))) }
+
+	private init(_ t: Table) { _accessor = t }
+	public init(_ bb: ByteBuffer, o: Int32) { _accessor = Table(bb: bb, position: o) }
+
+	public var probs: ppx.Tensor? { let o = _accessor.offset(4); return o == 0 ? nil : ppx.Tensor(_accessor.bb, o: _accessor.indirect(o + _accessor.postion)) }
+	public static func startBernoulli(_ fbb: FlatBufferBuilder) -> UOffset { fbb.startTable(with: 1) }
+	public static func add(probs: Offset<UOffset>, _ fbb: FlatBufferBuilder) { fbb.add(offset: probs, at: 0)  }
+	public static func endBernoulli(_ fbb: FlatBufferBuilder, start: UOffset) -> Offset<UOffset> { let end = Offset<UOffset>(offset: fbb.endTable(at: start)); return end }
+	public static func createBernoulli(_ fbb: FlatBufferBuilder,
+		offsetOfProbs probs: Offset<UOffset> = Offset()) -> Offset<UOffset> {
+		let __start = Bernoulli.startBernoulli(fbb)
+		Bernoulli.add(probs: probs, fbb)
+		return Bernoulli.endBernoulli(fbb, start: __start)
+	}
+}
+
+public struct Beta: FlatBufferObject {
+
+	static func validateVersion() { FlatBuffersVersion_1_12_0() }
+	public var __buffer: ByteBuffer! { return _accessor.bb }
+
+	private var _accessor: Table
+	public static func finish(_ fbb: FlatBufferBuilder, end: Offset<UOffset>, prefix: Bool = false) { fbb.finish(offset: end, fileId: "PPXF", addPrefix: prefix) }
+	public static func getRootAsBeta(bb: ByteBuffer) -> Beta { return Beta(Table(bb: bb, position: Int32(bb.read(def: UOffset.self, position: bb.reader)) + Int32(bb.reader))) }
+
+	private init(_ t: Table) { _accessor = t }
+	public init(_ bb: ByteBuffer, o: Int32) { _accessor = Table(bb: bb, position: o) }
+
+	public var concentration1: ppx.Tensor? { let o = _accessor.offset(4); return o == 0 ? nil : ppx.Tensor(_accessor.bb, o: _accessor.indirect(o + _accessor.postion)) }
+	public var concentration0: ppx.Tensor? { let o = _accessor.offset(6); return o == 0 ? nil : ppx.Tensor(_accessor.bb, o: _accessor.indirect(o + _accessor.postion)) }
+	public static func startBeta(_ fbb: FlatBufferBuilder) -> UOffset { fbb.startTable(with: 2) }
+	public static func add(concentration1: Offset<UOffset>, _ fbb: FlatBufferBuilder) { fbb.add(offset: concentration1, at: 0)  }
+	public static func add(concentration0: Offset<UOffset>, _ fbb: FlatBufferBuilder) { fbb.add(offset: concentration0, at: 1)  }
+	public static func endBeta(_ fbb: FlatBufferBuilder, start: UOffset) -> Offset<UOffset> { let end = Offset<UOffset>(offset: fbb.endTable(at: start)); return end }
+	public static func createBeta(_ fbb: FlatBufferBuilder,
+		offsetOfConcentration1 concentration1: Offset<UOffset> = Offset(),
+		offsetOfConcentration0 concentration0: Offset<UOffset> = Offset()) -> Offset<UOffset> {
+		let __start = Beta.startBeta(fbb)
+		Beta.add(concentration1: concentration1, fbb)
+		Beta.add(concentration0: concentration0, fbb)
+		return Beta.endBeta(fbb, start: __start)
+	}
+}
+
+public struct Exponential: FlatBufferObject {
+
+	static func validateVersion() { FlatBuffersVersion_1_12_0() }
+	public var __buffer: ByteBuffer! { return _accessor.bb }
+
+	private var _accessor: Table
+	public static func finish(_ fbb: FlatBufferBuilder, end: Offset<UOffset>, prefix: Bool = false) { fbb.finish(offset: end, fileId: "PPXF", addPrefix: prefix) }
+	public static func getRootAsExponential(bb: ByteBuffer) -> Exponential { return Exponential(Table(bb: bb, position: Int32(bb.read(def: UOffset.self, position: bb.reader)) + Int32(bb.reader))) }
+
+	private init(_ t: Table) { _accessor = t }
+	public init(_ bb: ByteBuffer, o: Int32) { _accessor = Table(bb: bb, position: o) }
+
+	public var rate: ppx.Tensor? { let o = _accessor.offset(4); return o == 0 ? nil : ppx.Tensor(_accessor.bb, o: _accessor.indirect(o + _accessor.postion)) }
+	public static func startExponential(_ fbb: FlatBufferBuilder) -> UOffset { fbb.startTable(with: 1) }
+	public static func add(rate: Offset<UOffset>, _ fbb: FlatBufferBuilder) { fbb.add(offset: rate, at: 0)  }
+	public static func endExponential(_ fbb: FlatBufferBuilder, start: UOffset) -> Offset<UOffset> { let end = Offset<UOffset>(offset: fbb.endTable(at: start)); return end }
+	public static func createExponential(_ fbb: FlatBufferBuilder,
+		offsetOfRate rate: Offset<UOffset> = Offset()) -> Offset<UOffset> {
+		let __start = Exponential.startExponential(fbb)
+		Exponential.add(rate: rate, fbb)
+		return Exponential.endExponential(fbb, start: __start)
+	}
+}
+
+public struct Gamma: FlatBufferObject {
+
+	static func validateVersion() { FlatBuffersVersion_1_12_0() }
+	public var __buffer: ByteBuffer! { return _accessor.bb }
+
+	private var _accessor: Table
+	public static func finish(_ fbb: FlatBufferBuilder, end: Offset<UOffset>, prefix: Bool = false) { fbb.finish(offset: end, fileId: "PPXF", addPrefix: prefix) }
+	public static func getRootAsGamma(bb: ByteBuffer) -> Gamma { return Gamma(Table(bb: bb, position: Int32(bb.read(def: UOffset.self, position: bb.reader)) + Int32(bb.reader))) }
+
+	private init(_ t: Table) { _accessor = t }
+	public init(_ bb: ByteBuffer, o: Int32) { _accessor = Table(bb: bb, position: o) }
+
+	public var concentration: ppx.Tensor? { let o = _accessor.offset(4); return o == 0 ? nil : ppx.Tensor(_accessor.bb, o: _accessor.indirect(o + _accessor.postion)) }
+	public var rate: ppx.Tensor? { let o = _accessor.offset(6); return o == 0 ? nil : ppx.Tensor(_accessor.bb, o: _accessor.indirect(o + _accessor.postion)) }
+	public static func startGamma(_ fbb: FlatBufferBuilder) -> UOffset { fbb.startTable(with: 2) }
+	public static func add(concentration: Offset<UOffset>, _ fbb: FlatBufferBuilder) { fbb.add(offset: concentration, at: 0)  }
+	public static func add(rate: Offset<UOffset>, _ fbb: FlatBufferBuilder) { fbb.add(offset: rate, at: 1)  }
+	public static func endGamma(_ fbb: FlatBufferBuilder, start: UOffset) -> Offset<UOffset> { let end = Offset<UOffset>(offset: fbb.endTable(at: start)); return end }
+	public static func createGamma(_ fbb: FlatBufferBuilder,
+		offsetOfConcentration concentration: Offset<UOffset> = Offset(),
+		offsetOfRate rate: Offset<UOffset> = Offset()) -> Offset<UOffset> {
+		let __start = Gamma.startGamma(fbb)
+		Gamma.add(concentration: concentration, fbb)
+		Gamma.add(rate: rate, fbb)
+		return Gamma.endGamma(fbb, start: __start)
+	}
+}
+
+public struct LogNormal: FlatBufferObject {
+
+	static func validateVersion() { FlatBuffersVersion_1_12_0() }
+	public var __buffer: ByteBuffer! { return _accessor.bb }
+
+	private var _accessor: Table
+	public static func finish(_ fbb: FlatBufferBuilder, end: Offset<UOffset>, prefix: Bool = false) { fbb.finish(offset: end, fileId: "PPXF", addPrefix: prefix) }
+	public static func getRootAsLogNormal(bb: ByteBuffer) -> LogNormal { return LogNormal(Table(bb: bb, position: Int32(bb.read(def: UOffset.self, position: bb.reader)) + Int32(bb.reader))) }
+
+	private init(_ t: Table) { _accessor = t }
+	public init(_ bb: ByteBuffer, o: Int32) { _accessor = Table(bb: bb, position: o) }
+
+	public var loc: ppx.Tensor? { let o = _accessor.offset(4); return o == 0 ? nil : ppx.Tensor(_accessor.bb, o: _accessor.indirect(o + _accessor.postion)) }
+	public var scale: ppx.Tensor? { let o = _accessor.offset(6); return o == 0 ? nil : ppx.Tensor(_accessor.bb, o: _accessor.indirect(o + _accessor.postion)) }
+	public static func startLogNormal(_ fbb: FlatBufferBuilder) -> UOffset { fbb.startTable(with: 2) }
+	public static func add(loc: Offset<UOffset>, _ fbb: FlatBufferBuilder) { fbb.add(offset: loc, at: 0)  }
+	public static func add(scale: Offset<UOffset>, _ fbb: FlatBufferBuilder) { fbb.add(offset: scale, at: 1)  }
+	public static func endLogNormal(_ fbb: FlatBufferBuilder, start: UOffset) -> Offset<UOffset> { let end = Offset<UOffset>(offset: fbb.endTable(at: start)); return end }
+	public static func createLogNormal(_ fbb: FlatBufferBuilder,
+		offsetOfLoc loc: Offset<UOffset> = Offset(),
+		offsetOfScale scale: Offset<UOffset> = Offset()) -> Offset<UOffset> {
+		let __start = LogNormal.startLogNormal(fbb)
+		LogNormal.add(loc: loc, fbb)
+		LogNormal.add(scale: scale, fbb)
+		return LogNormal.endLogNormal(fbb, start: __start)
 	}
 }
 

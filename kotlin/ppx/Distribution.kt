@@ -11,7 +11,12 @@ class Distribution private constructor() {
         const val Uniform: UByte = 2u
         const val Categorical: UByte = 3u
         const val Poisson: UByte = 4u
-        val names : Array<String> = arrayOf("NONE", "Normal", "Uniform", "Categorical", "Poisson")
+        const val Bernoulli: UByte = 5u
+        const val Beta: UByte = 6u
+        const val Exponential: UByte = 7u
+        const val Gamma: UByte = 8u
+        const val LogNormal: UByte = 9u
+        val names : Array<String> = arrayOf("NONE", "Normal", "Uniform", "Categorical", "Poisson", "Bernoulli", "Beta", "Exponential", "Gamma", "LogNormal")
         fun name(e: Int) : String = names[e]
     }
 }

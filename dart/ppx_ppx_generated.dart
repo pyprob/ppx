@@ -69,7 +69,7 @@ class DistributionTypeId {
   }
 
   static const int minValue = 0;
-  static const int maxValue = 4;
+  static const int maxValue = 9;
   static bool containsValue(int value) => values.containsKey(value);
 
   static const DistributionTypeId NONE = const DistributionTypeId._(0);
@@ -77,7 +77,12 @@ class DistributionTypeId {
   static const DistributionTypeId Uniform = const DistributionTypeId._(2);
   static const DistributionTypeId Categorical = const DistributionTypeId._(3);
   static const DistributionTypeId Poisson = const DistributionTypeId._(4);
-  static get values => {0: NONE,1: Normal,2: Uniform,3: Categorical,4: Poisson,};
+  static const DistributionTypeId Bernoulli = const DistributionTypeId._(5);
+  static const DistributionTypeId Beta = const DistributionTypeId._(6);
+  static const DistributionTypeId Exponential = const DistributionTypeId._(7);
+  static const DistributionTypeId Gamma = const DistributionTypeId._(8);
+  static const DistributionTypeId LogNormal = const DistributionTypeId._(9);
+  static get values => {0: NONE,1: Normal,2: Uniform,3: Categorical,4: Poisson,5: Bernoulli,6: Beta,7: Exponential,8: Gamma,9: LogNormal,};
 
   static const fb.Reader<DistributionTypeId> reader = const _DistributionTypeIdReader();
 
@@ -615,6 +620,11 @@ class Sample {
       case 2: return Uniform.reader.vTableGet(_bc, _bcOffset, 10, null);
       case 3: return Categorical.reader.vTableGet(_bc, _bcOffset, 10, null);
       case 4: return Poisson.reader.vTableGet(_bc, _bcOffset, 10, null);
+      case 5: return Bernoulli.reader.vTableGet(_bc, _bcOffset, 10, null);
+      case 6: return Beta.reader.vTableGet(_bc, _bcOffset, 10, null);
+      case 7: return Exponential.reader.vTableGet(_bc, _bcOffset, 10, null);
+      case 8: return Gamma.reader.vTableGet(_bc, _bcOffset, 10, null);
+      case 9: return LogNormal.reader.vTableGet(_bc, _bcOffset, 10, null);
       default: return null;
     }
   }
@@ -832,6 +842,11 @@ class Observe {
       case 2: return Uniform.reader.vTableGet(_bc, _bcOffset, 10, null);
       case 3: return Categorical.reader.vTableGet(_bc, _bcOffset, 10, null);
       case 4: return Poisson.reader.vTableGet(_bc, _bcOffset, 10, null);
+      case 5: return Bernoulli.reader.vTableGet(_bc, _bcOffset, 10, null);
+      case 6: return Beta.reader.vTableGet(_bc, _bcOffset, 10, null);
+      case 7: return Exponential.reader.vTableGet(_bc, _bcOffset, 10, null);
+      case 8: return Gamma.reader.vTableGet(_bc, _bcOffset, 10, null);
+      case 9: return LogNormal.reader.vTableGet(_bc, _bcOffset, 10, null);
       default: return null;
     }
   }
@@ -1521,6 +1536,437 @@ class PoissonObjectBuilder extends fb.ObjectBuilder {
     fbBuilder.startTable();
     if (rateOffset != null) {
       fbBuilder.addOffset(0, rateOffset);
+    }
+    return fbBuilder.endTable();
+  }
+
+  /// Convenience method to serialize to byte list.
+  @override
+  Uint8List toBytes([String fileIdentifier]) {
+    fb.Builder fbBuilder = new fb.Builder();
+    int offset = finish(fbBuilder);
+    return fbBuilder.finish(offset, fileIdentifier);
+  }
+}
+class Bernoulli {
+  Bernoulli._(this._bc, this._bcOffset);
+  factory Bernoulli(List<int> bytes) {
+    fb.BufferContext rootRef = new fb.BufferContext.fromBytes(bytes);
+    return reader.read(rootRef, 0);
+  }
+
+  static const fb.Reader<Bernoulli> reader = const _BernoulliReader();
+
+  final fb.BufferContext _bc;
+  final int _bcOffset;
+
+  Tensor get probs => Tensor.reader.vTableGet(_bc, _bcOffset, 4, null);
+
+  @override
+  String toString() {
+    return 'Bernoulli{probs: $probs}';
+  }
+}
+
+class _BernoulliReader extends fb.TableReader<Bernoulli> {
+  const _BernoulliReader();
+
+  @override
+  Bernoulli createObject(fb.BufferContext bc, int offset) => 
+    new Bernoulli._(bc, offset);
+}
+
+class BernoulliBuilder {
+  BernoulliBuilder(this.fbBuilder) {
+    assert(fbBuilder != null);
+  }
+
+  final fb.Builder fbBuilder;
+
+  void begin() {
+    fbBuilder.startTable();
+  }
+
+  int addProbsOffset(int offset) {
+    fbBuilder.addOffset(0, offset);
+    return fbBuilder.offset;
+  }
+
+  int finish() {
+    return fbBuilder.endTable();
+  }
+}
+
+class BernoulliObjectBuilder extends fb.ObjectBuilder {
+  final TensorObjectBuilder _probs;
+
+  BernoulliObjectBuilder({
+    TensorObjectBuilder probs,
+  })
+      : _probs = probs;
+
+  /// Finish building, and store into the [fbBuilder].
+  @override
+  int finish(
+    fb.Builder fbBuilder) {
+    assert(fbBuilder != null);
+    final int probsOffset = _probs?.getOrCreateOffset(fbBuilder);
+
+    fbBuilder.startTable();
+    if (probsOffset != null) {
+      fbBuilder.addOffset(0, probsOffset);
+    }
+    return fbBuilder.endTable();
+  }
+
+  /// Convenience method to serialize to byte list.
+  @override
+  Uint8List toBytes([String fileIdentifier]) {
+    fb.Builder fbBuilder = new fb.Builder();
+    int offset = finish(fbBuilder);
+    return fbBuilder.finish(offset, fileIdentifier);
+  }
+}
+class Beta {
+  Beta._(this._bc, this._bcOffset);
+  factory Beta(List<int> bytes) {
+    fb.BufferContext rootRef = new fb.BufferContext.fromBytes(bytes);
+    return reader.read(rootRef, 0);
+  }
+
+  static const fb.Reader<Beta> reader = const _BetaReader();
+
+  final fb.BufferContext _bc;
+  final int _bcOffset;
+
+  Tensor get concentration1 => Tensor.reader.vTableGet(_bc, _bcOffset, 4, null);
+  Tensor get concentration0 => Tensor.reader.vTableGet(_bc, _bcOffset, 6, null);
+
+  @override
+  String toString() {
+    return 'Beta{concentration1: $concentration1, concentration0: $concentration0}';
+  }
+}
+
+class _BetaReader extends fb.TableReader<Beta> {
+  const _BetaReader();
+
+  @override
+  Beta createObject(fb.BufferContext bc, int offset) => 
+    new Beta._(bc, offset);
+}
+
+class BetaBuilder {
+  BetaBuilder(this.fbBuilder) {
+    assert(fbBuilder != null);
+  }
+
+  final fb.Builder fbBuilder;
+
+  void begin() {
+    fbBuilder.startTable();
+  }
+
+  int addConcentration1Offset(int offset) {
+    fbBuilder.addOffset(0, offset);
+    return fbBuilder.offset;
+  }
+  int addConcentration0Offset(int offset) {
+    fbBuilder.addOffset(1, offset);
+    return fbBuilder.offset;
+  }
+
+  int finish() {
+    return fbBuilder.endTable();
+  }
+}
+
+class BetaObjectBuilder extends fb.ObjectBuilder {
+  final TensorObjectBuilder _concentration1;
+  final TensorObjectBuilder _concentration0;
+
+  BetaObjectBuilder({
+    TensorObjectBuilder concentration1,
+    TensorObjectBuilder concentration0,
+  })
+      : _concentration1 = concentration1,
+        _concentration0 = concentration0;
+
+  /// Finish building, and store into the [fbBuilder].
+  @override
+  int finish(
+    fb.Builder fbBuilder) {
+    assert(fbBuilder != null);
+    final int concentration1Offset = _concentration1?.getOrCreateOffset(fbBuilder);
+    final int concentration0Offset = _concentration0?.getOrCreateOffset(fbBuilder);
+
+    fbBuilder.startTable();
+    if (concentration1Offset != null) {
+      fbBuilder.addOffset(0, concentration1Offset);
+    }
+    if (concentration0Offset != null) {
+      fbBuilder.addOffset(1, concentration0Offset);
+    }
+    return fbBuilder.endTable();
+  }
+
+  /// Convenience method to serialize to byte list.
+  @override
+  Uint8List toBytes([String fileIdentifier]) {
+    fb.Builder fbBuilder = new fb.Builder();
+    int offset = finish(fbBuilder);
+    return fbBuilder.finish(offset, fileIdentifier);
+  }
+}
+class Exponential {
+  Exponential._(this._bc, this._bcOffset);
+  factory Exponential(List<int> bytes) {
+    fb.BufferContext rootRef = new fb.BufferContext.fromBytes(bytes);
+    return reader.read(rootRef, 0);
+  }
+
+  static const fb.Reader<Exponential> reader = const _ExponentialReader();
+
+  final fb.BufferContext _bc;
+  final int _bcOffset;
+
+  Tensor get rate => Tensor.reader.vTableGet(_bc, _bcOffset, 4, null);
+
+  @override
+  String toString() {
+    return 'Exponential{rate: $rate}';
+  }
+}
+
+class _ExponentialReader extends fb.TableReader<Exponential> {
+  const _ExponentialReader();
+
+  @override
+  Exponential createObject(fb.BufferContext bc, int offset) => 
+    new Exponential._(bc, offset);
+}
+
+class ExponentialBuilder {
+  ExponentialBuilder(this.fbBuilder) {
+    assert(fbBuilder != null);
+  }
+
+  final fb.Builder fbBuilder;
+
+  void begin() {
+    fbBuilder.startTable();
+  }
+
+  int addRateOffset(int offset) {
+    fbBuilder.addOffset(0, offset);
+    return fbBuilder.offset;
+  }
+
+  int finish() {
+    return fbBuilder.endTable();
+  }
+}
+
+class ExponentialObjectBuilder extends fb.ObjectBuilder {
+  final TensorObjectBuilder _rate;
+
+  ExponentialObjectBuilder({
+    TensorObjectBuilder rate,
+  })
+      : _rate = rate;
+
+  /// Finish building, and store into the [fbBuilder].
+  @override
+  int finish(
+    fb.Builder fbBuilder) {
+    assert(fbBuilder != null);
+    final int rateOffset = _rate?.getOrCreateOffset(fbBuilder);
+
+    fbBuilder.startTable();
+    if (rateOffset != null) {
+      fbBuilder.addOffset(0, rateOffset);
+    }
+    return fbBuilder.endTable();
+  }
+
+  /// Convenience method to serialize to byte list.
+  @override
+  Uint8List toBytes([String fileIdentifier]) {
+    fb.Builder fbBuilder = new fb.Builder();
+    int offset = finish(fbBuilder);
+    return fbBuilder.finish(offset, fileIdentifier);
+  }
+}
+class Gamma {
+  Gamma._(this._bc, this._bcOffset);
+  factory Gamma(List<int> bytes) {
+    fb.BufferContext rootRef = new fb.BufferContext.fromBytes(bytes);
+    return reader.read(rootRef, 0);
+  }
+
+  static const fb.Reader<Gamma> reader = const _GammaReader();
+
+  final fb.BufferContext _bc;
+  final int _bcOffset;
+
+  Tensor get concentration => Tensor.reader.vTableGet(_bc, _bcOffset, 4, null);
+  Tensor get rate => Tensor.reader.vTableGet(_bc, _bcOffset, 6, null);
+
+  @override
+  String toString() {
+    return 'Gamma{concentration: $concentration, rate: $rate}';
+  }
+}
+
+class _GammaReader extends fb.TableReader<Gamma> {
+  const _GammaReader();
+
+  @override
+  Gamma createObject(fb.BufferContext bc, int offset) => 
+    new Gamma._(bc, offset);
+}
+
+class GammaBuilder {
+  GammaBuilder(this.fbBuilder) {
+    assert(fbBuilder != null);
+  }
+
+  final fb.Builder fbBuilder;
+
+  void begin() {
+    fbBuilder.startTable();
+  }
+
+  int addConcentrationOffset(int offset) {
+    fbBuilder.addOffset(0, offset);
+    return fbBuilder.offset;
+  }
+  int addRateOffset(int offset) {
+    fbBuilder.addOffset(1, offset);
+    return fbBuilder.offset;
+  }
+
+  int finish() {
+    return fbBuilder.endTable();
+  }
+}
+
+class GammaObjectBuilder extends fb.ObjectBuilder {
+  final TensorObjectBuilder _concentration;
+  final TensorObjectBuilder _rate;
+
+  GammaObjectBuilder({
+    TensorObjectBuilder concentration,
+    TensorObjectBuilder rate,
+  })
+      : _concentration = concentration,
+        _rate = rate;
+
+  /// Finish building, and store into the [fbBuilder].
+  @override
+  int finish(
+    fb.Builder fbBuilder) {
+    assert(fbBuilder != null);
+    final int concentrationOffset = _concentration?.getOrCreateOffset(fbBuilder);
+    final int rateOffset = _rate?.getOrCreateOffset(fbBuilder);
+
+    fbBuilder.startTable();
+    if (concentrationOffset != null) {
+      fbBuilder.addOffset(0, concentrationOffset);
+    }
+    if (rateOffset != null) {
+      fbBuilder.addOffset(1, rateOffset);
+    }
+    return fbBuilder.endTable();
+  }
+
+  /// Convenience method to serialize to byte list.
+  @override
+  Uint8List toBytes([String fileIdentifier]) {
+    fb.Builder fbBuilder = new fb.Builder();
+    int offset = finish(fbBuilder);
+    return fbBuilder.finish(offset, fileIdentifier);
+  }
+}
+class LogNormal {
+  LogNormal._(this._bc, this._bcOffset);
+  factory LogNormal(List<int> bytes) {
+    fb.BufferContext rootRef = new fb.BufferContext.fromBytes(bytes);
+    return reader.read(rootRef, 0);
+  }
+
+  static const fb.Reader<LogNormal> reader = const _LogNormalReader();
+
+  final fb.BufferContext _bc;
+  final int _bcOffset;
+
+  Tensor get loc => Tensor.reader.vTableGet(_bc, _bcOffset, 4, null);
+  Tensor get scale => Tensor.reader.vTableGet(_bc, _bcOffset, 6, null);
+
+  @override
+  String toString() {
+    return 'LogNormal{loc: $loc, scale: $scale}';
+  }
+}
+
+class _LogNormalReader extends fb.TableReader<LogNormal> {
+  const _LogNormalReader();
+
+  @override
+  LogNormal createObject(fb.BufferContext bc, int offset) => 
+    new LogNormal._(bc, offset);
+}
+
+class LogNormalBuilder {
+  LogNormalBuilder(this.fbBuilder) {
+    assert(fbBuilder != null);
+  }
+
+  final fb.Builder fbBuilder;
+
+  void begin() {
+    fbBuilder.startTable();
+  }
+
+  int addLocOffset(int offset) {
+    fbBuilder.addOffset(0, offset);
+    return fbBuilder.offset;
+  }
+  int addScaleOffset(int offset) {
+    fbBuilder.addOffset(1, offset);
+    return fbBuilder.offset;
+  }
+
+  int finish() {
+    return fbBuilder.endTable();
+  }
+}
+
+class LogNormalObjectBuilder extends fb.ObjectBuilder {
+  final TensorObjectBuilder _loc;
+  final TensorObjectBuilder _scale;
+
+  LogNormalObjectBuilder({
+    TensorObjectBuilder loc,
+    TensorObjectBuilder scale,
+  })
+      : _loc = loc,
+        _scale = scale;
+
+  /// Finish building, and store into the [fbBuilder].
+  @override
+  int finish(
+    fb.Builder fbBuilder) {
+    assert(fbBuilder != null);
+    final int locOffset = _loc?.getOrCreateOffset(fbBuilder);
+    final int scaleOffset = _scale?.getOrCreateOffset(fbBuilder);
+
+    fbBuilder.startTable();
+    if (locOffset != null) {
+      fbBuilder.addOffset(0, locOffset);
+    }
+    if (scaleOffset != null) {
+      fbBuilder.addOffset(1, scaleOffset);
     }
     return fbBuilder.endTable();
   }

@@ -23,6 +23,11 @@ enum Distribution:
     Distribution_Uniform = 2
     Distribution_Categorical = 3
     Distribution_Poisson = 4
+    Distribution_Bernoulli = 5
+    Distribution_Beta = 6
+    Distribution_Exponential = 7
+    Distribution_Gamma = 8
+    Distribution_LogNormal = 9
 
 class Message
 
@@ -57,6 +62,16 @@ class Uniform
 class Categorical
 
 class Poisson
+
+class Bernoulli
+
+class Beta
+
+class Exponential
+
+class Gamma
+
+class LogNormal
 
 class Message : flatbuffers_handle
     def body_type():
@@ -224,6 +239,16 @@ class Sample : flatbuffers_handle
         return ppx_Categorical { buf_, buf_.flatbuffers_field_table(pos_, 10) }
     def distribution_as_Poisson():
         return ppx_Poisson { buf_, buf_.flatbuffers_field_table(pos_, 10) }
+    def distribution_as_Bernoulli():
+        return ppx_Bernoulli { buf_, buf_.flatbuffers_field_table(pos_, 10) }
+    def distribution_as_Beta():
+        return ppx_Beta { buf_, buf_.flatbuffers_field_table(pos_, 10) }
+    def distribution_as_Exponential():
+        return ppx_Exponential { buf_, buf_.flatbuffers_field_table(pos_, 10) }
+    def distribution_as_Gamma():
+        return ppx_Gamma { buf_, buf_.flatbuffers_field_table(pos_, 10) }
+    def distribution_as_LogNormal():
+        return ppx_LogNormal { buf_, buf_.flatbuffers_field_table(pos_, 10) }
     def control():
         return buf_.flatbuffers_field_int8(pos_, 12, 1)
     def replace():
@@ -290,6 +315,16 @@ class Observe : flatbuffers_handle
         return ppx_Categorical { buf_, buf_.flatbuffers_field_table(pos_, 10) }
     def distribution_as_Poisson():
         return ppx_Poisson { buf_, buf_.flatbuffers_field_table(pos_, 10) }
+    def distribution_as_Bernoulli():
+        return ppx_Bernoulli { buf_, buf_.flatbuffers_field_table(pos_, 10) }
+    def distribution_as_Beta():
+        return ppx_Beta { buf_, buf_.flatbuffers_field_table(pos_, 10) }
+    def distribution_as_Exponential():
+        return ppx_Exponential { buf_, buf_.flatbuffers_field_table(pos_, 10) }
+    def distribution_as_Gamma():
+        return ppx_Gamma { buf_, buf_.flatbuffers_field_table(pos_, 10) }
+    def distribution_as_LogNormal():
+        return ppx_LogNormal { buf_, buf_.flatbuffers_field_table(pos_, 10) }
     def value():
         let o = buf_.flatbuffers_field_table(pos_, 12)
         return if o: ppx_Tensor { buf_, o } else: nil
@@ -463,6 +498,114 @@ struct PoissonBuilder:
         return this
     def add_rate(rate:flatbuffers_offset):
         b_.PrependUOffsetTRelativeSlot(0, rate)
+        return this
+    def end():
+        return b_.EndObject()
+
+class Bernoulli : flatbuffers_handle
+    def probs():
+        let o = buf_.flatbuffers_field_table(pos_, 4)
+        return if o: ppx_Tensor { buf_, o } else: nil
+
+def GetRootAsBernoulli(buf:string): return Bernoulli { buf, buf.flatbuffers_indirect(0) }
+
+struct BernoulliBuilder:
+    b_:flatbuffers_builder
+    def start():
+        b_.StartObject(1)
+        return this
+    def add_probs(probs:flatbuffers_offset):
+        b_.PrependUOffsetTRelativeSlot(0, probs)
+        return this
+    def end():
+        return b_.EndObject()
+
+class Beta : flatbuffers_handle
+    def concentration1():
+        let o = buf_.flatbuffers_field_table(pos_, 4)
+        return if o: ppx_Tensor { buf_, o } else: nil
+    def concentration0():
+        let o = buf_.flatbuffers_field_table(pos_, 6)
+        return if o: ppx_Tensor { buf_, o } else: nil
+
+def GetRootAsBeta(buf:string): return Beta { buf, buf.flatbuffers_indirect(0) }
+
+struct BetaBuilder:
+    b_:flatbuffers_builder
+    def start():
+        b_.StartObject(2)
+        return this
+    def add_concentration1(concentration1:flatbuffers_offset):
+        b_.PrependUOffsetTRelativeSlot(0, concentration1)
+        return this
+    def add_concentration0(concentration0:flatbuffers_offset):
+        b_.PrependUOffsetTRelativeSlot(1, concentration0)
+        return this
+    def end():
+        return b_.EndObject()
+
+class Exponential : flatbuffers_handle
+    def rate():
+        let o = buf_.flatbuffers_field_table(pos_, 4)
+        return if o: ppx_Tensor { buf_, o } else: nil
+
+def GetRootAsExponential(buf:string): return Exponential { buf, buf.flatbuffers_indirect(0) }
+
+struct ExponentialBuilder:
+    b_:flatbuffers_builder
+    def start():
+        b_.StartObject(1)
+        return this
+    def add_rate(rate:flatbuffers_offset):
+        b_.PrependUOffsetTRelativeSlot(0, rate)
+        return this
+    def end():
+        return b_.EndObject()
+
+class Gamma : flatbuffers_handle
+    def concentration():
+        let o = buf_.flatbuffers_field_table(pos_, 4)
+        return if o: ppx_Tensor { buf_, o } else: nil
+    def rate():
+        let o = buf_.flatbuffers_field_table(pos_, 6)
+        return if o: ppx_Tensor { buf_, o } else: nil
+
+def GetRootAsGamma(buf:string): return Gamma { buf, buf.flatbuffers_indirect(0) }
+
+struct GammaBuilder:
+    b_:flatbuffers_builder
+    def start():
+        b_.StartObject(2)
+        return this
+    def add_concentration(concentration:flatbuffers_offset):
+        b_.PrependUOffsetTRelativeSlot(0, concentration)
+        return this
+    def add_rate(rate:flatbuffers_offset):
+        b_.PrependUOffsetTRelativeSlot(1, rate)
+        return this
+    def end():
+        return b_.EndObject()
+
+class LogNormal : flatbuffers_handle
+    def loc():
+        let o = buf_.flatbuffers_field_table(pos_, 4)
+        return if o: ppx_Tensor { buf_, o } else: nil
+    def scale():
+        let o = buf_.flatbuffers_field_table(pos_, 6)
+        return if o: ppx_Tensor { buf_, o } else: nil
+
+def GetRootAsLogNormal(buf:string): return LogNormal { buf, buf.flatbuffers_indirect(0) }
+
+struct LogNormalBuilder:
+    b_:flatbuffers_builder
+    def start():
+        b_.StartObject(2)
+        return this
+    def add_loc(loc:flatbuffers_offset):
+        b_.PrependUOffsetTRelativeSlot(0, loc)
+        return this
+    def add_scale(scale:flatbuffers_offset):
+        b_.PrependUOffsetTRelativeSlot(1, scale)
         return this
     def end():
         return b_.EndObject()

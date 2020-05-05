@@ -50,7 +50,12 @@ ppx.Distribution = {
   Normal: 1,
   Uniform: 2,
   Categorical: 3,
-  Poisson: 4
+  Poisson: 4,
+  Bernoulli: 5,
+  Beta: 6,
+  Exponential: 7,
+  Gamma: 8,
+  LogNormal: 9
 };
 
 /**
@@ -61,7 +66,12 @@ ppx.DistributionName = {
   '1': 'Normal',
   '2': 'Uniform',
   '3': 'Categorical',
-  '4': 'Poisson'
+  '4': 'Poisson',
+  '5': 'Bernoulli',
+  '6': 'Beta',
+  '7': 'Exponential',
+  '8': 'Gamma',
+  '9': 'LogNormal'
 };
 
 /**
@@ -1896,6 +1906,508 @@ ppx.Poisson.createPoisson = function(builder, rateOffset) {
   ppx.Poisson.startPoisson(builder);
   ppx.Poisson.addRate(builder, rateOffset);
   return ppx.Poisson.endPoisson(builder);
+}
+
+/**
+ * @constructor
+ */
+ppx.Bernoulli = function() {
+  /**
+   * @type {flatbuffers.ByteBuffer}
+   */
+  this.bb = null;
+
+  /**
+   * @type {number}
+   */
+  this.bb_pos = 0;
+};
+
+/**
+ * @param {number} i
+ * @param {flatbuffers.ByteBuffer} bb
+ * @returns {ppx.Bernoulli}
+ */
+ppx.Bernoulli.prototype.__init = function(i, bb) {
+  this.bb_pos = i;
+  this.bb = bb;
+  return this;
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Bernoulli=} obj
+ * @returns {ppx.Bernoulli}
+ */
+ppx.Bernoulli.getRootAsBernoulli = function(bb, obj) {
+  return (obj || new ppx.Bernoulli).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Bernoulli=} obj
+ * @returns {ppx.Bernoulli}
+ */
+ppx.Bernoulli.getSizePrefixedRootAsBernoulli = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new ppx.Bernoulli).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
+ */
+ppx.Bernoulli.prototype.probs = function(obj) {
+  var offset = this.bb.__offset(this.bb_pos, 4);
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ */
+ppx.Bernoulli.startBernoulli = function(builder) {
+  builder.startObject(1);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} probsOffset
+ */
+ppx.Bernoulli.addProbs = function(builder, probsOffset) {
+  builder.addFieldOffset(0, probsOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Bernoulli.endBernoulli = function(builder) {
+  var offset = builder.endObject();
+  return offset;
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} probsOffset
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Bernoulli.createBernoulli = function(builder, probsOffset) {
+  ppx.Bernoulli.startBernoulli(builder);
+  ppx.Bernoulli.addProbs(builder, probsOffset);
+  return ppx.Bernoulli.endBernoulli(builder);
+}
+
+/**
+ * @constructor
+ */
+ppx.Beta = function() {
+  /**
+   * @type {flatbuffers.ByteBuffer}
+   */
+  this.bb = null;
+
+  /**
+   * @type {number}
+   */
+  this.bb_pos = 0;
+};
+
+/**
+ * @param {number} i
+ * @param {flatbuffers.ByteBuffer} bb
+ * @returns {ppx.Beta}
+ */
+ppx.Beta.prototype.__init = function(i, bb) {
+  this.bb_pos = i;
+  this.bb = bb;
+  return this;
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Beta=} obj
+ * @returns {ppx.Beta}
+ */
+ppx.Beta.getRootAsBeta = function(bb, obj) {
+  return (obj || new ppx.Beta).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Beta=} obj
+ * @returns {ppx.Beta}
+ */
+ppx.Beta.getSizePrefixedRootAsBeta = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new ppx.Beta).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
+ */
+ppx.Beta.prototype.concentration1 = function(obj) {
+  var offset = this.bb.__offset(this.bb_pos, 4);
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+};
+
+/**
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
+ */
+ppx.Beta.prototype.concentration0 = function(obj) {
+  var offset = this.bb.__offset(this.bb_pos, 6);
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ */
+ppx.Beta.startBeta = function(builder) {
+  builder.startObject(2);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} concentration1Offset
+ */
+ppx.Beta.addConcentration1 = function(builder, concentration1Offset) {
+  builder.addFieldOffset(0, concentration1Offset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} concentration0Offset
+ */
+ppx.Beta.addConcentration0 = function(builder, concentration0Offset) {
+  builder.addFieldOffset(1, concentration0Offset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Beta.endBeta = function(builder) {
+  var offset = builder.endObject();
+  return offset;
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} concentration1Offset
+ * @param {flatbuffers.Offset} concentration0Offset
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Beta.createBeta = function(builder, concentration1Offset, concentration0Offset) {
+  ppx.Beta.startBeta(builder);
+  ppx.Beta.addConcentration1(builder, concentration1Offset);
+  ppx.Beta.addConcentration0(builder, concentration0Offset);
+  return ppx.Beta.endBeta(builder);
+}
+
+/**
+ * @constructor
+ */
+ppx.Exponential = function() {
+  /**
+   * @type {flatbuffers.ByteBuffer}
+   */
+  this.bb = null;
+
+  /**
+   * @type {number}
+   */
+  this.bb_pos = 0;
+};
+
+/**
+ * @param {number} i
+ * @param {flatbuffers.ByteBuffer} bb
+ * @returns {ppx.Exponential}
+ */
+ppx.Exponential.prototype.__init = function(i, bb) {
+  this.bb_pos = i;
+  this.bb = bb;
+  return this;
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Exponential=} obj
+ * @returns {ppx.Exponential}
+ */
+ppx.Exponential.getRootAsExponential = function(bb, obj) {
+  return (obj || new ppx.Exponential).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Exponential=} obj
+ * @returns {ppx.Exponential}
+ */
+ppx.Exponential.getSizePrefixedRootAsExponential = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new ppx.Exponential).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
+ */
+ppx.Exponential.prototype.rate = function(obj) {
+  var offset = this.bb.__offset(this.bb_pos, 4);
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ */
+ppx.Exponential.startExponential = function(builder) {
+  builder.startObject(1);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} rateOffset
+ */
+ppx.Exponential.addRate = function(builder, rateOffset) {
+  builder.addFieldOffset(0, rateOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Exponential.endExponential = function(builder) {
+  var offset = builder.endObject();
+  return offset;
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} rateOffset
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Exponential.createExponential = function(builder, rateOffset) {
+  ppx.Exponential.startExponential(builder);
+  ppx.Exponential.addRate(builder, rateOffset);
+  return ppx.Exponential.endExponential(builder);
+}
+
+/**
+ * @constructor
+ */
+ppx.Gamma = function() {
+  /**
+   * @type {flatbuffers.ByteBuffer}
+   */
+  this.bb = null;
+
+  /**
+   * @type {number}
+   */
+  this.bb_pos = 0;
+};
+
+/**
+ * @param {number} i
+ * @param {flatbuffers.ByteBuffer} bb
+ * @returns {ppx.Gamma}
+ */
+ppx.Gamma.prototype.__init = function(i, bb) {
+  this.bb_pos = i;
+  this.bb = bb;
+  return this;
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Gamma=} obj
+ * @returns {ppx.Gamma}
+ */
+ppx.Gamma.getRootAsGamma = function(bb, obj) {
+  return (obj || new ppx.Gamma).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.Gamma=} obj
+ * @returns {ppx.Gamma}
+ */
+ppx.Gamma.getSizePrefixedRootAsGamma = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new ppx.Gamma).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
+ */
+ppx.Gamma.prototype.concentration = function(obj) {
+  var offset = this.bb.__offset(this.bb_pos, 4);
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+};
+
+/**
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
+ */
+ppx.Gamma.prototype.rate = function(obj) {
+  var offset = this.bb.__offset(this.bb_pos, 6);
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ */
+ppx.Gamma.startGamma = function(builder) {
+  builder.startObject(2);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} concentrationOffset
+ */
+ppx.Gamma.addConcentration = function(builder, concentrationOffset) {
+  builder.addFieldOffset(0, concentrationOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} rateOffset
+ */
+ppx.Gamma.addRate = function(builder, rateOffset) {
+  builder.addFieldOffset(1, rateOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Gamma.endGamma = function(builder) {
+  var offset = builder.endObject();
+  return offset;
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} concentrationOffset
+ * @param {flatbuffers.Offset} rateOffset
+ * @returns {flatbuffers.Offset}
+ */
+ppx.Gamma.createGamma = function(builder, concentrationOffset, rateOffset) {
+  ppx.Gamma.startGamma(builder);
+  ppx.Gamma.addConcentration(builder, concentrationOffset);
+  ppx.Gamma.addRate(builder, rateOffset);
+  return ppx.Gamma.endGamma(builder);
+}
+
+/**
+ * @constructor
+ */
+ppx.LogNormal = function() {
+  /**
+   * @type {flatbuffers.ByteBuffer}
+   */
+  this.bb = null;
+
+  /**
+   * @type {number}
+   */
+  this.bb_pos = 0;
+};
+
+/**
+ * @param {number} i
+ * @param {flatbuffers.ByteBuffer} bb
+ * @returns {ppx.LogNormal}
+ */
+ppx.LogNormal.prototype.__init = function(i, bb) {
+  this.bb_pos = i;
+  this.bb = bb;
+  return this;
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.LogNormal=} obj
+ * @returns {ppx.LogNormal}
+ */
+ppx.LogNormal.getRootAsLogNormal = function(bb, obj) {
+  return (obj || new ppx.LogNormal).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {flatbuffers.ByteBuffer} bb
+ * @param {ppx.LogNormal=} obj
+ * @returns {ppx.LogNormal}
+ */
+ppx.LogNormal.getSizePrefixedRootAsLogNormal = function(bb, obj) {
+  bb.setPosition(bb.position() + flatbuffers.SIZE_PREFIX_LENGTH);
+  return (obj || new ppx.LogNormal).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+};
+
+/**
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
+ */
+ppx.LogNormal.prototype.loc = function(obj) {
+  var offset = this.bb.__offset(this.bb_pos, 4);
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+};
+
+/**
+ * @param {ppx.Tensor=} obj
+ * @returns {ppx.Tensor|null}
+ */
+ppx.LogNormal.prototype.scale = function(obj) {
+  var offset = this.bb.__offset(this.bb_pos, 6);
+  return offset ? (obj || new ppx.Tensor).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ */
+ppx.LogNormal.startLogNormal = function(builder) {
+  builder.startObject(2);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} locOffset
+ */
+ppx.LogNormal.addLoc = function(builder, locOffset) {
+  builder.addFieldOffset(0, locOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} scaleOffset
+ */
+ppx.LogNormal.addScale = function(builder, scaleOffset) {
+  builder.addFieldOffset(1, scaleOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @returns {flatbuffers.Offset}
+ */
+ppx.LogNormal.endLogNormal = function(builder) {
+  var offset = builder.endObject();
+  return offset;
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} locOffset
+ * @param {flatbuffers.Offset} scaleOffset
+ * @returns {flatbuffers.Offset}
+ */
+ppx.LogNormal.createLogNormal = function(builder, locOffset, scaleOffset) {
+  ppx.LogNormal.startLogNormal(builder);
+  ppx.LogNormal.addLoc(builder, locOffset);
+  ppx.LogNormal.addScale(builder, scaleOffset);
+  return ppx.LogNormal.endLogNormal(builder);
 }
 
 // Exports for Node.js and RequireJS

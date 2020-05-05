@@ -1,5 +1,5 @@
 // ppx
-// 0.1.3
+// 0.1.4
 //
 // Probabilistic programming execution protocol
 // https://github.com/pyprob/ppx
@@ -33,7 +33,12 @@ union Distribution {
   Normal,
   Uniform,
   Categorical,
-  Poisson
+  Poisson,
+  Bernoulli,
+  Beta,
+  Exponential,
+  Gamma,
+  LogNormal
 }
 
 table Handshake {
@@ -98,6 +103,29 @@ table Categorical {
 
 table Poisson {
   rate: Tensor;
+}
+
+table Bernoulli {
+  probs: Tensor;
+}
+
+table Beta {
+  concentration1: Tensor;
+  concentration0: Tensor;
+}
+
+table Exponential {
+  rate: Tensor;
+}
+
+table Gamma {
+  concentration: Tensor;
+  rate: Tensor;
+}
+
+table LogNormal {
+  loc: Tensor;
+  scale: Tensor;
 }
 
 root_type Message;
