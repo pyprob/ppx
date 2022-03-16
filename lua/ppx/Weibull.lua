@@ -13,6 +13,9 @@ function Weibull.New()
     return o
 end
 function Weibull.GetRootAsWeibull(buf, offset)
+    if type(buf) == "string" then
+        buf = flatbuffers.binaryArray.New(buf)
+    end
     local n = flatbuffers.N.UOffsetT:Unpack(buf, offset)
     local o = Weibull.New()
     o:Init(buf, n + offset)

@@ -27,7 +27,7 @@ class Bernoulli : Table() {
         }
     }
     companion object {
-        fun validateVersion() = Constants.FLATBUFFERS_1_12_0()
+        fun validateVersion() = Constants.FLATBUFFERS_2_0_0()
         fun getRootAsBernoulli(_bb: ByteBuffer): Bernoulli = getRootAsBernoulli(_bb, Bernoulli())
         fun getRootAsBernoulli(_bb: ByteBuffer, obj: Bernoulli): Bernoulli {
             _bb.order(ByteOrder.LITTLE_ENDIAN)

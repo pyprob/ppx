@@ -13,6 +13,9 @@ function Run.New()
     return o
 end
 function Run.GetRootAsRun(buf, offset)
+    if type(buf) == "string" then
+        buf = flatbuffers.binaryArray.New(buf)
+    end
     local n = flatbuffers.N.UOffsetT:Unpack(buf, offset)
     local o = Run.New()
     o:Init(buf, n + offset)

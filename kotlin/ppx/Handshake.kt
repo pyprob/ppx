@@ -25,7 +25,7 @@ class Handshake : Table() {
     val systemNameAsByteBuffer : ByteBuffer get() = __vector_as_bytebuffer(4, 1)
     fun systemNameInByteBuffer(_bb: ByteBuffer) : ByteBuffer = __vector_in_bytebuffer(_bb, 4, 1)
     companion object {
-        fun validateVersion() = Constants.FLATBUFFERS_1_12_0()
+        fun validateVersion() = Constants.FLATBUFFERS_2_0_0()
         fun getRootAsHandshake(_bb: ByteBuffer): Handshake = getRootAsHandshake(_bb, Handshake())
         fun getRootAsHandshake(_bb: ByteBuffer, obj: Handshake): Handshake {
             _bb.order(ByteOrder.LITTLE_ENDIAN)

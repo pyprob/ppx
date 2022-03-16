@@ -13,6 +13,9 @@ function Sample.New()
     return o
 end
 function Sample.GetRootAsSample(buf, offset)
+    if type(buf) == "string" then
+        buf = flatbuffers.binaryArray.New(buf)
+    end
     local n = flatbuffers.N.UOffsetT:Unpack(buf, offset)
     local o = Sample.New()
     o:Init(buf, n + offset)
@@ -55,20 +58,12 @@ function Sample_mt:Control()
     end
     return true
 end
-function Sample_mt:Replace()
-    local o = self.view:Offset(14)
-    if o ~= 0 then
-        return (self.view:Get(flatbuffers.N.Bool, o + self.view.pos) ~= 0)
-    end
-    return false
-end
-function Sample.Start(builder) builder:StartObject(6) end
+function Sample.Start(builder) builder:StartObject(5) end
 function Sample.AddAddress(builder, address) builder:PrependUOffsetTRelativeSlot(0, address, 0) end
 function Sample.AddName(builder, name) builder:PrependUOffsetTRelativeSlot(1, name, 0) end
 function Sample.AddDistributionType(builder, distributionType) builder:PrependUint8Slot(2, distributionType, 0) end
 function Sample.AddDistribution(builder, distribution) builder:PrependUOffsetTRelativeSlot(3, distribution, 0) end
 function Sample.AddControl(builder, control) builder:PrependBoolSlot(4, control, 1) end
-function Sample.AddReplace(builder, replace) builder:PrependBoolSlot(5, replace, 0) end
 function Sample.End(builder) return builder:EndObject() end
 
 return Sample -- return the module

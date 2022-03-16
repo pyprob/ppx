@@ -17,6 +17,13 @@ func GetRootAsBinomial(buf []byte, offset flatbuffers.UOffsetT) *Binomial {
 	return x
 }
 
+func GetSizePrefixedRootAsBinomial(buf []byte, offset flatbuffers.UOffsetT) *Binomial {
+	n := flatbuffers.GetUOffsetT(buf[offset+flatbuffers.SizeUint32:])
+	x := &Binomial{}
+	x.Init(buf, n+offset+flatbuffers.SizeUint32)
+	return x
+}
+
 func (rcv *Binomial) Init(buf []byte, i flatbuffers.UOffsetT) {
 	rcv._tab.Bytes = buf
 	rcv._tab.Pos = i

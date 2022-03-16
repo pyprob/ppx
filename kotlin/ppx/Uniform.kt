@@ -36,7 +36,7 @@ class Uniform : Table() {
         }
     }
     companion object {
-        fun validateVersion() = Constants.FLATBUFFERS_1_12_0()
+        fun validateVersion() = Constants.FLATBUFFERS_2_0_0()
         fun getRootAsUniform(_bb: ByteBuffer): Uniform = getRootAsUniform(_bb, Uniform())
         fun getRootAsUniform(_bb: ByteBuffer, obj: Uniform): Uniform {
             _bb.order(ByteOrder.LITTLE_ENDIAN)

@@ -82,36 +82,26 @@ class Sample extends Table
     }
 
     /**
-     * @return bool
-     */
-    public function getReplace()
-    {
-        $o = $this->__offset(14);
-        return $o != 0 ? $this->bb->getBool($o + $this->bb_pos) : false;
-    }
-
-    /**
      * @param FlatBufferBuilder $builder
      * @return void
      */
     public static function startSample(FlatBufferBuilder $builder)
     {
-        $builder->StartObject(6);
+        $builder->StartObject(5);
     }
 
     /**
      * @param FlatBufferBuilder $builder
      * @return Sample
      */
-    public static function createSample(FlatBufferBuilder $builder, $address, $name, $distribution_type, $distribution, $control, $replace)
+    public static function createSample(FlatBufferBuilder $builder, $address, $name, $distribution_type, $distribution, $control)
     {
-        $builder->startObject(6);
+        $builder->startObject(5);
         self::addAddress($builder, $address);
         self::addName($builder, $name);
         self::addDistributionType($builder, $distribution_type);
         self::addDistribution($builder, $distribution);
         self::addControl($builder, $control);
-        self::addReplace($builder, $replace);
         $o = $builder->endObject();
         return $o;
     }
@@ -159,16 +149,6 @@ class Sample extends Table
     public static function addControl(FlatBufferBuilder $builder, $control)
     {
         $builder->addBoolX(4, $control, false);
-    }
-
-    /**
-     * @param FlatBufferBuilder $builder
-     * @param bool
-     * @return void
-     */
-    public static function addReplace(FlatBufferBuilder $builder, $replace)
-    {
-        $builder->addBoolX(5, $replace, false);
     }
 
     /**

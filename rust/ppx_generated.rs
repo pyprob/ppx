@@ -6,7 +6,7 @@ use std::mem;
 use std::cmp::Ordering;
 
 extern crate flatbuffers;
-use self::flatbuffers::EndianScalar;
+use self::flatbuffers::{EndianScalar, Follow};
 
 #[allow(unused_imports, dead_code)]
 pub mod ppx {
@@ -15,63 +15,15 @@ pub mod ppx {
   use std::cmp::Ordering;
 
   extern crate flatbuffers;
-  use self::flatbuffers::EndianScalar;
+  use self::flatbuffers::{EndianScalar, Follow};
 
-#[allow(non_camel_case_types)]
-#[repr(u8)]
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
-pub enum MessageBody {
-  NONE = 0,
-  Handshake = 1,
-  HandshakeResult = 2,
-  Run = 3,
-  RunResult = 4,
-  Sample = 5,
-  SampleResult = 6,
-  Observe = 7,
-  ObserveResult = 8,
-  Tag = 9,
-  TagResult = 10,
-  Reset = 11,
-
-}
-
+#[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
 pub const ENUM_MIN_MESSAGE_BODY: u8 = 0;
+#[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
 pub const ENUM_MAX_MESSAGE_BODY: u8 = 11;
-
-impl<'a> flatbuffers::Follow<'a> for MessageBody {
-  type Inner = Self;
-  #[inline]
-  fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-    flatbuffers::read_scalar_at::<Self>(buf, loc)
-  }
-}
-
-impl flatbuffers::EndianScalar for MessageBody {
-  #[inline]
-  fn to_little_endian(self) -> Self {
-    let n = u8::to_le(self as u8);
-    let p = &n as *const u8 as *const MessageBody;
-    unsafe { *p }
-  }
-  #[inline]
-  fn from_little_endian(self) -> Self {
-    let n = u8::from_le(self as u8);
-    let p = &n as *const u8 as *const MessageBody;
-    unsafe { *p }
-  }
-}
-
-impl flatbuffers::Push for MessageBody {
-    type Output = MessageBody;
-    #[inline]
-    fn push(&self, dst: &mut [u8], _rest: &[u8]) {
-        flatbuffers::emplace_scalar::<MessageBody>(dst, *self);
-    }
-}
-
+#[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
 #[allow(non_camel_case_types)]
-pub const ENUM_VALUES_MESSAGE_BODY:[MessageBody; 12] = [
+pub const ENUM_VALUES_MESSAGE_BODY: [MessageBody; 12] = [
   MessageBody::NONE,
   MessageBody::Handshake,
   MessageBody::HandshakeResult,
@@ -83,86 +35,124 @@ pub const ENUM_VALUES_MESSAGE_BODY:[MessageBody; 12] = [
   MessageBody::ObserveResult,
   MessageBody::Tag,
   MessageBody::TagResult,
-  MessageBody::Reset
+  MessageBody::Reset,
 ];
 
-#[allow(non_camel_case_types)]
-pub const ENUM_NAMES_MESSAGE_BODY:[&'static str; 12] = [
-    "NONE",
-    "Handshake",
-    "HandshakeResult",
-    "Run",
-    "RunResult",
-    "Sample",
-    "SampleResult",
-    "Observe",
-    "ObserveResult",
-    "Tag",
-    "TagResult",
-    "Reset"
-];
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[repr(transparent)]
+pub struct MessageBody(pub u8);
+#[allow(non_upper_case_globals)]
+impl MessageBody {
+  pub const NONE: Self = Self(0);
+  pub const Handshake: Self = Self(1);
+  pub const HandshakeResult: Self = Self(2);
+  pub const Run: Self = Self(3);
+  pub const RunResult: Self = Self(4);
+  pub const Sample: Self = Self(5);
+  pub const SampleResult: Self = Self(6);
+  pub const Observe: Self = Self(7);
+  pub const ObserveResult: Self = Self(8);
+  pub const Tag: Self = Self(9);
+  pub const TagResult: Self = Self(10);
+  pub const Reset: Self = Self(11);
 
-pub fn enum_name_message_body(e: MessageBody) -> &'static str {
-  let index = e as u8;
-  ENUM_NAMES_MESSAGE_BODY[index as usize]
+  pub const ENUM_MIN: u8 = 0;
+  pub const ENUM_MAX: u8 = 11;
+  pub const ENUM_VALUES: &'static [Self] = &[
+    Self::NONE,
+    Self::Handshake,
+    Self::HandshakeResult,
+    Self::Run,
+    Self::RunResult,
+    Self::Sample,
+    Self::SampleResult,
+    Self::Observe,
+    Self::ObserveResult,
+    Self::Tag,
+    Self::TagResult,
+    Self::Reset,
+  ];
+  /// Returns the variant's name or "" if unknown.
+  pub fn variant_name(self) -> Option<&'static str> {
+    match self {
+      Self::NONE => Some("NONE"),
+      Self::Handshake => Some("Handshake"),
+      Self::HandshakeResult => Some("HandshakeResult"),
+      Self::Run => Some("Run"),
+      Self::RunResult => Some("RunResult"),
+      Self::Sample => Some("Sample"),
+      Self::SampleResult => Some("SampleResult"),
+      Self::Observe => Some("Observe"),
+      Self::ObserveResult => Some("ObserveResult"),
+      Self::Tag => Some("Tag"),
+      Self::TagResult => Some("TagResult"),
+      Self::Reset => Some("Reset"),
+      _ => None,
+    }
+  }
 }
-
-pub struct MessageBodyUnionTableOffset {}
-#[allow(non_camel_case_types)]
-#[repr(u8)]
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
-pub enum Distribution {
-  NONE = 0,
-  Normal = 1,
-  Uniform = 2,
-  Categorical = 3,
-  Poisson = 4,
-  Bernoulli = 5,
-  Beta = 6,
-  Exponential = 7,
-  Gamma = 8,
-  LogNormal = 9,
-  Binomial = 10,
-  Weibull = 11,
-
+impl std::fmt::Debug for MessageBody {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    if let Some(name) = self.variant_name() {
+      f.write_str(name)
+    } else {
+      f.write_fmt(format_args!("<UNKNOWN {:?}>", self.0))
+    }
+  }
 }
-
-pub const ENUM_MIN_DISTRIBUTION: u8 = 0;
-pub const ENUM_MAX_DISTRIBUTION: u8 = 11;
-
-impl<'a> flatbuffers::Follow<'a> for Distribution {
+impl<'a> flatbuffers::Follow<'a> for MessageBody {
   type Inner = Self;
   #[inline]
   fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-    flatbuffers::read_scalar_at::<Self>(buf, loc)
+    let b = unsafe {
+      flatbuffers::read_scalar_at::<u8>(buf, loc)
+    };
+    Self(b)
   }
 }
 
-impl flatbuffers::EndianScalar for Distribution {
-  #[inline]
-  fn to_little_endian(self) -> Self {
-    let n = u8::to_le(self as u8);
-    let p = &n as *const u8 as *const Distribution;
-    unsafe { *p }
-  }
-  #[inline]
-  fn from_little_endian(self) -> Self {
-    let n = u8::from_le(self as u8);
-    let p = &n as *const u8 as *const Distribution;
-    unsafe { *p }
-  }
-}
-
-impl flatbuffers::Push for Distribution {
-    type Output = Distribution;
+impl flatbuffers::Push for MessageBody {
+    type Output = MessageBody;
     #[inline]
     fn push(&self, dst: &mut [u8], _rest: &[u8]) {
-        flatbuffers::emplace_scalar::<Distribution>(dst, *self);
+        unsafe { flatbuffers::emplace_scalar::<u8>(dst, self.0); }
     }
 }
 
+impl flatbuffers::EndianScalar for MessageBody {
+  #[inline]
+  fn to_little_endian(self) -> Self {
+    let b = u8::to_le(self.0);
+    Self(b)
+  }
+  #[inline]
+  #[allow(clippy::wrong_self_convention)]
+  fn from_little_endian(self) -> Self {
+    let b = u8::from_le(self.0);
+    Self(b)
+  }
+}
+
+impl<'a> flatbuffers::Verifiable for MessageBody {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    u8::run_verifier(v, pos)
+  }
+}
+
+impl flatbuffers::SimpleToVerifyInSlice for MessageBody {}
+pub struct MessageBodyUnionTableOffset {}
+
+#[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
+pub const ENUM_MIN_DISTRIBUTION: u8 = 0;
+#[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
+pub const ENUM_MAX_DISTRIBUTION: u8 = 11;
+#[deprecated(since = "2.0.0", note = "Use associated constants instead. This will no longer be generated in 2021.")]
 #[allow(non_camel_case_types)]
-pub const ENUM_VALUES_DISTRIBUTION:[Distribution; 12] = [
+pub const ENUM_VALUES_DISTRIBUTION: [Distribution; 12] = [
   Distribution::NONE,
   Distribution::Normal,
   Distribution::Uniform,
@@ -174,33 +164,119 @@ pub const ENUM_VALUES_DISTRIBUTION:[Distribution; 12] = [
   Distribution::Gamma,
   Distribution::LogNormal,
   Distribution::Binomial,
-  Distribution::Weibull
+  Distribution::Weibull,
 ];
 
-#[allow(non_camel_case_types)]
-pub const ENUM_NAMES_DISTRIBUTION:[&'static str; 12] = [
-    "NONE",
-    "Normal",
-    "Uniform",
-    "Categorical",
-    "Poisson",
-    "Bernoulli",
-    "Beta",
-    "Exponential",
-    "Gamma",
-    "LogNormal",
-    "Binomial",
-    "Weibull"
-];
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[repr(transparent)]
+pub struct Distribution(pub u8);
+#[allow(non_upper_case_globals)]
+impl Distribution {
+  pub const NONE: Self = Self(0);
+  pub const Normal: Self = Self(1);
+  pub const Uniform: Self = Self(2);
+  pub const Categorical: Self = Self(3);
+  pub const Poisson: Self = Self(4);
+  pub const Bernoulli: Self = Self(5);
+  pub const Beta: Self = Self(6);
+  pub const Exponential: Self = Self(7);
+  pub const Gamma: Self = Self(8);
+  pub const LogNormal: Self = Self(9);
+  pub const Binomial: Self = Self(10);
+  pub const Weibull: Self = Self(11);
 
-pub fn enum_name_distribution(e: Distribution) -> &'static str {
-  let index = e as u8;
-  ENUM_NAMES_DISTRIBUTION[index as usize]
+  pub const ENUM_MIN: u8 = 0;
+  pub const ENUM_MAX: u8 = 11;
+  pub const ENUM_VALUES: &'static [Self] = &[
+    Self::NONE,
+    Self::Normal,
+    Self::Uniform,
+    Self::Categorical,
+    Self::Poisson,
+    Self::Bernoulli,
+    Self::Beta,
+    Self::Exponential,
+    Self::Gamma,
+    Self::LogNormal,
+    Self::Binomial,
+    Self::Weibull,
+  ];
+  /// Returns the variant's name or "" if unknown.
+  pub fn variant_name(self) -> Option<&'static str> {
+    match self {
+      Self::NONE => Some("NONE"),
+      Self::Normal => Some("Normal"),
+      Self::Uniform => Some("Uniform"),
+      Self::Categorical => Some("Categorical"),
+      Self::Poisson => Some("Poisson"),
+      Self::Bernoulli => Some("Bernoulli"),
+      Self::Beta => Some("Beta"),
+      Self::Exponential => Some("Exponential"),
+      Self::Gamma => Some("Gamma"),
+      Self::LogNormal => Some("LogNormal"),
+      Self::Binomial => Some("Binomial"),
+      Self::Weibull => Some("Weibull"),
+      _ => None,
+    }
+  }
+}
+impl std::fmt::Debug for Distribution {
+  fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    if let Some(name) = self.variant_name() {
+      f.write_str(name)
+    } else {
+      f.write_fmt(format_args!("<UNKNOWN {:?}>", self.0))
+    }
+  }
+}
+impl<'a> flatbuffers::Follow<'a> for Distribution {
+  type Inner = Self;
+  #[inline]
+  fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+    let b = unsafe {
+      flatbuffers::read_scalar_at::<u8>(buf, loc)
+    };
+    Self(b)
+  }
 }
 
+impl flatbuffers::Push for Distribution {
+    type Output = Distribution;
+    #[inline]
+    fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+        unsafe { flatbuffers::emplace_scalar::<u8>(dst, self.0); }
+    }
+}
+
+impl flatbuffers::EndianScalar for Distribution {
+  #[inline]
+  fn to_little_endian(self) -> Self {
+    let b = u8::to_le(self.0);
+    Self(b)
+  }
+  #[inline]
+  #[allow(clippy::wrong_self_convention)]
+  fn from_little_endian(self) -> Self {
+    let b = u8::from_le(self.0);
+    Self(b)
+  }
+}
+
+impl<'a> flatbuffers::Verifiable for Distribution {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    u8::run_verifier(v, pos)
+  }
+}
+
+impl flatbuffers::SimpleToVerifyInSlice for Distribution {}
 pub struct DistributionUnionTableOffset {}
+
 pub enum MessageOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct Message<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -210,18 +286,14 @@ impl<'a> flatbuffers::Follow<'a> for Message<'a> {
     type Inner = Message<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> Message<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        Message {
-            _tab: table,
-        }
+        Message { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -248,7 +320,7 @@ impl<'a> Message<'a> {
   #[allow(non_snake_case)]
   pub fn body_as_handshake(&self) -> Option<Handshake<'a>> {
     if self.body_type() == MessageBody::Handshake {
-      self.body().map(|u| Handshake::init_from_table(u))
+      self.body().map(Handshake::init_from_table)
     } else {
       None
     }
@@ -258,7 +330,7 @@ impl<'a> Message<'a> {
   #[allow(non_snake_case)]
   pub fn body_as_handshake_result(&self) -> Option<HandshakeResult<'a>> {
     if self.body_type() == MessageBody::HandshakeResult {
-      self.body().map(|u| HandshakeResult::init_from_table(u))
+      self.body().map(HandshakeResult::init_from_table)
     } else {
       None
     }
@@ -268,7 +340,7 @@ impl<'a> Message<'a> {
   #[allow(non_snake_case)]
   pub fn body_as_run(&self) -> Option<Run<'a>> {
     if self.body_type() == MessageBody::Run {
-      self.body().map(|u| Run::init_from_table(u))
+      self.body().map(Run::init_from_table)
     } else {
       None
     }
@@ -278,7 +350,7 @@ impl<'a> Message<'a> {
   #[allow(non_snake_case)]
   pub fn body_as_run_result(&self) -> Option<RunResult<'a>> {
     if self.body_type() == MessageBody::RunResult {
-      self.body().map(|u| RunResult::init_from_table(u))
+      self.body().map(RunResult::init_from_table)
     } else {
       None
     }
@@ -288,7 +360,7 @@ impl<'a> Message<'a> {
   #[allow(non_snake_case)]
   pub fn body_as_sample(&self) -> Option<Sample<'a>> {
     if self.body_type() == MessageBody::Sample {
-      self.body().map(|u| Sample::init_from_table(u))
+      self.body().map(Sample::init_from_table)
     } else {
       None
     }
@@ -298,7 +370,7 @@ impl<'a> Message<'a> {
   #[allow(non_snake_case)]
   pub fn body_as_sample_result(&self) -> Option<SampleResult<'a>> {
     if self.body_type() == MessageBody::SampleResult {
-      self.body().map(|u| SampleResult::init_from_table(u))
+      self.body().map(SampleResult::init_from_table)
     } else {
       None
     }
@@ -308,7 +380,7 @@ impl<'a> Message<'a> {
   #[allow(non_snake_case)]
   pub fn body_as_observe(&self) -> Option<Observe<'a>> {
     if self.body_type() == MessageBody::Observe {
-      self.body().map(|u| Observe::init_from_table(u))
+      self.body().map(Observe::init_from_table)
     } else {
       None
     }
@@ -318,7 +390,7 @@ impl<'a> Message<'a> {
   #[allow(non_snake_case)]
   pub fn body_as_observe_result(&self) -> Option<ObserveResult<'a>> {
     if self.body_type() == MessageBody::ObserveResult {
-      self.body().map(|u| ObserveResult::init_from_table(u))
+      self.body().map(ObserveResult::init_from_table)
     } else {
       None
     }
@@ -328,7 +400,7 @@ impl<'a> Message<'a> {
   #[allow(non_snake_case)]
   pub fn body_as_tag(&self) -> Option<Tag<'a>> {
     if self.body_type() == MessageBody::Tag {
-      self.body().map(|u| Tag::init_from_table(u))
+      self.body().map(Tag::init_from_table)
     } else {
       None
     }
@@ -338,7 +410,7 @@ impl<'a> Message<'a> {
   #[allow(non_snake_case)]
   pub fn body_as_tag_result(&self) -> Option<TagResult<'a>> {
     if self.body_type() == MessageBody::TagResult {
-      self.body().map(|u| TagResult::init_from_table(u))
+      self.body().map(TagResult::init_from_table)
     } else {
       None
     }
@@ -348,7 +420,7 @@ impl<'a> Message<'a> {
   #[allow(non_snake_case)]
   pub fn body_as_reset(&self) -> Option<Reset<'a>> {
     if self.body_type() == MessageBody::Reset {
-      self.body().map(|u| Reset::init_from_table(u))
+      self.body().map(Reset::init_from_table)
     } else {
       None
     }
@@ -356,6 +428,33 @@ impl<'a> Message<'a> {
 
 }
 
+impl flatbuffers::Verifiable for Message<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .visit_union::<MessageBody, _>(&"body_type", Self::VT_BODY_TYPE, &"body", Self::VT_BODY, false, |key, v, pos| {
+        match key {
+          MessageBody::Handshake => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Handshake>>("MessageBody::Handshake", pos),
+          MessageBody::HandshakeResult => v.verify_union_variant::<flatbuffers::ForwardsUOffset<HandshakeResult>>("MessageBody::HandshakeResult", pos),
+          MessageBody::Run => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Run>>("MessageBody::Run", pos),
+          MessageBody::RunResult => v.verify_union_variant::<flatbuffers::ForwardsUOffset<RunResult>>("MessageBody::RunResult", pos),
+          MessageBody::Sample => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Sample>>("MessageBody::Sample", pos),
+          MessageBody::SampleResult => v.verify_union_variant::<flatbuffers::ForwardsUOffset<SampleResult>>("MessageBody::SampleResult", pos),
+          MessageBody::Observe => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Observe>>("MessageBody::Observe", pos),
+          MessageBody::ObserveResult => v.verify_union_variant::<flatbuffers::ForwardsUOffset<ObserveResult>>("MessageBody::ObserveResult", pos),
+          MessageBody::Tag => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Tag>>("MessageBody::Tag", pos),
+          MessageBody::TagResult => v.verify_union_variant::<flatbuffers::ForwardsUOffset<TagResult>>("MessageBody::TagResult", pos),
+          MessageBody::Reset => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Reset>>("MessageBody::Reset", pos),
+          _ => Ok(()),
+        }
+     })?
+     .finish();
+    Ok(())
+  }
+}
 pub struct MessageArgs {
     pub body_type: MessageBody,
     pub body: Option<flatbuffers::WIPOffset<flatbuffers::UnionWIPOffset>>,
@@ -397,8 +496,98 @@ impl<'a: 'b, 'b> MessageBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for Message<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("Message");
+      ds.field("body_type", &self.body_type());
+      match self.body_type() {
+        MessageBody::Handshake => {
+          if let Some(x) = self.body_as_handshake() {
+            ds.field("body", &x)
+          } else {
+            ds.field("body", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        MessageBody::HandshakeResult => {
+          if let Some(x) = self.body_as_handshake_result() {
+            ds.field("body", &x)
+          } else {
+            ds.field("body", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        MessageBody::Run => {
+          if let Some(x) = self.body_as_run() {
+            ds.field("body", &x)
+          } else {
+            ds.field("body", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        MessageBody::RunResult => {
+          if let Some(x) = self.body_as_run_result() {
+            ds.field("body", &x)
+          } else {
+            ds.field("body", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        MessageBody::Sample => {
+          if let Some(x) = self.body_as_sample() {
+            ds.field("body", &x)
+          } else {
+            ds.field("body", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        MessageBody::SampleResult => {
+          if let Some(x) = self.body_as_sample_result() {
+            ds.field("body", &x)
+          } else {
+            ds.field("body", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        MessageBody::Observe => {
+          if let Some(x) = self.body_as_observe() {
+            ds.field("body", &x)
+          } else {
+            ds.field("body", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        MessageBody::ObserveResult => {
+          if let Some(x) = self.body_as_observe_result() {
+            ds.field("body", &x)
+          } else {
+            ds.field("body", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        MessageBody::Tag => {
+          if let Some(x) = self.body_as_tag() {
+            ds.field("body", &x)
+          } else {
+            ds.field("body", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        MessageBody::TagResult => {
+          if let Some(x) = self.body_as_tag_result() {
+            ds.field("body", &x)
+          } else {
+            ds.field("body", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        MessageBody::Reset => {
+          if let Some(x) = self.body_as_reset() {
+            ds.field("body", &x)
+          } else {
+            ds.field("body", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        _ => {
+          let x: Option<()> = None;
+          ds.field("body", &x)
+        },
+      };
+      ds.finish()
+  }
+}
 pub enum TensorOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct Tensor<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -408,18 +597,14 @@ impl<'a> flatbuffers::Follow<'a> for Tensor<'a> {
     type Inner = Tensor<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> Tensor<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        Tensor {
-            _tab: table,
-        }
+        Tensor { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -444,9 +629,22 @@ impl<'a> Tensor<'a> {
   }
 }
 
+impl flatbuffers::Verifiable for Tensor<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .visit_field::<flatbuffers::ForwardsUOffset<flatbuffers::Vector<'_, f64>>>(&"data", Self::VT_DATA, false)?
+     .visit_field::<flatbuffers::ForwardsUOffset<flatbuffers::Vector<'_, i32>>>(&"shape", Self::VT_SHAPE, false)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct TensorArgs<'a> {
-    pub data: Option<flatbuffers::WIPOffset<flatbuffers::Vector<'a ,  f64>>>,
-    pub shape: Option<flatbuffers::WIPOffset<flatbuffers::Vector<'a ,  i32>>>,
+    pub data: Option<flatbuffers::WIPOffset<flatbuffers::Vector<'a, f64>>>,
+    pub shape: Option<flatbuffers::WIPOffset<flatbuffers::Vector<'a, i32>>>,
 }
 impl<'a> Default for TensorArgs<'a> {
     #[inline]
@@ -485,8 +683,16 @@ impl<'a: 'b, 'b> TensorBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for Tensor<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("Tensor");
+      ds.field("data", &self.data());
+      ds.field("shape", &self.shape());
+      ds.finish()
+  }
+}
 pub enum HandshakeOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct Handshake<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -496,18 +702,14 @@ impl<'a> flatbuffers::Follow<'a> for Handshake<'a> {
     type Inner = Handshake<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> Handshake<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        Handshake {
-            _tab: table,
-        }
+        Handshake { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -526,8 +728,20 @@ impl<'a> Handshake<'a> {
   }
 }
 
+impl flatbuffers::Verifiable for Handshake<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .visit_field::<flatbuffers::ForwardsUOffset<&str>>(&"system_name", Self::VT_SYSTEM_NAME, false)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct HandshakeArgs<'a> {
-    pub system_name: Option<flatbuffers::WIPOffset<&'a  str>>,
+    pub system_name: Option<flatbuffers::WIPOffset<&'a str>>,
 }
 impl<'a> Default for HandshakeArgs<'a> {
     #[inline]
@@ -561,8 +775,15 @@ impl<'a: 'b, 'b> HandshakeBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for Handshake<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("Handshake");
+      ds.field("system_name", &self.system_name());
+      ds.finish()
+  }
+}
 pub enum HandshakeResultOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct HandshakeResult<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -572,18 +793,14 @@ impl<'a> flatbuffers::Follow<'a> for HandshakeResult<'a> {
     type Inner = HandshakeResult<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> HandshakeResult<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        HandshakeResult {
-            _tab: table,
-        }
+        HandshakeResult { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -608,9 +825,22 @@ impl<'a> HandshakeResult<'a> {
   }
 }
 
+impl flatbuffers::Verifiable for HandshakeResult<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .visit_field::<flatbuffers::ForwardsUOffset<&str>>(&"system_name", Self::VT_SYSTEM_NAME, false)?
+     .visit_field::<flatbuffers::ForwardsUOffset<&str>>(&"model_name", Self::VT_MODEL_NAME, false)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct HandshakeResultArgs<'a> {
-    pub system_name: Option<flatbuffers::WIPOffset<&'a  str>>,
-    pub model_name: Option<flatbuffers::WIPOffset<&'a  str>>,
+    pub system_name: Option<flatbuffers::WIPOffset<&'a str>>,
+    pub model_name: Option<flatbuffers::WIPOffset<&'a str>>,
 }
 impl<'a> Default for HandshakeResultArgs<'a> {
     #[inline]
@@ -649,8 +879,16 @@ impl<'a: 'b, 'b> HandshakeResultBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for HandshakeResult<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("HandshakeResult");
+      ds.field("system_name", &self.system_name());
+      ds.field("model_name", &self.model_name());
+      ds.finish()
+  }
+}
 pub enum RunOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct Run<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -660,18 +898,14 @@ impl<'a> flatbuffers::Follow<'a> for Run<'a> {
     type Inner = Run<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> Run<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        Run {
-            _tab: table,
-        }
+        Run { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -683,6 +917,17 @@ impl<'a> Run<'a> {
 
 }
 
+impl flatbuffers::Verifiable for Run<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct RunArgs {
 }
 impl<'a> Default for RunArgs {
@@ -712,8 +957,14 @@ impl<'a: 'b, 'b> RunBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for Run<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("Run");
+      ds.finish()
+  }
+}
 pub enum RunResultOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct RunResult<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -723,18 +974,14 @@ impl<'a> flatbuffers::Follow<'a> for RunResult<'a> {
     type Inner = RunResult<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> RunResult<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        RunResult {
-            _tab: table,
-        }
+        RunResult { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -749,12 +996,24 @@ impl<'a> RunResult<'a> {
 
   #[inline]
   pub fn result(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(RunResult::VT_RESULT, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(RunResult::VT_RESULT, None)
   }
 }
 
+impl flatbuffers::Verifiable for RunResult<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"result", Self::VT_RESULT, false)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct RunResultArgs<'a> {
-    pub result: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+    pub result: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
 }
 impl<'a> Default for RunResultArgs<'a> {
     #[inline]
@@ -788,8 +1047,15 @@ impl<'a: 'b, 'b> RunResultBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for RunResult<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("RunResult");
+      ds.field("result", &self.result());
+      ds.finish()
+  }
+}
 pub enum SampleOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct Sample<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -799,18 +1065,14 @@ impl<'a> flatbuffers::Follow<'a> for Sample<'a> {
     type Inner = Sample<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> Sample<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        Sample {
-            _tab: table,
-        }
+        Sample { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -820,7 +1082,6 @@ impl<'a> Sample<'a> {
       if let Some(x) = args.distribution { builder.add_distribution(x); }
       if let Some(x) = args.name { builder.add_name(x); }
       if let Some(x) = args.address { builder.add_address(x); }
-      builder.add_replace(args.replace);
       builder.add_control(args.control);
       builder.add_distribution_type(args.distribution_type);
       builder.finish()
@@ -831,7 +1092,6 @@ impl<'a> Sample<'a> {
     pub const VT_DISTRIBUTION_TYPE: flatbuffers::VOffsetT = 8;
     pub const VT_DISTRIBUTION: flatbuffers::VOffsetT = 10;
     pub const VT_CONTROL: flatbuffers::VOffsetT = 12;
-    pub const VT_REPLACE: flatbuffers::VOffsetT = 14;
 
   #[inline]
   pub fn address(&self) -> Option<&'a str> {
@@ -854,14 +1114,10 @@ impl<'a> Sample<'a> {
     self._tab.get::<bool>(Sample::VT_CONTROL, Some(true)).unwrap()
   }
   #[inline]
-  pub fn replace(&self) -> bool {
-    self._tab.get::<bool>(Sample::VT_REPLACE, Some(false)).unwrap()
-  }
-  #[inline]
   #[allow(non_snake_case)]
   pub fn distribution_as_normal(&self) -> Option<Normal<'a>> {
     if self.distribution_type() == Distribution::Normal {
-      self.distribution().map(|u| Normal::init_from_table(u))
+      self.distribution().map(Normal::init_from_table)
     } else {
       None
     }
@@ -871,7 +1127,7 @@ impl<'a> Sample<'a> {
   #[allow(non_snake_case)]
   pub fn distribution_as_uniform(&self) -> Option<Uniform<'a>> {
     if self.distribution_type() == Distribution::Uniform {
-      self.distribution().map(|u| Uniform::init_from_table(u))
+      self.distribution().map(Uniform::init_from_table)
     } else {
       None
     }
@@ -881,7 +1137,7 @@ impl<'a> Sample<'a> {
   #[allow(non_snake_case)]
   pub fn distribution_as_categorical(&self) -> Option<Categorical<'a>> {
     if self.distribution_type() == Distribution::Categorical {
-      self.distribution().map(|u| Categorical::init_from_table(u))
+      self.distribution().map(Categorical::init_from_table)
     } else {
       None
     }
@@ -891,7 +1147,7 @@ impl<'a> Sample<'a> {
   #[allow(non_snake_case)]
   pub fn distribution_as_poisson(&self) -> Option<Poisson<'a>> {
     if self.distribution_type() == Distribution::Poisson {
-      self.distribution().map(|u| Poisson::init_from_table(u))
+      self.distribution().map(Poisson::init_from_table)
     } else {
       None
     }
@@ -901,7 +1157,7 @@ impl<'a> Sample<'a> {
   #[allow(non_snake_case)]
   pub fn distribution_as_bernoulli(&self) -> Option<Bernoulli<'a>> {
     if self.distribution_type() == Distribution::Bernoulli {
-      self.distribution().map(|u| Bernoulli::init_from_table(u))
+      self.distribution().map(Bernoulli::init_from_table)
     } else {
       None
     }
@@ -911,7 +1167,7 @@ impl<'a> Sample<'a> {
   #[allow(non_snake_case)]
   pub fn distribution_as_beta(&self) -> Option<Beta<'a>> {
     if self.distribution_type() == Distribution::Beta {
-      self.distribution().map(|u| Beta::init_from_table(u))
+      self.distribution().map(Beta::init_from_table)
     } else {
       None
     }
@@ -921,7 +1177,7 @@ impl<'a> Sample<'a> {
   #[allow(non_snake_case)]
   pub fn distribution_as_exponential(&self) -> Option<Exponential<'a>> {
     if self.distribution_type() == Distribution::Exponential {
-      self.distribution().map(|u| Exponential::init_from_table(u))
+      self.distribution().map(Exponential::init_from_table)
     } else {
       None
     }
@@ -931,7 +1187,7 @@ impl<'a> Sample<'a> {
   #[allow(non_snake_case)]
   pub fn distribution_as_gamma(&self) -> Option<Gamma<'a>> {
     if self.distribution_type() == Distribution::Gamma {
-      self.distribution().map(|u| Gamma::init_from_table(u))
+      self.distribution().map(Gamma::init_from_table)
     } else {
       None
     }
@@ -941,7 +1197,7 @@ impl<'a> Sample<'a> {
   #[allow(non_snake_case)]
   pub fn distribution_as_log_normal(&self) -> Option<LogNormal<'a>> {
     if self.distribution_type() == Distribution::LogNormal {
-      self.distribution().map(|u| LogNormal::init_from_table(u))
+      self.distribution().map(LogNormal::init_from_table)
     } else {
       None
     }
@@ -951,7 +1207,7 @@ impl<'a> Sample<'a> {
   #[allow(non_snake_case)]
   pub fn distribution_as_binomial(&self) -> Option<Binomial<'a>> {
     if self.distribution_type() == Distribution::Binomial {
-      self.distribution().map(|u| Binomial::init_from_table(u))
+      self.distribution().map(Binomial::init_from_table)
     } else {
       None
     }
@@ -961,7 +1217,7 @@ impl<'a> Sample<'a> {
   #[allow(non_snake_case)]
   pub fn distribution_as_weibull(&self) -> Option<Weibull<'a>> {
     if self.distribution_type() == Distribution::Weibull {
-      self.distribution().map(|u| Weibull::init_from_table(u))
+      self.distribution().map(Weibull::init_from_table)
     } else {
       None
     }
@@ -969,13 +1225,42 @@ impl<'a> Sample<'a> {
 
 }
 
+impl flatbuffers::Verifiable for Sample<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .visit_field::<flatbuffers::ForwardsUOffset<&str>>(&"address", Self::VT_ADDRESS, false)?
+     .visit_field::<flatbuffers::ForwardsUOffset<&str>>(&"name", Self::VT_NAME, false)?
+     .visit_union::<Distribution, _>(&"distribution_type", Self::VT_DISTRIBUTION_TYPE, &"distribution", Self::VT_DISTRIBUTION, false, |key, v, pos| {
+        match key {
+          Distribution::Normal => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Normal>>("Distribution::Normal", pos),
+          Distribution::Uniform => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Uniform>>("Distribution::Uniform", pos),
+          Distribution::Categorical => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Categorical>>("Distribution::Categorical", pos),
+          Distribution::Poisson => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Poisson>>("Distribution::Poisson", pos),
+          Distribution::Bernoulli => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Bernoulli>>("Distribution::Bernoulli", pos),
+          Distribution::Beta => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Beta>>("Distribution::Beta", pos),
+          Distribution::Exponential => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Exponential>>("Distribution::Exponential", pos),
+          Distribution::Gamma => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Gamma>>("Distribution::Gamma", pos),
+          Distribution::LogNormal => v.verify_union_variant::<flatbuffers::ForwardsUOffset<LogNormal>>("Distribution::LogNormal", pos),
+          Distribution::Binomial => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Binomial>>("Distribution::Binomial", pos),
+          Distribution::Weibull => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Weibull>>("Distribution::Weibull", pos),
+          _ => Ok(()),
+        }
+     })?
+     .visit_field::<bool>(&"control", Self::VT_CONTROL, false)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct SampleArgs<'a> {
-    pub address: Option<flatbuffers::WIPOffset<&'a  str>>,
-    pub name: Option<flatbuffers::WIPOffset<&'a  str>>,
+    pub address: Option<flatbuffers::WIPOffset<&'a str>>,
+    pub name: Option<flatbuffers::WIPOffset<&'a str>>,
     pub distribution_type: Distribution,
     pub distribution: Option<flatbuffers::WIPOffset<flatbuffers::UnionWIPOffset>>,
     pub control: bool,
-    pub replace: bool,
 }
 impl<'a> Default for SampleArgs<'a> {
     #[inline]
@@ -986,7 +1271,6 @@ impl<'a> Default for SampleArgs<'a> {
             distribution_type: Distribution::NONE,
             distribution: None,
             control: true,
-            replace: false,
         }
     }
 }
@@ -1016,10 +1300,6 @@ impl<'a: 'b, 'b> SampleBuilder<'a, 'b> {
     self.fbb_.push_slot::<bool>(Sample::VT_CONTROL, control, true);
   }
   #[inline]
-  pub fn add_replace(&mut self, replace: bool) {
-    self.fbb_.push_slot::<bool>(Sample::VT_REPLACE, replace, false);
-  }
-  #[inline]
   pub fn new(_fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>) -> SampleBuilder<'a, 'b> {
     let start = _fbb.start_table();
     SampleBuilder {
@@ -1034,8 +1314,101 @@ impl<'a: 'b, 'b> SampleBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for Sample<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("Sample");
+      ds.field("address", &self.address());
+      ds.field("name", &self.name());
+      ds.field("distribution_type", &self.distribution_type());
+      match self.distribution_type() {
+        Distribution::Normal => {
+          if let Some(x) = self.distribution_as_normal() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        Distribution::Uniform => {
+          if let Some(x) = self.distribution_as_uniform() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        Distribution::Categorical => {
+          if let Some(x) = self.distribution_as_categorical() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        Distribution::Poisson => {
+          if let Some(x) = self.distribution_as_poisson() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        Distribution::Bernoulli => {
+          if let Some(x) = self.distribution_as_bernoulli() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        Distribution::Beta => {
+          if let Some(x) = self.distribution_as_beta() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        Distribution::Exponential => {
+          if let Some(x) = self.distribution_as_exponential() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        Distribution::Gamma => {
+          if let Some(x) = self.distribution_as_gamma() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        Distribution::LogNormal => {
+          if let Some(x) = self.distribution_as_log_normal() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        Distribution::Binomial => {
+          if let Some(x) = self.distribution_as_binomial() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        Distribution::Weibull => {
+          if let Some(x) = self.distribution_as_weibull() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        _ => {
+          let x: Option<()> = None;
+          ds.field("distribution", &x)
+        },
+      };
+      ds.field("control", &self.control());
+      ds.finish()
+  }
+}
 pub enum SampleResultOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct SampleResult<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -1045,18 +1418,14 @@ impl<'a> flatbuffers::Follow<'a> for SampleResult<'a> {
     type Inner = SampleResult<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> SampleResult<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        SampleResult {
-            _tab: table,
-        }
+        SampleResult { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -1071,12 +1440,24 @@ impl<'a> SampleResult<'a> {
 
   #[inline]
   pub fn result(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(SampleResult::VT_RESULT, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(SampleResult::VT_RESULT, None)
   }
 }
 
+impl flatbuffers::Verifiable for SampleResult<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"result", Self::VT_RESULT, false)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct SampleResultArgs<'a> {
-    pub result: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+    pub result: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
 }
 impl<'a> Default for SampleResultArgs<'a> {
     #[inline]
@@ -1110,8 +1491,15 @@ impl<'a: 'b, 'b> SampleResultBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for SampleResult<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("SampleResult");
+      ds.field("result", &self.result());
+      ds.finish()
+  }
+}
 pub enum ObserveOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct Observe<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -1121,18 +1509,14 @@ impl<'a> flatbuffers::Follow<'a> for Observe<'a> {
     type Inner = Observe<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> Observe<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        Observe {
-            _tab: table,
-        }
+        Observe { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -1171,13 +1555,13 @@ impl<'a> Observe<'a> {
   }
   #[inline]
   pub fn value(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Observe::VT_VALUE, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(Observe::VT_VALUE, None)
   }
   #[inline]
   #[allow(non_snake_case)]
   pub fn distribution_as_normal(&self) -> Option<Normal<'a>> {
     if self.distribution_type() == Distribution::Normal {
-      self.distribution().map(|u| Normal::init_from_table(u))
+      self.distribution().map(Normal::init_from_table)
     } else {
       None
     }
@@ -1187,7 +1571,7 @@ impl<'a> Observe<'a> {
   #[allow(non_snake_case)]
   pub fn distribution_as_uniform(&self) -> Option<Uniform<'a>> {
     if self.distribution_type() == Distribution::Uniform {
-      self.distribution().map(|u| Uniform::init_from_table(u))
+      self.distribution().map(Uniform::init_from_table)
     } else {
       None
     }
@@ -1197,7 +1581,7 @@ impl<'a> Observe<'a> {
   #[allow(non_snake_case)]
   pub fn distribution_as_categorical(&self) -> Option<Categorical<'a>> {
     if self.distribution_type() == Distribution::Categorical {
-      self.distribution().map(|u| Categorical::init_from_table(u))
+      self.distribution().map(Categorical::init_from_table)
     } else {
       None
     }
@@ -1207,7 +1591,7 @@ impl<'a> Observe<'a> {
   #[allow(non_snake_case)]
   pub fn distribution_as_poisson(&self) -> Option<Poisson<'a>> {
     if self.distribution_type() == Distribution::Poisson {
-      self.distribution().map(|u| Poisson::init_from_table(u))
+      self.distribution().map(Poisson::init_from_table)
     } else {
       None
     }
@@ -1217,7 +1601,7 @@ impl<'a> Observe<'a> {
   #[allow(non_snake_case)]
   pub fn distribution_as_bernoulli(&self) -> Option<Bernoulli<'a>> {
     if self.distribution_type() == Distribution::Bernoulli {
-      self.distribution().map(|u| Bernoulli::init_from_table(u))
+      self.distribution().map(Bernoulli::init_from_table)
     } else {
       None
     }
@@ -1227,7 +1611,7 @@ impl<'a> Observe<'a> {
   #[allow(non_snake_case)]
   pub fn distribution_as_beta(&self) -> Option<Beta<'a>> {
     if self.distribution_type() == Distribution::Beta {
-      self.distribution().map(|u| Beta::init_from_table(u))
+      self.distribution().map(Beta::init_from_table)
     } else {
       None
     }
@@ -1237,7 +1621,7 @@ impl<'a> Observe<'a> {
   #[allow(non_snake_case)]
   pub fn distribution_as_exponential(&self) -> Option<Exponential<'a>> {
     if self.distribution_type() == Distribution::Exponential {
-      self.distribution().map(|u| Exponential::init_from_table(u))
+      self.distribution().map(Exponential::init_from_table)
     } else {
       None
     }
@@ -1247,7 +1631,7 @@ impl<'a> Observe<'a> {
   #[allow(non_snake_case)]
   pub fn distribution_as_gamma(&self) -> Option<Gamma<'a>> {
     if self.distribution_type() == Distribution::Gamma {
-      self.distribution().map(|u| Gamma::init_from_table(u))
+      self.distribution().map(Gamma::init_from_table)
     } else {
       None
     }
@@ -1257,7 +1641,7 @@ impl<'a> Observe<'a> {
   #[allow(non_snake_case)]
   pub fn distribution_as_log_normal(&self) -> Option<LogNormal<'a>> {
     if self.distribution_type() == Distribution::LogNormal {
-      self.distribution().map(|u| LogNormal::init_from_table(u))
+      self.distribution().map(LogNormal::init_from_table)
     } else {
       None
     }
@@ -1267,7 +1651,7 @@ impl<'a> Observe<'a> {
   #[allow(non_snake_case)]
   pub fn distribution_as_binomial(&self) -> Option<Binomial<'a>> {
     if self.distribution_type() == Distribution::Binomial {
-      self.distribution().map(|u| Binomial::init_from_table(u))
+      self.distribution().map(Binomial::init_from_table)
     } else {
       None
     }
@@ -1277,7 +1661,7 @@ impl<'a> Observe<'a> {
   #[allow(non_snake_case)]
   pub fn distribution_as_weibull(&self) -> Option<Weibull<'a>> {
     if self.distribution_type() == Distribution::Weibull {
-      self.distribution().map(|u| Weibull::init_from_table(u))
+      self.distribution().map(Weibull::init_from_table)
     } else {
       None
     }
@@ -1285,12 +1669,42 @@ impl<'a> Observe<'a> {
 
 }
 
+impl flatbuffers::Verifiable for Observe<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .visit_field::<flatbuffers::ForwardsUOffset<&str>>(&"address", Self::VT_ADDRESS, false)?
+     .visit_field::<flatbuffers::ForwardsUOffset<&str>>(&"name", Self::VT_NAME, false)?
+     .visit_union::<Distribution, _>(&"distribution_type", Self::VT_DISTRIBUTION_TYPE, &"distribution", Self::VT_DISTRIBUTION, false, |key, v, pos| {
+        match key {
+          Distribution::Normal => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Normal>>("Distribution::Normal", pos),
+          Distribution::Uniform => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Uniform>>("Distribution::Uniform", pos),
+          Distribution::Categorical => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Categorical>>("Distribution::Categorical", pos),
+          Distribution::Poisson => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Poisson>>("Distribution::Poisson", pos),
+          Distribution::Bernoulli => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Bernoulli>>("Distribution::Bernoulli", pos),
+          Distribution::Beta => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Beta>>("Distribution::Beta", pos),
+          Distribution::Exponential => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Exponential>>("Distribution::Exponential", pos),
+          Distribution::Gamma => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Gamma>>("Distribution::Gamma", pos),
+          Distribution::LogNormal => v.verify_union_variant::<flatbuffers::ForwardsUOffset<LogNormal>>("Distribution::LogNormal", pos),
+          Distribution::Binomial => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Binomial>>("Distribution::Binomial", pos),
+          Distribution::Weibull => v.verify_union_variant::<flatbuffers::ForwardsUOffset<Weibull>>("Distribution::Weibull", pos),
+          _ => Ok(()),
+        }
+     })?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"value", Self::VT_VALUE, false)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct ObserveArgs<'a> {
-    pub address: Option<flatbuffers::WIPOffset<&'a  str>>,
-    pub name: Option<flatbuffers::WIPOffset<&'a  str>>,
+    pub address: Option<flatbuffers::WIPOffset<&'a str>>,
+    pub name: Option<flatbuffers::WIPOffset<&'a str>>,
     pub distribution_type: Distribution,
     pub distribution: Option<flatbuffers::WIPOffset<flatbuffers::UnionWIPOffset>>,
-    pub value: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+    pub value: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
 }
 impl<'a> Default for ObserveArgs<'a> {
     #[inline]
@@ -1344,8 +1758,101 @@ impl<'a: 'b, 'b> ObserveBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for Observe<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("Observe");
+      ds.field("address", &self.address());
+      ds.field("name", &self.name());
+      ds.field("distribution_type", &self.distribution_type());
+      match self.distribution_type() {
+        Distribution::Normal => {
+          if let Some(x) = self.distribution_as_normal() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        Distribution::Uniform => {
+          if let Some(x) = self.distribution_as_uniform() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        Distribution::Categorical => {
+          if let Some(x) = self.distribution_as_categorical() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        Distribution::Poisson => {
+          if let Some(x) = self.distribution_as_poisson() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        Distribution::Bernoulli => {
+          if let Some(x) = self.distribution_as_bernoulli() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        Distribution::Beta => {
+          if let Some(x) = self.distribution_as_beta() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        Distribution::Exponential => {
+          if let Some(x) = self.distribution_as_exponential() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        Distribution::Gamma => {
+          if let Some(x) = self.distribution_as_gamma() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        Distribution::LogNormal => {
+          if let Some(x) = self.distribution_as_log_normal() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        Distribution::Binomial => {
+          if let Some(x) = self.distribution_as_binomial() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        Distribution::Weibull => {
+          if let Some(x) = self.distribution_as_weibull() {
+            ds.field("distribution", &x)
+          } else {
+            ds.field("distribution", &"InvalidFlatbuffer: Union discriminant does not match value.")
+          }
+        },
+        _ => {
+          let x: Option<()> = None;
+          ds.field("distribution", &x)
+        },
+      };
+      ds.field("value", &self.value());
+      ds.finish()
+  }
+}
 pub enum ObserveResultOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct ObserveResult<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -1355,18 +1862,14 @@ impl<'a> flatbuffers::Follow<'a> for ObserveResult<'a> {
     type Inner = ObserveResult<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> ObserveResult<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        ObserveResult {
-            _tab: table,
-        }
+        ObserveResult { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -1378,6 +1881,17 @@ impl<'a> ObserveResult<'a> {
 
 }
 
+impl flatbuffers::Verifiable for ObserveResult<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct ObserveResultArgs {
 }
 impl<'a> Default for ObserveResultArgs {
@@ -1407,8 +1921,14 @@ impl<'a: 'b, 'b> ObserveResultBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for ObserveResult<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("ObserveResult");
+      ds.finish()
+  }
+}
 pub enum TagOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct Tag<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -1418,18 +1938,14 @@ impl<'a> flatbuffers::Follow<'a> for Tag<'a> {
     type Inner = Tag<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> Tag<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        Tag {
-            _tab: table,
-        }
+        Tag { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -1456,14 +1972,28 @@ impl<'a> Tag<'a> {
   }
   #[inline]
   pub fn value(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Tag::VT_VALUE, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(Tag::VT_VALUE, None)
   }
 }
 
+impl flatbuffers::Verifiable for Tag<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .visit_field::<flatbuffers::ForwardsUOffset<&str>>(&"address", Self::VT_ADDRESS, false)?
+     .visit_field::<flatbuffers::ForwardsUOffset<&str>>(&"name", Self::VT_NAME, false)?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"value", Self::VT_VALUE, false)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct TagArgs<'a> {
-    pub address: Option<flatbuffers::WIPOffset<&'a  str>>,
-    pub name: Option<flatbuffers::WIPOffset<&'a  str>>,
-    pub value: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+    pub address: Option<flatbuffers::WIPOffset<&'a str>>,
+    pub name: Option<flatbuffers::WIPOffset<&'a str>>,
+    pub value: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
 }
 impl<'a> Default for TagArgs<'a> {
     #[inline]
@@ -1507,8 +2037,17 @@ impl<'a: 'b, 'b> TagBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for Tag<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("Tag");
+      ds.field("address", &self.address());
+      ds.field("name", &self.name());
+      ds.field("value", &self.value());
+      ds.finish()
+  }
+}
 pub enum TagResultOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct TagResult<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -1518,18 +2057,14 @@ impl<'a> flatbuffers::Follow<'a> for TagResult<'a> {
     type Inner = TagResult<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> TagResult<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        TagResult {
-            _tab: table,
-        }
+        TagResult { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -1541,6 +2076,17 @@ impl<'a> TagResult<'a> {
 
 }
 
+impl flatbuffers::Verifiable for TagResult<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct TagResultArgs {
 }
 impl<'a> Default for TagResultArgs {
@@ -1570,8 +2116,14 @@ impl<'a: 'b, 'b> TagResultBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for TagResult<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("TagResult");
+      ds.finish()
+  }
+}
 pub enum ResetOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct Reset<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -1581,18 +2133,14 @@ impl<'a> flatbuffers::Follow<'a> for Reset<'a> {
     type Inner = Reset<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> Reset<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        Reset {
-            _tab: table,
-        }
+        Reset { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -1604,6 +2152,17 @@ impl<'a> Reset<'a> {
 
 }
 
+impl flatbuffers::Verifiable for Reset<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct ResetArgs {
 }
 impl<'a> Default for ResetArgs {
@@ -1633,8 +2192,14 @@ impl<'a: 'b, 'b> ResetBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for Reset<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("Reset");
+      ds.finish()
+  }
+}
 pub enum NormalOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct Normal<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -1644,18 +2209,14 @@ impl<'a> flatbuffers::Follow<'a> for Normal<'a> {
     type Inner = Normal<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> Normal<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        Normal {
-            _tab: table,
-        }
+        Normal { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -1672,17 +2233,30 @@ impl<'a> Normal<'a> {
 
   #[inline]
   pub fn mean(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Normal::VT_MEAN, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(Normal::VT_MEAN, None)
   }
   #[inline]
   pub fn stddev(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Normal::VT_STDDEV, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(Normal::VT_STDDEV, None)
   }
 }
 
+impl flatbuffers::Verifiable for Normal<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"mean", Self::VT_MEAN, false)?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"stddev", Self::VT_STDDEV, false)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct NormalArgs<'a> {
-    pub mean: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
-    pub stddev: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+    pub mean: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
+    pub stddev: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
 }
 impl<'a> Default for NormalArgs<'a> {
     #[inline]
@@ -1721,8 +2295,16 @@ impl<'a: 'b, 'b> NormalBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for Normal<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("Normal");
+      ds.field("mean", &self.mean());
+      ds.field("stddev", &self.stddev());
+      ds.finish()
+  }
+}
 pub enum UniformOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct Uniform<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -1732,18 +2314,14 @@ impl<'a> flatbuffers::Follow<'a> for Uniform<'a> {
     type Inner = Uniform<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> Uniform<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        Uniform {
-            _tab: table,
-        }
+        Uniform { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -1760,17 +2338,30 @@ impl<'a> Uniform<'a> {
 
   #[inline]
   pub fn low(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Uniform::VT_LOW, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(Uniform::VT_LOW, None)
   }
   #[inline]
   pub fn high(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Uniform::VT_HIGH, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(Uniform::VT_HIGH, None)
   }
 }
 
+impl flatbuffers::Verifiable for Uniform<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"low", Self::VT_LOW, false)?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"high", Self::VT_HIGH, false)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct UniformArgs<'a> {
-    pub low: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
-    pub high: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+    pub low: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
+    pub high: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
 }
 impl<'a> Default for UniformArgs<'a> {
     #[inline]
@@ -1809,8 +2400,16 @@ impl<'a: 'b, 'b> UniformBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for Uniform<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("Uniform");
+      ds.field("low", &self.low());
+      ds.field("high", &self.high());
+      ds.finish()
+  }
+}
 pub enum CategoricalOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct Categorical<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -1820,18 +2419,14 @@ impl<'a> flatbuffers::Follow<'a> for Categorical<'a> {
     type Inner = Categorical<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> Categorical<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        Categorical {
-            _tab: table,
-        }
+        Categorical { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -1846,12 +2441,24 @@ impl<'a> Categorical<'a> {
 
   #[inline]
   pub fn probs(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Categorical::VT_PROBS, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(Categorical::VT_PROBS, None)
   }
 }
 
+impl flatbuffers::Verifiable for Categorical<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"probs", Self::VT_PROBS, false)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct CategoricalArgs<'a> {
-    pub probs: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+    pub probs: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
 }
 impl<'a> Default for CategoricalArgs<'a> {
     #[inline]
@@ -1885,8 +2492,15 @@ impl<'a: 'b, 'b> CategoricalBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for Categorical<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("Categorical");
+      ds.field("probs", &self.probs());
+      ds.finish()
+  }
+}
 pub enum PoissonOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct Poisson<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -1896,18 +2510,14 @@ impl<'a> flatbuffers::Follow<'a> for Poisson<'a> {
     type Inner = Poisson<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> Poisson<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        Poisson {
-            _tab: table,
-        }
+        Poisson { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -1922,12 +2532,24 @@ impl<'a> Poisson<'a> {
 
   #[inline]
   pub fn rate(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Poisson::VT_RATE, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(Poisson::VT_RATE, None)
   }
 }
 
+impl flatbuffers::Verifiable for Poisson<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"rate", Self::VT_RATE, false)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct PoissonArgs<'a> {
-    pub rate: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+    pub rate: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
 }
 impl<'a> Default for PoissonArgs<'a> {
     #[inline]
@@ -1961,8 +2583,15 @@ impl<'a: 'b, 'b> PoissonBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for Poisson<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("Poisson");
+      ds.field("rate", &self.rate());
+      ds.finish()
+  }
+}
 pub enum BernoulliOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct Bernoulli<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -1972,18 +2601,14 @@ impl<'a> flatbuffers::Follow<'a> for Bernoulli<'a> {
     type Inner = Bernoulli<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> Bernoulli<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        Bernoulli {
-            _tab: table,
-        }
+        Bernoulli { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -1998,12 +2623,24 @@ impl<'a> Bernoulli<'a> {
 
   #[inline]
   pub fn probs(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Bernoulli::VT_PROBS, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(Bernoulli::VT_PROBS, None)
   }
 }
 
+impl flatbuffers::Verifiable for Bernoulli<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"probs", Self::VT_PROBS, false)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct BernoulliArgs<'a> {
-    pub probs: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+    pub probs: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
 }
 impl<'a> Default for BernoulliArgs<'a> {
     #[inline]
@@ -2037,8 +2674,15 @@ impl<'a: 'b, 'b> BernoulliBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for Bernoulli<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("Bernoulli");
+      ds.field("probs", &self.probs());
+      ds.finish()
+  }
+}
 pub enum BetaOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct Beta<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -2048,18 +2692,14 @@ impl<'a> flatbuffers::Follow<'a> for Beta<'a> {
     type Inner = Beta<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> Beta<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        Beta {
-            _tab: table,
-        }
+        Beta { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -2076,17 +2716,30 @@ impl<'a> Beta<'a> {
 
   #[inline]
   pub fn concentration1(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Beta::VT_CONCENTRATION1, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(Beta::VT_CONCENTRATION1, None)
   }
   #[inline]
   pub fn concentration0(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Beta::VT_CONCENTRATION0, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(Beta::VT_CONCENTRATION0, None)
   }
 }
 
+impl flatbuffers::Verifiable for Beta<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"concentration1", Self::VT_CONCENTRATION1, false)?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"concentration0", Self::VT_CONCENTRATION0, false)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct BetaArgs<'a> {
-    pub concentration1: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
-    pub concentration0: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+    pub concentration1: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
+    pub concentration0: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
 }
 impl<'a> Default for BetaArgs<'a> {
     #[inline]
@@ -2125,8 +2778,16 @@ impl<'a: 'b, 'b> BetaBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for Beta<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("Beta");
+      ds.field("concentration1", &self.concentration1());
+      ds.field("concentration0", &self.concentration0());
+      ds.finish()
+  }
+}
 pub enum ExponentialOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct Exponential<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -2136,18 +2797,14 @@ impl<'a> flatbuffers::Follow<'a> for Exponential<'a> {
     type Inner = Exponential<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> Exponential<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        Exponential {
-            _tab: table,
-        }
+        Exponential { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -2162,12 +2819,24 @@ impl<'a> Exponential<'a> {
 
   #[inline]
   pub fn rate(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Exponential::VT_RATE, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(Exponential::VT_RATE, None)
   }
 }
 
+impl flatbuffers::Verifiable for Exponential<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"rate", Self::VT_RATE, false)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct ExponentialArgs<'a> {
-    pub rate: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+    pub rate: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
 }
 impl<'a> Default for ExponentialArgs<'a> {
     #[inline]
@@ -2201,8 +2870,15 @@ impl<'a: 'b, 'b> ExponentialBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for Exponential<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("Exponential");
+      ds.field("rate", &self.rate());
+      ds.finish()
+  }
+}
 pub enum GammaOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct Gamma<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -2212,18 +2888,14 @@ impl<'a> flatbuffers::Follow<'a> for Gamma<'a> {
     type Inner = Gamma<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> Gamma<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        Gamma {
-            _tab: table,
-        }
+        Gamma { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -2240,17 +2912,30 @@ impl<'a> Gamma<'a> {
 
   #[inline]
   pub fn concentration(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Gamma::VT_CONCENTRATION, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(Gamma::VT_CONCENTRATION, None)
   }
   #[inline]
   pub fn rate(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Gamma::VT_RATE, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(Gamma::VT_RATE, None)
   }
 }
 
+impl flatbuffers::Verifiable for Gamma<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"concentration", Self::VT_CONCENTRATION, false)?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"rate", Self::VT_RATE, false)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct GammaArgs<'a> {
-    pub concentration: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
-    pub rate: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+    pub concentration: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
+    pub rate: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
 }
 impl<'a> Default for GammaArgs<'a> {
     #[inline]
@@ -2289,8 +2974,16 @@ impl<'a: 'b, 'b> GammaBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for Gamma<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("Gamma");
+      ds.field("concentration", &self.concentration());
+      ds.field("rate", &self.rate());
+      ds.finish()
+  }
+}
 pub enum LogNormalOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct LogNormal<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -2300,18 +2993,14 @@ impl<'a> flatbuffers::Follow<'a> for LogNormal<'a> {
     type Inner = LogNormal<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> LogNormal<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        LogNormal {
-            _tab: table,
-        }
+        LogNormal { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -2328,17 +3017,30 @@ impl<'a> LogNormal<'a> {
 
   #[inline]
   pub fn loc(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(LogNormal::VT_LOC, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(LogNormal::VT_LOC, None)
   }
   #[inline]
   pub fn scale(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(LogNormal::VT_SCALE, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(LogNormal::VT_SCALE, None)
   }
 }
 
+impl flatbuffers::Verifiable for LogNormal<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"loc", Self::VT_LOC, false)?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"scale", Self::VT_SCALE, false)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct LogNormalArgs<'a> {
-    pub loc: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
-    pub scale: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+    pub loc: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
+    pub scale: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
 }
 impl<'a> Default for LogNormalArgs<'a> {
     #[inline]
@@ -2377,8 +3079,16 @@ impl<'a: 'b, 'b> LogNormalBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for LogNormal<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("LogNormal");
+      ds.field("loc", &self.loc());
+      ds.field("scale", &self.scale());
+      ds.finish()
+  }
+}
 pub enum BinomialOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct Binomial<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -2388,18 +3098,14 @@ impl<'a> flatbuffers::Follow<'a> for Binomial<'a> {
     type Inner = Binomial<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> Binomial<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        Binomial {
-            _tab: table,
-        }
+        Binomial { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -2416,17 +3122,30 @@ impl<'a> Binomial<'a> {
 
   #[inline]
   pub fn total_count(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Binomial::VT_TOTAL_COUNT, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(Binomial::VT_TOTAL_COUNT, None)
   }
   #[inline]
   pub fn probs(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Binomial::VT_PROBS, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(Binomial::VT_PROBS, None)
   }
 }
 
+impl flatbuffers::Verifiable for Binomial<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"total_count", Self::VT_TOTAL_COUNT, false)?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"probs", Self::VT_PROBS, false)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct BinomialArgs<'a> {
-    pub total_count: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
-    pub probs: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+    pub total_count: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
+    pub probs: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
 }
 impl<'a> Default for BinomialArgs<'a> {
     #[inline]
@@ -2465,8 +3184,16 @@ impl<'a: 'b, 'b> BinomialBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for Binomial<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("Binomial");
+      ds.field("total_count", &self.total_count());
+      ds.field("probs", &self.probs());
+      ds.finish()
+  }
+}
 pub enum WeibullOffset {}
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 
 pub struct Weibull<'a> {
   pub _tab: flatbuffers::Table<'a>,
@@ -2476,18 +3203,14 @@ impl<'a> flatbuffers::Follow<'a> for Weibull<'a> {
     type Inner = Weibull<'a>;
     #[inline]
     fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
-        Self {
-            _tab: flatbuffers::Table { buf: buf, loc: loc },
-        }
+        Self { _tab: flatbuffers::Table { buf, loc } }
     }
 }
 
 impl<'a> Weibull<'a> {
     #[inline]
     pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
-        Weibull {
-            _tab: table,
-        }
+        Weibull { _tab: table }
     }
     #[allow(unused_mut)]
     pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
@@ -2504,17 +3227,30 @@ impl<'a> Weibull<'a> {
 
   #[inline]
   pub fn scale(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Weibull::VT_SCALE, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(Weibull::VT_SCALE, None)
   }
   #[inline]
   pub fn concentration(&self) -> Option<Tensor<'a>> {
-    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor<'a>>>(Weibull::VT_CONCENTRATION, None)
+    self._tab.get::<flatbuffers::ForwardsUOffset<Tensor>>(Weibull::VT_CONCENTRATION, None)
   }
 }
 
+impl flatbuffers::Verifiable for Weibull<'_> {
+  #[inline]
+  fn run_verifier(
+    v: &mut flatbuffers::Verifier, pos: usize
+  ) -> Result<(), flatbuffers::InvalidFlatbuffer> {
+    use self::flatbuffers::Verifiable;
+    v.visit_table(pos)?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"scale", Self::VT_SCALE, false)?
+     .visit_field::<flatbuffers::ForwardsUOffset<Tensor>>(&"concentration", Self::VT_CONCENTRATION, false)?
+     .finish();
+    Ok(())
+  }
+}
 pub struct WeibullArgs<'a> {
-    pub scale: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
-    pub concentration: Option<flatbuffers::WIPOffset<Tensor<'a >>>,
+    pub scale: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
+    pub concentration: Option<flatbuffers::WIPOffset<Tensor<'a>>>,
 }
 impl<'a> Default for WeibullArgs<'a> {
     #[inline]
@@ -2553,26 +3289,96 @@ impl<'a: 'b, 'b> WeibullBuilder<'a, 'b> {
   }
 }
 
+impl std::fmt::Debug for Weibull<'_> {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let mut ds = f.debug_struct("Weibull");
+      ds.field("scale", &self.scale());
+      ds.field("concentration", &self.concentration());
+      ds.finish()
+  }
+}
 #[inline]
+#[deprecated(since="2.0.0", note="Deprecated in favor of `root_as...` methods.")]
 pub fn get_root_as_message<'a>(buf: &'a [u8]) -> Message<'a> {
-  flatbuffers::get_root::<Message<'a>>(buf)
+  unsafe { flatbuffers::root_unchecked::<Message<'a>>(buf) }
 }
 
 #[inline]
+#[deprecated(since="2.0.0", note="Deprecated in favor of `root_as...` methods.")]
 pub fn get_size_prefixed_root_as_message<'a>(buf: &'a [u8]) -> Message<'a> {
-  flatbuffers::get_size_prefixed_root::<Message<'a>>(buf)
+  unsafe { flatbuffers::size_prefixed_root_unchecked::<Message<'a>>(buf) }
 }
 
-pub const MESSAGE_IDENTIFIER: &'static str = "PPXF";
+#[inline]
+/// Verifies that a buffer of bytes contains a `Message`
+/// and returns it.
+/// Note that verification is still experimental and may not
+/// catch every error, or be maximally performant. For the
+/// previous, unchecked, behavior use
+/// `root_as_message_unchecked`.
+pub fn root_as_message(buf: &[u8]) -> Result<Message, flatbuffers::InvalidFlatbuffer> {
+  flatbuffers::root::<Message>(buf)
+}
+#[inline]
+/// Verifies that a buffer of bytes contains a size prefixed
+/// `Message` and returns it.
+/// Note that verification is still experimental and may not
+/// catch every error, or be maximally performant. For the
+/// previous, unchecked, behavior use
+/// `size_prefixed_root_as_message_unchecked`.
+pub fn size_prefixed_root_as_message(buf: &[u8]) -> Result<Message, flatbuffers::InvalidFlatbuffer> {
+  flatbuffers::size_prefixed_root::<Message>(buf)
+}
+#[inline]
+/// Verifies, with the given options, that a buffer of bytes
+/// contains a `Message` and returns it.
+/// Note that verification is still experimental and may not
+/// catch every error, or be maximally performant. For the
+/// previous, unchecked, behavior use
+/// `root_as_message_unchecked`.
+pub fn root_as_message_with_opts<'b, 'o>(
+  opts: &'o flatbuffers::VerifierOptions,
+  buf: &'b [u8],
+) -> Result<Message<'b>, flatbuffers::InvalidFlatbuffer> {
+  flatbuffers::root_with_opts::<Message<'b>>(opts, buf)
+}
+#[inline]
+/// Verifies, with the given verifier options, that a buffer of
+/// bytes contains a size prefixed `Message` and returns
+/// it. Note that verification is still experimental and may not
+/// catch every error, or be maximally performant. For the
+/// previous, unchecked, behavior use
+/// `root_as_message_unchecked`.
+pub fn size_prefixed_root_as_message_with_opts<'b, 'o>(
+  opts: &'o flatbuffers::VerifierOptions,
+  buf: &'b [u8],
+) -> Result<Message<'b>, flatbuffers::InvalidFlatbuffer> {
+  flatbuffers::size_prefixed_root_with_opts::<Message<'b>>(opts, buf)
+}
+#[inline]
+/// Assumes, without verification, that a buffer of bytes contains a Message and returns it.
+/// # Safety
+/// Callers must trust the given bytes do indeed contain a valid `Message`.
+pub unsafe fn root_as_message_unchecked(buf: &[u8]) -> Message {
+  flatbuffers::root_unchecked::<Message>(buf)
+}
+#[inline]
+/// Assumes, without verification, that a buffer of bytes contains a size prefixed Message and returns it.
+/// # Safety
+/// Callers must trust the given bytes do indeed contain a valid size prefixed `Message`.
+pub unsafe fn size_prefixed_root_as_message_unchecked(buf: &[u8]) -> Message {
+  flatbuffers::size_prefixed_root_unchecked::<Message>(buf)
+}
+pub const MESSAGE_IDENTIFIER: &str = "PPXF";
 
 #[inline]
 pub fn message_buffer_has_identifier(buf: &[u8]) -> bool {
-  return flatbuffers::buffer_has_identifier(buf, MESSAGE_IDENTIFIER, false);
+  flatbuffers::buffer_has_identifier(buf, MESSAGE_IDENTIFIER, false)
 }
 
 #[inline]
 pub fn message_size_prefixed_buffer_has_identifier(buf: &[u8]) -> bool {
-  return flatbuffers::buffer_has_identifier(buf, MESSAGE_IDENTIFIER, true);
+  flatbuffers::buffer_has_identifier(buf, MESSAGE_IDENTIFIER, true)
 }
 
 #[inline]

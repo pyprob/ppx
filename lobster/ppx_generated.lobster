@@ -261,15 +261,13 @@ class Sample : flatbuffers_handle
         return ppx_Weibull { buf_, buf_.flatbuffers_field_table(pos_, 10) }
     def control():
         return buf_.flatbuffers_field_int8(pos_, 12, 1)
-    def replace():
-        return buf_.flatbuffers_field_int8(pos_, 14, 0)
 
 def GetRootAsSample(buf:string): return Sample { buf, buf.flatbuffers_indirect(0) }
 
 struct SampleBuilder:
     b_:flatbuffers_builder
     def start():
-        b_.StartObject(6)
+        b_.StartObject(5)
         return this
     def add_address(address:flatbuffers_offset):
         b_.PrependUOffsetTRelativeSlot(0, address)
@@ -285,9 +283,6 @@ struct SampleBuilder:
         return this
     def add_control(control:int):
         b_.PrependBoolSlot(4, control, 1)
-        return this
-    def add_replace(replace:int):
-        b_.PrependBoolSlot(5, replace, 0)
         return this
     def end():
         return b_.EndObject()

@@ -27,7 +27,7 @@ class Categorical : Table() {
         }
     }
     companion object {
-        fun validateVersion() = Constants.FLATBUFFERS_1_12_0()
+        fun validateVersion() = Constants.FLATBUFFERS_2_0_0()
         fun getRootAsCategorical(_bb: ByteBuffer): Categorical = getRootAsCategorical(_bb, Categorical())
         fun getRootAsCategorical(_bb: ByteBuffer, obj: Categorical): Categorical {
             _bb.order(ByteOrder.LITTLE_ENDIAN)

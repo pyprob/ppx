@@ -13,6 +13,9 @@ function Handshake.New()
     return o
 end
 function Handshake.GetRootAsHandshake(buf, offset)
+    if type(buf) == "string" then
+        buf = flatbuffers.binaryArray.New(buf)
+    end
     local n = flatbuffers.N.UOffsetT:Unpack(buf, offset)
     local o = Handshake.New()
     o:Init(buf, n + offset)

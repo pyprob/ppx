@@ -41,7 +41,7 @@ class Tag : Table() {
         }
     }
     companion object {
-        fun validateVersion() = Constants.FLATBUFFERS_1_12_0()
+        fun validateVersion() = Constants.FLATBUFFERS_2_0_0()
         fun getRootAsTag(_bb: ByteBuffer): Tag = getRootAsTag(_bb, Tag())
         fun getRootAsTag(_bb: ByteBuffer, obj: Tag): Tag {
             _bb.order(ByteOrder.LITTLE_ENDIAN)

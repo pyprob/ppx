@@ -27,7 +27,7 @@ class Exponential : Table() {
         }
     }
     companion object {
-        fun validateVersion() = Constants.FLATBUFFERS_1_12_0()
+        fun validateVersion() = Constants.FLATBUFFERS_2_0_0()
         fun getRootAsExponential(_bb: ByteBuffer): Exponential = getRootAsExponential(_bb, Exponential())
         fun getRootAsExponential(_bb: ByteBuffer, obj: Exponential): Exponential {
             _bb.order(ByteOrder.LITTLE_ENDIAN)

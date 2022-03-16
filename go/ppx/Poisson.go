@@ -17,6 +17,13 @@ func GetRootAsPoisson(buf []byte, offset flatbuffers.UOffsetT) *Poisson {
 	return x
 }
 
+func GetSizePrefixedRootAsPoisson(buf []byte, offset flatbuffers.UOffsetT) *Poisson {
+	n := flatbuffers.GetUOffsetT(buf[offset+flatbuffers.SizeUint32:])
+	x := &Poisson{}
+	x.Init(buf, n+offset+flatbuffers.SizeUint32)
+	return x
+}
+
 func (rcv *Poisson) Init(buf []byte, i flatbuffers.UOffsetT) {
 	rcv._tab.Bytes = buf
 	rcv._tab.Pos = i

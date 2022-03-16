@@ -13,6 +13,9 @@ function Beta.New()
     return o
 end
 function Beta.GetRootAsBeta(buf, offset)
+    if type(buf) == "string" then
+        buf = flatbuffers.binaryArray.New(buf)
+    end
     local n = flatbuffers.N.UOffsetT:Unpack(buf, offset)
     local o = Beta.New()
     o:Init(buf, n + offset)

@@ -1,5 +1,5 @@
 // ppx
-// 0.1.5
+// 1.0.0
 //
 // Probabilistic programming execution protocol
 // https://github.com/pyprob/ppx
@@ -63,7 +63,6 @@ table Sample {
   name: string;
   distribution: Distribution;
   control: bool = true;
-  replace: bool = false;
 }
 
 table SampleResult {

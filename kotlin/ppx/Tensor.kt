@@ -46,7 +46,7 @@ class Tensor : Table() {
     val shapeAsByteBuffer : ByteBuffer get() = __vector_as_bytebuffer(6, 4)
     fun shapeInByteBuffer(_bb: ByteBuffer) : ByteBuffer = __vector_in_bytebuffer(_bb, 6, 4)
     companion object {
-        fun validateVersion() = Constants.FLATBUFFERS_1_12_0()
+        fun validateVersion() = Constants.FLATBUFFERS_2_0_0()
         fun getRootAsTensor(_bb: ByteBuffer): Tensor = getRootAsTensor(_bb, Tensor())
         fun getRootAsTensor(_bb: ByteBuffer, obj: Tensor): Tensor {
             _bb.order(ByteOrder.LITTLE_ENDIAN)

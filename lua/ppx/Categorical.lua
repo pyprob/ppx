@@ -13,6 +13,9 @@ function Categorical.New()
     return o
 end
 function Categorical.GetRootAsCategorical(buf, offset)
+    if type(buf) == "string" then
+        buf = flatbuffers.binaryArray.New(buf)
+    end
     local n = flatbuffers.N.UOffsetT:Unpack(buf, offset)
     local o = Categorical.New()
     o:Init(buf, n + offset)

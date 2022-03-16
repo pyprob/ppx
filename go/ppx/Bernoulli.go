@@ -17,6 +17,13 @@ func GetRootAsBernoulli(buf []byte, offset flatbuffers.UOffsetT) *Bernoulli {
 	return x
 }
 
+func GetSizePrefixedRootAsBernoulli(buf []byte, offset flatbuffers.UOffsetT) *Bernoulli {
+	n := flatbuffers.GetUOffsetT(buf[offset+flatbuffers.SizeUint32:])
+	x := &Bernoulli{}
+	x.Init(buf, n+offset+flatbuffers.SizeUint32)
+	return x
+}
+
 func (rcv *Bernoulli) Init(buf []byte, i flatbuffers.UOffsetT) {
 	rcv._tab.Bytes = buf
 	rcv._tab.Pos = i

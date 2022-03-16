@@ -18,7 +18,7 @@ class Run : Table() {
         return this
     }
     companion object {
-        fun validateVersion() = Constants.FLATBUFFERS_1_12_0()
+        fun validateVersion() = Constants.FLATBUFFERS_2_0_0()
         fun getRootAsRun(_bb: ByteBuffer): Run = getRootAsRun(_bb, Run())
         fun getRootAsRun(_bb: ByteBuffer, obj: Run): Run {
             _bb.order(ByteOrder.LITTLE_ENDIAN)

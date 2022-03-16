@@ -80,7 +80,7 @@ struct BinomialBuilder;
 struct Weibull;
 struct WeibullBuilder;
 
-enum MessageBody {
+enum MessageBody : uint8_t {
   MessageBody_NONE = 0,
   MessageBody_Handshake = 1,
   MessageBody_HandshakeResult = 2,
@@ -191,7 +191,7 @@ template<> struct MessageBodyTraits<ppx::Reset> {
 bool VerifyMessageBody(flatbuffers::Verifier &verifier, const void *obj, MessageBody type);
 bool VerifyMessageBodyVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
 
-enum Distribution {
+enum Distribution : uint8_t {
   Distribution_NONE = 0,
   Distribution_Normal = 1,
   Distribution_Uniform = 2,
@@ -415,7 +415,6 @@ struct MessageBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  MessageBuilder &operator=(const MessageBuilder &);
   flatbuffers::Offset<Message> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<Message>(end);
@@ -469,7 +468,6 @@ struct TensorBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  TensorBuilder &operator=(const TensorBuilder &);
   flatbuffers::Offset<Tensor> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<Tensor>(end);
@@ -526,7 +524,6 @@ struct HandshakeBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  HandshakeBuilder &operator=(const HandshakeBuilder &);
   flatbuffers::Offset<Handshake> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<Handshake>(end);
@@ -587,7 +584,6 @@ struct HandshakeResultBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  HandshakeResultBuilder &operator=(const HandshakeResultBuilder &);
   flatbuffers::Offset<HandshakeResult> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<HandshakeResult>(end);
@@ -633,7 +629,6 @@ struct RunBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  RunBuilder &operator=(const RunBuilder &);
   flatbuffers::Offset<Run> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<Run>(end);
@@ -674,7 +669,6 @@ struct RunResultBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  RunResultBuilder &operator=(const RunResultBuilder &);
   flatbuffers::Offset<RunResult> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<RunResult>(end);
@@ -697,8 +691,7 @@ struct Sample FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     VT_NAME = 6,
     VT_DISTRIBUTION_TYPE = 8,
     VT_DISTRIBUTION = 10,
-    VT_CONTROL = 12,
-    VT_REPLACE = 14
+    VT_CONTROL = 12
   };
   const flatbuffers::String *address() const {
     return GetPointer<const flatbuffers::String *>(VT_ADDRESS);
@@ -749,9 +742,6 @@ struct Sample FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   bool control() const {
     return GetField<uint8_t>(VT_CONTROL, 1) != 0;
   }
-  bool replace() const {
-    return GetField<uint8_t>(VT_REPLACE, 0) != 0;
-  }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_ADDRESS) &&
@@ -762,7 +752,6 @@ struct Sample FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
            VerifyOffset(verifier, VT_DISTRIBUTION) &&
            VerifyDistribution(verifier, distribution(), distribution_type()) &&
            VerifyField<uint8_t>(verifier, VT_CONTROL) &&
-           VerifyField<uint8_t>(verifier, VT_REPLACE) &&
            verifier.EndTable();
   }
 };
@@ -830,14 +819,10 @@ struct SampleBuilder {
   void add_control(bool control) {
     fbb_.AddElement<uint8_t>(Sample::VT_CONTROL, static_cast<uint8_t>(control), 1);
   }
-  void add_replace(bool replace) {
-    fbb_.AddElement<uint8_t>(Sample::VT_REPLACE, static_cast<uint8_t>(replace), 0);
-  }
   explicit SampleBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  SampleBuilder &operator=(const SampleBuilder &);
   flatbuffers::Offset<Sample> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<Sample>(end);
@@ -851,13 +836,11 @@ inline flatbuffers::Offset<Sample> CreateSample(
     flatbuffers::Offset<flatbuffers::String> name = 0,
     ppx::Distribution distribution_type = ppx::Distribution_NONE,
     flatbuffers::Offset<void> distribution = 0,
-    bool control = true,
-    bool replace = false) {
+    bool control = true) {
   SampleBuilder builder_(_fbb);
   builder_.add_distribution(distribution);
   builder_.add_name(name);
   builder_.add_address(address);
-  builder_.add_replace(replace);
   builder_.add_control(control);
   builder_.add_distribution_type(distribution_type);
   return builder_.Finish();
@@ -869,8 +852,7 @@ inline flatbuffers::Offset<Sample> CreateSampleDirect(
     const char *name = nullptr,
     ppx::Distribution distribution_type = ppx::Distribution_NONE,
     flatbuffers::Offset<void> distribution = 0,
-    bool control = true,
-    bool replace = false) {
+    bool control = true) {
   auto address__ = address ? _fbb.CreateString(address) : 0;
   auto name__ = name ? _fbb.CreateString(name) : 0;
   return ppx::CreateSample(
@@ -879,8 +861,7 @@ inline flatbuffers::Offset<Sample> CreateSampleDirect(
       name__,
       distribution_type,
       distribution,
-      control,
-      replace);
+      control);
 }
 
 struct SampleResult FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
@@ -910,7 +891,6 @@ struct SampleResultBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  SampleResultBuilder &operator=(const SampleResultBuilder &);
   flatbuffers::Offset<SampleResult> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<SampleResult>(end);
@@ -1066,7 +1046,6 @@ struct ObserveBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ObserveBuilder &operator=(const ObserveBuilder &);
   flatbuffers::Offset<Observe> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<Observe>(end);
@@ -1124,7 +1103,6 @@ struct ObserveResultBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ObserveResultBuilder &operator=(const ObserveResultBuilder &);
   flatbuffers::Offset<ObserveResult> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<ObserveResult>(end);
@@ -1183,7 +1161,6 @@ struct TagBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  TagBuilder &operator=(const TagBuilder &);
   flatbuffers::Offset<Tag> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<Tag>(end);
@@ -1233,7 +1210,6 @@ struct TagResultBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  TagResultBuilder &operator=(const TagResultBuilder &);
   flatbuffers::Offset<TagResult> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<TagResult>(end);
@@ -1263,7 +1239,6 @@ struct ResetBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ResetBuilder &operator=(const ResetBuilder &);
   flatbuffers::Offset<Reset> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<Reset>(end);
@@ -1313,7 +1288,6 @@ struct NormalBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  NormalBuilder &operator=(const NormalBuilder &);
   flatbuffers::Offset<Normal> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<Normal>(end);
@@ -1367,7 +1341,6 @@ struct UniformBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  UniformBuilder &operator=(const UniformBuilder &);
   flatbuffers::Offset<Uniform> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<Uniform>(end);
@@ -1412,7 +1385,6 @@ struct CategoricalBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  CategoricalBuilder &operator=(const CategoricalBuilder &);
   flatbuffers::Offset<Categorical> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<Categorical>(end);
@@ -1455,7 +1427,6 @@ struct PoissonBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  PoissonBuilder &operator=(const PoissonBuilder &);
   flatbuffers::Offset<Poisson> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<Poisson>(end);
@@ -1498,7 +1469,6 @@ struct BernoulliBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  BernoulliBuilder &operator=(const BernoulliBuilder &);
   flatbuffers::Offset<Bernoulli> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<Bernoulli>(end);
@@ -1550,7 +1520,6 @@ struct BetaBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  BetaBuilder &operator=(const BetaBuilder &);
   flatbuffers::Offset<Beta> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<Beta>(end);
@@ -1595,7 +1564,6 @@ struct ExponentialBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ExponentialBuilder &operator=(const ExponentialBuilder &);
   flatbuffers::Offset<Exponential> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<Exponential>(end);
@@ -1647,7 +1615,6 @@ struct GammaBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  GammaBuilder &operator=(const GammaBuilder &);
   flatbuffers::Offset<Gamma> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<Gamma>(end);
@@ -1701,7 +1668,6 @@ struct LogNormalBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  LogNormalBuilder &operator=(const LogNormalBuilder &);
   flatbuffers::Offset<LogNormal> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<LogNormal>(end);
@@ -1755,7 +1721,6 @@ struct BinomialBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  BinomialBuilder &operator=(const BinomialBuilder &);
   flatbuffers::Offset<Binomial> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<Binomial>(end);
@@ -1809,7 +1774,6 @@ struct WeibullBuilder {
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  WeibullBuilder &operator=(const WeibullBuilder &);
   flatbuffers::Offset<Weibull> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = flatbuffers::Offset<Weibull>(end);

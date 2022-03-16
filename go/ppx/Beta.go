@@ -17,6 +17,13 @@ func GetRootAsBeta(buf []byte, offset flatbuffers.UOffsetT) *Beta {
 	return x
 }
 
+func GetSizePrefixedRootAsBeta(buf []byte, offset flatbuffers.UOffsetT) *Beta {
+	n := flatbuffers.GetUOffsetT(buf[offset+flatbuffers.SizeUint32:])
+	x := &Beta{}
+	x.Init(buf, n+offset+flatbuffers.SizeUint32)
+	return x
+}
+
 func (rcv *Beta) Init(buf []byte, i flatbuffers.UOffsetT) {
 	rcv._tab.Bytes = buf
 	rcv._tab.Pos = i

@@ -17,6 +17,13 @@ func GetRootAsCategorical(buf []byte, offset flatbuffers.UOffsetT) *Categorical 
 	return x
 }
 
+func GetSizePrefixedRootAsCategorical(buf []byte, offset flatbuffers.UOffsetT) *Categorical {
+	n := flatbuffers.GetUOffsetT(buf[offset+flatbuffers.SizeUint32:])
+	x := &Categorical{}
+	x.Init(buf, n+offset+flatbuffers.SizeUint32)
+	return x
+}
+
 func (rcv *Categorical) Init(buf []byte, i flatbuffers.UOffsetT) {
 	rcv._tab.Bytes = buf
 	rcv._tab.Pos = i

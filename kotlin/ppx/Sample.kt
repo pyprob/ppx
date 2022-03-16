@@ -44,35 +44,28 @@ class Sample : Table() {
             val o = __offset(12)
             return if(o != 0) 0.toByte() != bb.get(o + bb_pos) else true
         }
-    val replace : Boolean
-        get() {
-            val o = __offset(14)
-            return if(o != 0) 0.toByte() != bb.get(o + bb_pos) else false
-        }
     companion object {
-        fun validateVersion() = Constants.FLATBUFFERS_1_12_0()
+        fun validateVersion() = Constants.FLATBUFFERS_2_0_0()
         fun getRootAsSample(_bb: ByteBuffer): Sample = getRootAsSample(_bb, Sample())
         fun getRootAsSample(_bb: ByteBuffer, obj: Sample): Sample {
             _bb.order(ByteOrder.LITTLE_ENDIAN)
             return (obj.__assign(_bb.getInt(_bb.position()) + _bb.position(), _bb))
         }
-        fun createSample(builder: FlatBufferBuilder, addressOffset: Int, nameOffset: Int, distributionType: UByte, distributionOffset: Int, control: Boolean, replace: Boolean) : Int {
-            builder.startTable(6)
+        fun createSample(builder: FlatBufferBuilder, addressOffset: Int, nameOffset: Int, distributionType: UByte, distributionOffset: Int, control: Boolean) : Int {
+            builder.startTable(5)
             addDistribution(builder, distributionOffset)
             addName(builder, nameOffset)
             addAddress(builder, addressOffset)
-            addReplace(builder, replace)
             addControl(builder, control)
             addDistributionType(builder, distributionType)
             return endSample(builder)
         }
-        fun startSample(builder: FlatBufferBuilder) = builder.startTable(6)
+        fun startSample(builder: FlatBufferBuilder) = builder.startTable(5)
         fun addAddress(builder: FlatBufferBuilder, address: Int) = builder.addOffset(0, address, 0)
         fun addName(builder: FlatBufferBuilder, name: Int) = builder.addOffset(1, name, 0)
         fun addDistributionType(builder: FlatBufferBuilder, distributionType: UByte) = builder.addByte(2, distributionType.toByte(), 0)
         fun addDistribution(builder: FlatBufferBuilder, distribution: Int) = builder.addOffset(3, distribution, 0)
         fun addControl(builder: FlatBufferBuilder, control: Boolean) = builder.addBoolean(4, control, true)
-        fun addReplace(builder: FlatBufferBuilder, replace: Boolean) = builder.addBoolean(5, replace, false)
         fun endSample(builder: FlatBufferBuilder) : Int {
             val o = builder.endTable()
             return o

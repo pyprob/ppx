@@ -9,7 +9,7 @@ import com.google.flatbuffers.*;
 
 @SuppressWarnings("unused")
 public final class HandshakeResult extends Table {
-  public static void ValidateVersion() { Constants.FLATBUFFERS_1_12_0(); }
+  public static void ValidateVersion() { Constants.FLATBUFFERS_2_0_0(); }
   public static HandshakeResult getRootAsHandshakeResult(ByteBuffer _bb) { return getRootAsHandshakeResult(_bb, new HandshakeResult()); }
   public static HandshakeResult getRootAsHandshakeResult(ByteBuffer _bb, HandshakeResult obj) { _bb.order(ByteOrder.LITTLE_ENDIAN); return (obj.__assign(_bb.getInt(_bb.position()) + _bb.position(), _bb)); }
   public void __init(int _i, ByteBuffer _bb) { __reset(_i, _bb); }

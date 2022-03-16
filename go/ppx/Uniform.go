@@ -17,6 +17,13 @@ func GetRootAsUniform(buf []byte, offset flatbuffers.UOffsetT) *Uniform {
 	return x
 }
 
+func GetSizePrefixedRootAsUniform(buf []byte, offset flatbuffers.UOffsetT) *Uniform {
+	n := flatbuffers.GetUOffsetT(buf[offset+flatbuffers.SizeUint32:])
+	x := &Uniform{}
+	x.Init(buf, n+offset+flatbuffers.SizeUint32)
+	return x
+}
+
 func (rcv *Uniform) Init(buf []byte, i flatbuffers.UOffsetT) {
 	rcv._tab.Bytes = buf
 	rcv._tab.Pos = i

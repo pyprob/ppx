@@ -18,7 +18,7 @@ class Reset : Table() {
         return this
     }
     companion object {
-        fun validateVersion() = Constants.FLATBUFFERS_1_12_0()
+        fun validateVersion() = Constants.FLATBUFFERS_2_0_0()
         fun getRootAsReset(_bb: ByteBuffer): Reset = getRootAsReset(_bb, Reset())
         fun getRootAsReset(_bb: ByteBuffer, obj: Reset): Reset {
             _bb.order(ByteOrder.LITTLE_ENDIAN)

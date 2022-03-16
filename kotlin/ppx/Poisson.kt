@@ -27,7 +27,7 @@ class Poisson : Table() {
         }
     }
     companion object {
-        fun validateVersion() = Constants.FLATBUFFERS_1_12_0()
+        fun validateVersion() = Constants.FLATBUFFERS_2_0_0()
         fun getRootAsPoisson(_bb: ByteBuffer): Poisson = getRootAsPoisson(_bb, Poisson())
         fun getRootAsPoisson(_bb: ByteBuffer, obj: Poisson): Poisson {
             _bb.order(ByteOrder.LITTLE_ENDIAN)

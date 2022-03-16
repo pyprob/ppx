@@ -13,6 +13,9 @@ function Message.New()
     return o
 end
 function Message.GetRootAsMessage(buf, offset)
+    if type(buf) == "string" then
+        buf = flatbuffers.binaryArray.New(buf)
+    end
     local n = flatbuffers.N.UOffsetT:Unpack(buf, offset)
     local o = Message.New()
     o:Init(buf, n + offset)

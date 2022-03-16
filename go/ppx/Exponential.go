@@ -17,6 +17,13 @@ func GetRootAsExponential(buf []byte, offset flatbuffers.UOffsetT) *Exponential 
 	return x
 }
 
+func GetSizePrefixedRootAsExponential(buf []byte, offset flatbuffers.UOffsetT) *Exponential {
+	n := flatbuffers.GetUOffsetT(buf[offset+flatbuffers.SizeUint32:])
+	x := &Exponential{}
+	x.Init(buf, n+offset+flatbuffers.SizeUint32)
+	return x
+}
+
 func (rcv *Exponential) Init(buf []byte, i flatbuffers.UOffsetT) {
 	rcv._tab.Bytes = buf
 	rcv._tab.Pos = i

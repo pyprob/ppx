@@ -36,7 +36,7 @@ class Beta : Table() {
         }
     }
     companion object {
-        fun validateVersion() = Constants.FLATBUFFERS_1_12_0()
+        fun validateVersion() = Constants.FLATBUFFERS_2_0_0()
         fun getRootAsBeta(_bb: ByteBuffer): Beta = getRootAsBeta(_bb, Beta())
         fun getRootAsBeta(_bb: ByteBuffer, obj: Beta): Beta {
             _bb.order(ByteOrder.LITTLE_ENDIAN)

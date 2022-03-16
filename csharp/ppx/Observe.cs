@@ -13,7 +13,7 @@ public struct Observe : IFlatbufferObject
 {
   private Table __p;
   public ByteBuffer ByteBuffer { get { return __p.bb; } }
-  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_1_12_0(); }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_2_0_0(); }
   public static Observe GetRootAsObserve(ByteBuffer _bb) { return GetRootAsObserve(_bb, new Observe()); }
   public static Observe GetRootAsObserve(ByteBuffer _bb, Observe obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
@@ -35,6 +35,17 @@ public struct Observe : IFlatbufferObject
   public byte[] GetNameArray() { return __p.__vector_as_array<byte>(6); }
   public ppx.Distribution DistributionType { get { int o = __p.__offset(8); return o != 0 ? (ppx.Distribution)__p.bb.Get(o + __p.bb_pos) : ppx.Distribution.NONE; } }
   public TTable? Distribution<TTable>() where TTable : struct, IFlatbufferObject { int o = __p.__offset(10); return o != 0 ? (TTable?)__p.__union<TTable>(o + __p.bb_pos) : null; }
+  public ppx.Normal DistributionAsNormal() { return Distribution<ppx.Normal>().Value; }
+  public ppx.Uniform DistributionAsUniform() { return Distribution<ppx.Uniform>().Value; }
+  public ppx.Categorical DistributionAsCategorical() { return Distribution<ppx.Categorical>().Value; }
+  public ppx.Poisson DistributionAsPoisson() { return Distribution<ppx.Poisson>().Value; }
+  public ppx.Bernoulli DistributionAsBernoulli() { return Distribution<ppx.Bernoulli>().Value; }
+  public ppx.Beta DistributionAsBeta() { return Distribution<ppx.Beta>().Value; }
+  public ppx.Exponential DistributionAsExponential() { return Distribution<ppx.Exponential>().Value; }
+  public ppx.Gamma DistributionAsGamma() { return Distribution<ppx.Gamma>().Value; }
+  public ppx.LogNormal DistributionAsLogNormal() { return Distribution<ppx.LogNormal>().Value; }
+  public ppx.Binomial DistributionAsBinomial() { return Distribution<ppx.Binomial>().Value; }
+  public ppx.Weibull DistributionAsWeibull() { return Distribution<ppx.Weibull>().Value; }
   public ppx.Tensor? Value { get { int o = __p.__offset(12); return o != 0 ? (ppx.Tensor?)(new ppx.Tensor()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
 
   public static Offset<ppx.Observe> CreateObserve(FlatBufferBuilder builder,

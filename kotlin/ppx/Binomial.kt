@@ -36,7 +36,7 @@ class Binomial : Table() {
         }
     }
     companion object {
-        fun validateVersion() = Constants.FLATBUFFERS_1_12_0()
+        fun validateVersion() = Constants.FLATBUFFERS_2_0_0()
         fun getRootAsBinomial(_bb: ByteBuffer): Binomial = getRootAsBinomial(_bb, Binomial())
         fun getRootAsBinomial(_bb: ByteBuffer, obj: Binomial): Binomial {
             _bb.order(ByteOrder.LITTLE_ENDIAN)

@@ -13,6 +13,9 @@ function Uniform.New()
     return o
 end
 function Uniform.GetRootAsUniform(buf, offset)
+    if type(buf) == "string" then
+        buf = flatbuffers.binaryArray.New(buf)
+    end
     local n = flatbuffers.N.UOffsetT:Unpack(buf, offset)
     local o = Uniform.New()
     o:Init(buf, n + offset)

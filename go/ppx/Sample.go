@@ -17,6 +17,13 @@ func GetRootAsSample(buf []byte, offset flatbuffers.UOffsetT) *Sample {
 	return x
 }
 
+func GetSizePrefixedRootAsSample(buf []byte, offset flatbuffers.UOffsetT) *Sample {
+	n := flatbuffers.GetUOffsetT(buf[offset+flatbuffers.SizeUint32:])
+	x := &Sample{}
+	x.Init(buf, n+offset+flatbuffers.SizeUint32)
+	return x
+}
+
 func (rcv *Sample) Init(buf []byte, i flatbuffers.UOffsetT) {
 	rcv._tab.Bytes = buf
 	rcv._tab.Pos = i
@@ -75,20 +82,8 @@ func (rcv *Sample) MutateControl(n bool) bool {
 	return rcv._tab.MutateBoolSlot(12, n)
 }
 
-func (rcv *Sample) Replace() bool {
-	o := flatbuffers.UOffsetT(rcv._tab.Offset(14))
-	if o != 0 {
-		return rcv._tab.GetBool(o + rcv._tab.Pos)
-	}
-	return false
-}
-
-func (rcv *Sample) MutateReplace(n bool) bool {
-	return rcv._tab.MutateBoolSlot(14, n)
-}
-
 func SampleStart(builder *flatbuffers.Builder) {
-	builder.StartObject(6)
+	builder.StartObject(5)
 }
 func SampleAddAddress(builder *flatbuffers.Builder, address flatbuffers.UOffsetT) {
 	builder.PrependUOffsetTSlot(0, flatbuffers.UOffsetT(address), 0)
@@ -104,9 +99,6 @@ func SampleAddDistribution(builder *flatbuffers.Builder, distribution flatbuffer
 }
 func SampleAddControl(builder *flatbuffers.Builder, control bool) {
 	builder.PrependBoolSlot(4, control, true)
-}
-func SampleAddReplace(builder *flatbuffers.Builder, replace bool) {
-	builder.PrependBoolSlot(5, replace, false)
 }
 func SampleEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {
 	return builder.EndObject()

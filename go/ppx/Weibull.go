@@ -17,6 +17,13 @@ func GetRootAsWeibull(buf []byte, offset flatbuffers.UOffsetT) *Weibull {
 	return x
 }
 
+func GetSizePrefixedRootAsWeibull(buf []byte, offset flatbuffers.UOffsetT) *Weibull {
+	n := flatbuffers.GetUOffsetT(buf[offset+flatbuffers.SizeUint32:])
+	x := &Weibull{}
+	x.Init(buf, n+offset+flatbuffers.SizeUint32)
+	return x
+}
+
 func (rcv *Weibull) Init(buf []byte, i flatbuffers.UOffsetT) {
 	rcv._tab.Bytes = buf
 	rcv._tab.Pos = i

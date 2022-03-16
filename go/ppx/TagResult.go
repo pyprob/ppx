@@ -17,6 +17,13 @@ func GetRootAsTagResult(buf []byte, offset flatbuffers.UOffsetT) *TagResult {
 	return x
 }
 
+func GetSizePrefixedRootAsTagResult(buf []byte, offset flatbuffers.UOffsetT) *TagResult {
+	n := flatbuffers.GetUOffsetT(buf[offset+flatbuffers.SizeUint32:])
+	x := &TagResult{}
+	x.Init(buf, n+offset+flatbuffers.SizeUint32)
+	return x
+}
+
 func (rcv *TagResult) Init(buf []byte, i flatbuffers.UOffsetT) {
 	rcv._tab.Bytes = buf
 	rcv._tab.Pos = i

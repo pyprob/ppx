@@ -35,7 +35,7 @@ class MessageBodyTypeId {
   static const MessageBodyTypeId Tag = const MessageBodyTypeId._(9);
   static const MessageBodyTypeId TagResult = const MessageBodyTypeId._(10);
   static const MessageBodyTypeId Reset = const MessageBodyTypeId._(11);
-  static get values => {0: NONE,1: Handshake,2: HandshakeResult,3: Run,4: RunResult,5: Sample,6: SampleResult,7: Observe,8: ObserveResult,9: Tag,10: TagResult,11: Reset,};
+  static const Map<int,MessageBodyTypeId> values = {0: NONE,1: Handshake,2: HandshakeResult,3: Run,4: RunResult,5: Sample,6: SampleResult,7: Observe,8: ObserveResult,9: Tag,10: TagResult,11: Reset,};
 
   static const fb.Reader<MessageBodyTypeId> reader = const _MessageBodyTypeIdReader();
 
@@ -84,7 +84,7 @@ class DistributionTypeId {
   static const DistributionTypeId LogNormal = const DistributionTypeId._(9);
   static const DistributionTypeId Binomial = const DistributionTypeId._(10);
   static const DistributionTypeId Weibull = const DistributionTypeId._(11);
-  static get values => {0: NONE,1: Normal,2: Uniform,3: Categorical,4: Poisson,5: Bernoulli,6: Beta,7: Exponential,8: Gamma,9: LogNormal,10: Binomial,11: Weibull,};
+  static const Map<int,DistributionTypeId> values = {0: NONE,1: Normal,2: Uniform,3: Categorical,4: Poisson,5: Bernoulli,6: Beta,7: Exponential,8: Gamma,9: LogNormal,10: Binomial,11: Weibull,};
 
   static const fb.Reader<DistributionTypeId> reader = const _DistributionTypeIdReader();
 
@@ -633,11 +633,10 @@ class Sample {
     }
   }
   bool get control => const fb.BoolReader().vTableGet(_bc, _bcOffset, 12, true);
-  bool get replace => const fb.BoolReader().vTableGet(_bc, _bcOffset, 14, false);
 
   @override
   String toString() {
-    return 'Sample{address: $address, name: $name, distributionType: $distributionType, distribution: $distribution, control: $control, replace: $replace}';
+    return 'Sample{address: $address, name: $name, distributionType: $distributionType, distribution: $distribution, control: $control}';
   }
 }
 
@@ -680,10 +679,6 @@ class SampleBuilder {
     fbBuilder.addBool(4, control);
     return fbBuilder.offset;
   }
-  int addReplace(bool replace) {
-    fbBuilder.addBool(5, replace);
-    return fbBuilder.offset;
-  }
 
   int finish() {
     return fbBuilder.endTable();
@@ -696,7 +691,6 @@ class SampleObjectBuilder extends fb.ObjectBuilder {
   final DistributionTypeId _distributionType;
   final dynamic _distribution;
   final bool _control;
-  final bool _replace;
 
   SampleObjectBuilder({
     String address,
@@ -704,14 +698,12 @@ class SampleObjectBuilder extends fb.ObjectBuilder {
     DistributionTypeId distributionType,
     dynamic distribution,
     bool control,
-    bool replace,
   })
       : _address = address,
         _name = name,
         _distributionType = distributionType,
         _distribution = distribution,
-        _control = control,
-        _replace = replace;
+        _control = control;
 
   /// Finish building, and store into the [fbBuilder].
   @override
@@ -734,7 +726,6 @@ class SampleObjectBuilder extends fb.ObjectBuilder {
       fbBuilder.addOffset(3, distributionOffset);
     }
     fbBuilder.addBool(4, _control);
-    fbBuilder.addBool(5, _replace);
     return fbBuilder.endTable();
   }
 

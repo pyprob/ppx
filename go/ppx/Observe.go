@@ -17,6 +17,13 @@ func GetRootAsObserve(buf []byte, offset flatbuffers.UOffsetT) *Observe {
 	return x
 }
 
+func GetSizePrefixedRootAsObserve(buf []byte, offset flatbuffers.UOffsetT) *Observe {
+	n := flatbuffers.GetUOffsetT(buf[offset+flatbuffers.SizeUint32:])
+	x := &Observe{}
+	x.Init(buf, n+offset+flatbuffers.SizeUint32)
+	return x
+}
+
 func (rcv *Observe) Init(buf []byte, i flatbuffers.UOffsetT) {
 	rcv._tab.Bytes = buf
 	rcv._tab.Pos = i

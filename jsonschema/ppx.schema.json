@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "definitions": {
     "ppx_MessageBody" : {
       "type" : "string",
@@ -25,10 +25,10 @@
       "type" : "object",
       "properties" : {
         "data" : {
-                "type" : "array", "items" : { "type" : "number" }
+                "type" : "array", "items" : {"type" : "number"}
               },
         "shape" : {
-                "type" : "array", "items" : { "type" : "number" }
+                "type" : "array", "items" : {"type" : "integer", "minimum" : -2147483648, "maximum" : 2147483647}
               }
       },
       "additionalProperties" : false
@@ -85,9 +85,6 @@
                 "anyOf": [{ "$ref" : "#/definitions/ppx_Normal" },{ "$ref" : "#/definitions/ppx_Uniform" },{ "$ref" : "#/definitions/ppx_Categorical" },{ "$ref" : "#/definitions/ppx_Poisson" },{ "$ref" : "#/definitions/ppx_Bernoulli" },{ "$ref" : "#/definitions/ppx_Beta" },{ "$ref" : "#/definitions/ppx_Exponential" },{ "$ref" : "#/definitions/ppx_Gamma" },{ "$ref" : "#/definitions/ppx_LogNormal" },{ "$ref" : "#/definitions/ppx_Binomial" },{ "$ref" : "#/definitions/ppx_Weibull" }]
               },
         "control" : {
-                "type" : "boolean"
-              },
-        "replace" : {
                 "type" : "boolean"
               }
       },

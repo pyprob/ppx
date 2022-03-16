@@ -13,7 +13,7 @@ public struct Sample : IFlatbufferObject
 {
   private Table __p;
   public ByteBuffer ByteBuffer { get { return __p.bb; } }
-  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_1_12_0(); }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_2_0_0(); }
   public static Sample GetRootAsSample(ByteBuffer _bb) { return GetRootAsSample(_bb, new Sample()); }
   public static Sample GetRootAsSample(ByteBuffer _bb, Sample obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
@@ -35,33 +35,40 @@ public struct Sample : IFlatbufferObject
   public byte[] GetNameArray() { return __p.__vector_as_array<byte>(6); }
   public ppx.Distribution DistributionType { get { int o = __p.__offset(8); return o != 0 ? (ppx.Distribution)__p.bb.Get(o + __p.bb_pos) : ppx.Distribution.NONE; } }
   public TTable? Distribution<TTable>() where TTable : struct, IFlatbufferObject { int o = __p.__offset(10); return o != 0 ? (TTable?)__p.__union<TTable>(o + __p.bb_pos) : null; }
+  public ppx.Normal DistributionAsNormal() { return Distribution<ppx.Normal>().Value; }
+  public ppx.Uniform DistributionAsUniform() { return Distribution<ppx.Uniform>().Value; }
+  public ppx.Categorical DistributionAsCategorical() { return Distribution<ppx.Categorical>().Value; }
+  public ppx.Poisson DistributionAsPoisson() { return Distribution<ppx.Poisson>().Value; }
+  public ppx.Bernoulli DistributionAsBernoulli() { return Distribution<ppx.Bernoulli>().Value; }
+  public ppx.Beta DistributionAsBeta() { return Distribution<ppx.Beta>().Value; }
+  public ppx.Exponential DistributionAsExponential() { return Distribution<ppx.Exponential>().Value; }
+  public ppx.Gamma DistributionAsGamma() { return Distribution<ppx.Gamma>().Value; }
+  public ppx.LogNormal DistributionAsLogNormal() { return Distribution<ppx.LogNormal>().Value; }
+  public ppx.Binomial DistributionAsBinomial() { return Distribution<ppx.Binomial>().Value; }
+  public ppx.Weibull DistributionAsWeibull() { return Distribution<ppx.Weibull>().Value; }
   public bool Control { get { int o = __p.__offset(12); return o != 0 ? 0!=__p.bb.Get(o + __p.bb_pos) : (bool)true; } }
-  public bool Replace { get { int o = __p.__offset(14); return o != 0 ? 0!=__p.bb.Get(o + __p.bb_pos) : (bool)false; } }
 
   public static Offset<ppx.Sample> CreateSample(FlatBufferBuilder builder,
       StringOffset addressOffset = default(StringOffset),
       StringOffset nameOffset = default(StringOffset),
       ppx.Distribution distribution_type = ppx.Distribution.NONE,
       int distributionOffset = 0,
-      bool control = true,
-      bool replace = false) {
-    builder.StartTable(6);
+      bool control = true) {
+    builder.StartTable(5);
     Sample.AddDistribution(builder, distributionOffset);
     Sample.AddName(builder, nameOffset);
     Sample.AddAddress(builder, addressOffset);
-    Sample.AddReplace(builder, replace);
     Sample.AddControl(builder, control);
     Sample.AddDistributionType(builder, distribution_type);
     return Sample.EndSample(builder);
   }
 
-  public static void StartSample(FlatBufferBuilder builder) { builder.StartTable(6); }
+  public static void StartSample(FlatBufferBuilder builder) { builder.StartTable(5); }
   public static void AddAddress(FlatBufferBuilder builder, StringOffset addressOffset) { builder.AddOffset(0, addressOffset.Value, 0); }
   public static void AddName(FlatBufferBuilder builder, StringOffset nameOffset) { builder.AddOffset(1, nameOffset.Value, 0); }
   public static void AddDistributionType(FlatBufferBuilder builder, ppx.Distribution distributionType) { builder.AddByte(2, (byte)distributionType, 0); }
   public static void AddDistribution(FlatBufferBuilder builder, int distributionOffset) { builder.AddOffset(3, distributionOffset, 0); }
   public static void AddControl(FlatBufferBuilder builder, bool control) { builder.AddBool(4, control, true); }
-  public static void AddReplace(FlatBufferBuilder builder, bool replace) { builder.AddBool(5, replace, false); }
   public static Offset<ppx.Sample> EndSample(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<ppx.Sample>(o);

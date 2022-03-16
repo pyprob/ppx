@@ -17,6 +17,13 @@ func GetRootAsHandshake(buf []byte, offset flatbuffers.UOffsetT) *Handshake {
 	return x
 }
 
+func GetSizePrefixedRootAsHandshake(buf []byte, offset flatbuffers.UOffsetT) *Handshake {
+	n := flatbuffers.GetUOffsetT(buf[offset+flatbuffers.SizeUint32:])
+	x := &Handshake{}
+	x.Init(buf, n+offset+flatbuffers.SizeUint32)
+	return x
+}
+
 func (rcv *Handshake) Init(buf []byte, i flatbuffers.UOffsetT) {
 	rcv._tab.Bytes = buf
 	rcv._tab.Pos = i

@@ -17,6 +17,13 @@ func GetRootAsLogNormal(buf []byte, offset flatbuffers.UOffsetT) *LogNormal {
 	return x
 }
 
+func GetSizePrefixedRootAsLogNormal(buf []byte, offset flatbuffers.UOffsetT) *LogNormal {
+	n := flatbuffers.GetUOffsetT(buf[offset+flatbuffers.SizeUint32:])
+	x := &LogNormal{}
+	x.Init(buf, n+offset+flatbuffers.SizeUint32)
+	return x
+}
+
 func (rcv *LogNormal) Init(buf []byte, i flatbuffers.UOffsetT) {
 	rcv._tab.Bytes = buf
 	rcv._tab.Pos = i

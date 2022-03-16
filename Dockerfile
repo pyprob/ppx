@@ -5,5 +5,5 @@ ENV CC=gcc-5
 ENV CXX=g++-5
 
 WORKDIR /home
-RUN git clone --branch v1.12.0 https://github.com/google/flatbuffers.git
+RUN git clone --branch v2.0.0 https://github.com/google/flatbuffers.git
 RUN cd flatbuffers && cmake -G "Unix Makefiles" && make install && cp flatc /usr/local/bin/

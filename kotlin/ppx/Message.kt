@@ -26,7 +26,7 @@ class Message : Table() {
         val o = __offset(6); return if (o != 0) __union(obj, o + bb_pos) else null
     }
     companion object {
-        fun validateVersion() = Constants.FLATBUFFERS_1_12_0()
+        fun validateVersion() = Constants.FLATBUFFERS_2_0_0()
         fun getRootAsMessage(_bb: ByteBuffer): Message = getRootAsMessage(_bb, Message())
         fun getRootAsMessage(_bb: ByteBuffer, obj: Message): Message {
             _bb.order(ByteOrder.LITTLE_ENDIAN)

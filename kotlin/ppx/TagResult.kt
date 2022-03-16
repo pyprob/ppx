@@ -18,7 +18,7 @@ class TagResult : Table() {
         return this
     }
     companion object {
-        fun validateVersion() = Constants.FLATBUFFERS_1_12_0()
+        fun validateVersion() = Constants.FLATBUFFERS_2_0_0()
         fun getRootAsTagResult(_bb: ByteBuffer): TagResult = getRootAsTagResult(_bb, TagResult())
         fun getRootAsTagResult(_bb: ByteBuffer, obj: TagResult): TagResult {
             _bb.order(ByteOrder.LITTLE_ENDIAN)

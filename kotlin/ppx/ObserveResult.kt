@@ -18,7 +18,7 @@ class ObserveResult : Table() {
         return this
     }
     companion object {
-        fun validateVersion() = Constants.FLATBUFFERS_1_12_0()
+        fun validateVersion() = Constants.FLATBUFFERS_2_0_0()
         fun getRootAsObserveResult(_bb: ByteBuffer): ObserveResult = getRootAsObserveResult(_bb, ObserveResult())
         fun getRootAsObserveResult(_bb: ByteBuffer, obj: ObserveResult): ObserveResult {
             _bb.order(ByteOrder.LITTLE_ENDIAN)

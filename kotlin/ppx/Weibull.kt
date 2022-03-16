@@ -36,7 +36,7 @@ class Weibull : Table() {
         }
     }
     companion object {
-        fun validateVersion() = Constants.FLATBUFFERS_1_12_0()
+        fun validateVersion() = Constants.FLATBUFFERS_2_0_0()
         fun getRootAsWeibull(_bb: ByteBuffer): Weibull = getRootAsWeibull(_bb, Weibull())
         fun getRootAsWeibull(_bb: ByteBuffer, obj: Weibull): Weibull {
             _bb.order(ByteOrder.LITTLE_ENDIAN)

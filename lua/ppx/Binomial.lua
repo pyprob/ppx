@@ -13,6 +13,9 @@ function Binomial.New()
     return o
 end
 function Binomial.GetRootAsBinomial(buf, offset)
+    if type(buf) == "string" then
+        buf = flatbuffers.binaryArray.New(buf)
+    end
     local n = flatbuffers.N.UOffsetT:Unpack(buf, offset)
     local o = Binomial.New()
     o:Init(buf, n + offset)
