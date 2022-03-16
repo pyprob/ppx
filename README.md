@@ -19,7 +19,6 @@ We provide `PPX` compiled to all programming languages officially supported by f
 * Dart
 * Go
 * Java
-* JavaScript
 * Kotlin
 * Lobster
 * Lua
